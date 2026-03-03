@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  /* Colors */
+  --color-primary: #1b2a4b;
+  --color-secondary: #C9A84C;
+  --color-background-light: #f6f7f8;
+  --color-background-dark: #14171e;
+  --color-surface-dark: #233355;
+
+  /* Font Families */
+  --font-display: "Manrope", sans-serif;
+  --font-serif: "Playfair Display", serif;
+
+  /* Border Radius */
+  --border-radius-default: 0.25rem;
+  --border-radius-lg: 0.5rem;
+  --border-radius-xl: 0.75rem;
+  --border-radius-full: 9999px;
+}
+
+
+
+@layer utilities {
+  .btn-primary {
+    @apply bg-[#1B2A4A] text-[#C9A84C] hover:bg-[#1B2A4A]/90 rounded-md px-4 py-2 transition-colors;
+  }
+  .btn-secondary {
+    @apply border border-[#C9A84C] text-[#1B2A4A] hover:bg-[#F8F7F4] rounded-md px-4 py-2 transition-colors;
+  }
+}

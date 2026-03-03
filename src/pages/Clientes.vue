@@ -95,8 +95,8 @@ const salvarCliente = async () => {
                     <h3 class="text-lg leading-6 font-serif font-medium text-[#1B2A4A]" id="modal-title">Novo Cliente</h3>
                     <div class="mt-4 space-y-4">
                         <input v-model="novoCliente.nome" type="text" placeholder="Nome Completo" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                        <input v-model="novoCliente.cpf" type="text" placeholder="CPF (opcional)" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                        <input v-model="novoCliente.email" type="email" placeholder="Email (opcional)" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                        <input v-model="novoCliente.cpf" type="text" placeholder="CPF" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                        <input v-model="novoCliente.email" type="email" placeholder="Email" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                         <input v-model="novoCliente.telefone" type="text" placeholder="Telefone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                         <input v-model="novoCliente.endereco" type="text" placeholder="Endereço" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                     </div>

@@ -73,13 +73,9 @@ function getIconColor(tipoAto: string): string {
     'reconhecimento':'#22C55E',
     'ata':           '#EF4444',
   };
-  const lowerCaseTipoAto = tipoAto?.toLowerCase();
-  for (const key in map) {
-    if (lowerCaseTipoAto?.includes(key)) {
-      return map[key];
-    }
-  }
-  return '#C9A84C';
+  const lowerCaseTipoAto = tipoAto ? tipoAto.toLowerCase() : '';
+  const foundKey = Object.keys(map).find(k => lowerCaseTipoAto.includes(k));
+  return foundKey ? map[foundKey] : '#C9A84C';
 }
 
 const formatDate = (date: any) => {

@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia';
 import api from '../services/api';
+import { useAuthStore } from './auth';
 
 interface Cliente {
   id?: string;
   nome: string;
-  cpf: string;
+  cpf?: string;
   telefone: string;
-  email: string;
+  email?: string;
   endereco: string;
   criadoEm?: any;
 }
@@ -19,9 +20,12 @@ export const useClientesStore = defineStore('clientes', {
   }),
   actions: {
     async fetchClientes() {
+      const authStore = useAuthStore();
+      if (!authStore.userId) return;
+
       this.loading = true;
       try {
-        const response = await api.get('/clientes');
+        const response = await api.get(`/clientes`, { params: { userId: authStore.userId } });
         this.clientes = response.data;
       } catch (error: any) {
         this.error = error.message;

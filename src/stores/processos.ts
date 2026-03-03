@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import api from '../services/api';
+import { useAuthStore } from './auth';
 
 interface Partes {
   outorganteVendedor: string;
@@ -10,12 +11,10 @@ interface Partes {
 
 interface Processo {
   id?: string;
-  protocolo: string;
-  titulo: string;
+  protocolo?: string;
   tipoAto: string;
   dataEntrada: string; // ou Date
   partes: Partes;
-  clienteId: string;
   notasInternas: string;
   criadoEm?: any;
   statusHistory?: any[];
@@ -25,14 +24,29 @@ export const useProcessosStore = defineStore('processos', {
   state: () => ({
     processos: [] as Processo[],
     processoAtual: null as Processo | null,
+    tiposAto: [
+        'Ata Notarial',
+        'Autenticação de Cópia',
+        'Contrato de Compra e Venda',
+        'Contrato de Doação',
+        'Contrato de Locação',
+        'Escritura de Imóvel',
+        'Procuração',
+        'Reconhecimento de Firma',
+        'Testamento',
+        'Outro'
+    ] as string[],
     loading: false,
     error: null as string | null,
   }),
   actions: {
     async fetchProcessos() {
+      const authStore = useAuthStore();
+      if (!authStore.userId) return;
+
       this.loading = true;
       try {
-        const response = await api.get('/processos');
+        const response = await api.get('/processos', { params: { userId: authStore.userId } });
         this.processos = response.data;
       } catch (error: any) {
         this.error = error.message;

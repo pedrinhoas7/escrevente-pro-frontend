@@ -10,7 +10,6 @@ const clientesStore = useClientesStore();
 
 const form = ref({
     protocolo: '',
-    titulo: '',
     tipoAto: '',
     dataEntrada: new Date().toISOString().slice(0, 10),
     partes: {
@@ -19,12 +18,14 @@ const form = ref({
         escrevente: '',
         apresentante: ''
     },
-    clienteId: '',
     notasInternas: ''
 });
 
-onMounted(() => {
-  clientesStore.fetchClientes();
+const tiposAto = ref<string[]>([]);
+
+onMounted(async () => {
+  await clientesStore.fetchClientes();
+  tiposAto.value = processosStore.tiposAto;
 });
 
 
@@ -46,16 +47,15 @@ const salvar = async () => {
         <form @submit.prevent="salvar" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="protocolo" class="block text-sm font-medium text-gray-700">Protocolo</label>
-                    <input v-model="form.protocolo" id="protocolo" type="text" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                </div>
-                <div>
-                    <label for="titulo" class="block text-sm font-medium text-gray-700">Título do Processo</label>
-                    <input v-model="form.titulo" id="titulo" type="text" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                    <label for="protocolo" class="block text-sm font-medium text-gray-700">Protocolo (opcional)</label>
+                    <input v-model="form.protocolo" id="protocolo" type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
                 <div>
                     <label for="tipoAto" class="block text-sm font-medium text-gray-700">Tipo de Ato</label>
-                    <input v-model="form.tipoAto" id="tipoAto" type="text" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                    <select v-model="form.tipoAto" id="tipoAto" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]">
+                        <option value="" disabled>Selecione um tipo</option>
+                        <option v-for="tipo in tiposAto" :key="tipo" :value="tipo">{{ tipo }}</option>
+                    </select>
                 </div>
                 <div>
                     <label for="dataEntrada" class="block text-sm font-medium text-gray-700">Data de Entrada</label>
@@ -90,15 +90,6 @@ const salvar = async () => {
                 </div>
             </div>
 
-            <div class="border-t border-gray-200 pt-6">
-                <label for="clienteId" class="block text-sm font-medium text-gray-700">Cliente Principal</label>
-                 <select v-model="form.clienteId" id="clienteId" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]">
-                    <option value="" disabled>Selecione um cliente</option>
-                    <option v-for="cliente in clientesStore.clientes" :key="cliente.id" :value="cliente.id">
-                        {{ cliente.nome }}
-                    </option>
-                </select>
-            </div>
 
             <div>
                 <label for="notasInternas" class="block text-sm font-medium text-gray-700">Notas Internas</label>

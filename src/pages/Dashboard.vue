@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useProcessosStore } from '../stores/processos';
 
 const processosStore = useProcessosStore();
@@ -73,8 +73,13 @@ function getIconColor(tipoAto: string): string {
     'reconhecimento':'#22C55E',
     'ata':           '#EF4444',
   };
-  const key = Object.keys(map).find(k => tipoAto?.toLowerCase().includes(k));
-  return key ? map[key] : '#C9A84C';
+  const lowerCaseTipoAto = tipoAto?.toLowerCase();
+  for (const key in map) {
+    if (lowerCaseTipoAto?.includes(key)) {
+      return map[key];
+    }
+  }
+  return '#C9A84C';
 }
 
 const formatDate = (date: any) => {

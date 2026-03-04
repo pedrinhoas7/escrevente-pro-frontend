@@ -44,12 +44,12 @@ const salvar = async () => {
 </script>
 
 <template>
-  <div class="min-h-dvh bg-[#F8F7F4] p-4 md:p-8">
-    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-6 md:p-8">
+  <div class="min-h-dvh bg-[#F8F7F4]  ">
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-6 md:p-8">
         <h1 class="text-2xl font-serif font-bold text-[#1B2A4A] mb-6 border-b pb-4">Novo Processo</h1>
 
         <form @submit.prevent="salvar" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6">
                 <div>
                     <label for="protocolo" class="block text-sm font-medium text-gray-700">Protocolo (opcional)</label>
                     <input v-model="form.protocolo" id="protocolo" type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
@@ -67,9 +67,9 @@ const salvar = async () => {
                 </div>
             </div>
 
-            <div class="border-t border-gray-200 pt-6">
+            <div class="border-t border-gray-200 pt-2 md:pt-6">
                 <h3 class="text-lg font-serif font-medium text-[#1B2A4A] mb-4">Partes Envolvidas</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6">
                      <div>
                         <label for="outorganteVendedor" class="block text-sm font-medium text-gray-700">Outorgante Vendedor</label>
                         <input v-model="form.partes.outorganteVendedor" id="outorganteVendedor" type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
@@ -100,11 +100,11 @@ const salvar = async () => {
                 <textarea v-model="form.notasInternas" id="notasInternas" rows="4" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]"></textarea>
             </div>
 
-            <div class="border-t border-gray-200 pt-6 flex flex-col-reverse sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+            <div class="border-t border-gray-200 pt-2 md:pt-6 flex flex-col-reverse sm:flex-row sm:justify-end space-y-3 sm:space-y-2 sm:space-x-3">
                 <router-link to="/processos" class="btn-secondary py-3 w-full sm:w-auto text-center">
                     Cancelar
                 </router-link>
-                <button type="submit" class="btn-primary py-3 w-full sm:w-auto">
+                <button type="submit" class="btn-primary py-3 w-full sm:w-auto mb-2">
                     Salvar Processo
                 </button>
             </div>

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { C } from 'vue-router/dist/options-D40y7AuF.mjs';
+import { useClientesStore } from '../stores/clientes';
+
 const props = defineProps<{
   partes: {
     outorganteVendedor: string;
@@ -7,6 +10,13 @@ const props = defineProps<{
     apresentante: string;
   };
 }>();
+
+const clientStore = useClientesStore()
+
+const getClientName = (apresentanteId: string) => {
+  const client = clientStore.clientes.find(c => c.id === apresentanteId)
+  return client ? client.nome : apresentanteId
+}
 </script>
 
 <template>
@@ -29,7 +39,7 @@ const props = defineProps<{
       </div>
       <div>
         <label class="block text-xs uppercase tracking-wide text-[#6B7280] font-bold mb-1">Apresentante</label>
-        <p class="text-[#1B2A4A] font-medium">{{ props.partes.apresentante }}</p>
+        <p class="text-[#1B2A4A] font-medium">{{ getClientName(props.partes.apresentante) }}</p>
       </div>
     </div>
   </div>

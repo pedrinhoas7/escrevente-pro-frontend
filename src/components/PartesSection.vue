@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { C } from 'vue-router/dist/options-D40y7AuF.mjs';
 import { useClientesStore } from '../stores/clientes';
 
 const props = defineProps<{

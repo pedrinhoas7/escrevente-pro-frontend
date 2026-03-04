@@ -3,8 +3,26 @@ import StatusBadge from './StatusBadge.vue'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 
+interface Partes {
+  outorganteVendedor: string;
+  outorganteComprador: string;
+  escrevente: string;
+  apresentante: string;
+}
+
+interface Processo {
+  id?: string;
+  protocolo?: string;
+  tipoAto: string;
+  dataEntrada: string; // ou Date
+  partes: Partes;
+  notasInternas: string;
+  criadoEm?: any;
+  statusHistory?: any[];
+}
+
 const props = defineProps<{
-  processo: any
+  processo: Processo
   clientName: string
 }>()
 
@@ -39,7 +57,7 @@ const formattedDate = computed(() => {
     <!-- Desktop Row -->
     <div class="hidden md:grid grid-cols-4 gap-4 items-center p-6">
       <div>
-        <p class="font-bold text-gray-800">{{ props.processo.titulo }}</p>
+        <p class="font-bold text-gray-800">{{ props.processo.tipoAto }}</p>
         <p class="text-sm text-gray-500">#{{ props.processo.protocolo }}</p>
       </div>
       <div>
@@ -57,7 +75,7 @@ const formattedDate = computed(() => {
     <div class="md:hidden p-6 space-y-4">
         <div class="flex justify-between items-start">
             <div>
-                <p class="font-bold text-gray-800">{{ props.processo.titulo }}</p>
+                <p class="font-bold text-gray-800">{{ props.processo.tipoAto }}</p>
                 <p class="text-sm text-gray-500">#{{ props.processo.protocolo }}</p>
             </div>
             <StatusBadge :status="lastStatus.status" />

@@ -44,7 +44,7 @@ export const useProcessosStore = defineStore('processos', {
     async fetchTiposAto() {
         this.loading = true;
         try {
-            const response = await api.get('/tipos-ato');
+            const response = await api.get('/processos/tipos-ato');
             this.tiposAto = response.data;
         } catch (error: any) {
             this.error = error.message;

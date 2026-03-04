@@ -77,6 +77,9 @@ const handleLogin = async () => {
             <span v-else>Entrar</span>
             <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
           </button>
+          <router-link to="/consulta" class="mt-4 w-full h-14 bg-white/10 hover:bg-white/20 text-white font-bold text-lg rounded-xl shadow-lg shadow-black/20 transition-all duration-200 transform active:scale-[0.98] flex items-center justify-center gap-2">
+            Consultar Processo
+          </router-link>
         </form>
       </div>
     </div>

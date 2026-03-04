@@ -29,7 +29,7 @@ const salvarCliente = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F8F7F4] p-4 md:p-8">
+  <div class="min-h-dvh bg-[#F8F7F4] p-4 md:p-8">
       <div class="max-w-7xl mx-auto">
         <div class="flex flex-col md:flex-row justify-between md:items-center mb-8">
             <h1 class="text-3xl font-serif font-bold text-[#1B2A4A] mb-4 md:mb-0">Clientes</h1>
@@ -87,9 +87,9 @@ const salvarCliente = async () => {
 
       <!-- Modal -->
       <div v-if="showModal" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="flex items-end justify-center min-h-dvh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class=" transition-opacity" aria-hidden="true" @click="showModal = false"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-dvh" aria-hidden="true">&#8203;</span>
             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <h3 class="text-lg leading-6 font-serif font-medium text-[#1B2A4A]" id="modal-title">Novo Cliente</h3>

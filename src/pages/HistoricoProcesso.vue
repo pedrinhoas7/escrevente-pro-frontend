@@ -21,7 +21,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F8F7F4] p-8">
+  <div class="min-h-dvh bg-[#F8F7F4] p-8">
       <div class="max-w-4xl mx-auto" v-if="!loading && processosStore.processoAtual">
         <div class="bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-8 mb-8">
             <h1 class="text-3xl font-serif font-bold text-[#1B2A4A] mb-2">{{ processosStore.processoAtual.tipoAto }}</h1>
@@ -46,11 +46,11 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div v-else-if="loading" class="min-h-screen flex items-center justify-center text-[#1B2A4A]">
+      <div v-else-if="loading" class="min-h-dvh flex items-center justify-center text-[#1B2A4A]">
           Carregando informações...
       </div>
 
-      <div v-else class="min-h-screen flex flex-col items-center justify-center text-[#1B2A4A]">
+      <div v-else class="min-h-dvh flex flex-col items-center justify-center text-[#1B2A4A]">
           <p class="text-xl mb-4">{{ error }}</p>
           <router-link to="/consulta" class="bg-[#1B2A4A] text-[#C9A84C] px-6 py-2 rounded-lg hover:bg-opacity-90">
               Voltar

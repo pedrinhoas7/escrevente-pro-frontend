@@ -39,7 +39,7 @@ const adicionarStatus = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F8F7F4] p-4 md:p-8">
+  <div class="min-h-dvh bg-[#F8F7F4] p-4 md:p-8">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8" v-if="processosStore.processoAtual">
         
         <!-- Coluna Esquerda: Detalhes e Partes -->

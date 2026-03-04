@@ -5,7 +5,7 @@ import AppHeader from '../components/AppHeader.vue'
 </script>
 
 <template>
-  <div class="bg-[#F8F7F4] min-h-screen">
+  <div class="bg-[#F8F7F4] min-h-dvh">
     <AppHeader />
     <AppMenu />
     <main class="pt-16 md:pt-0 pb-16 md:pb-0 md:ml-64">

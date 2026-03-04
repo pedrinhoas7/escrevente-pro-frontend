@@ -16,7 +16,7 @@ const consultar = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F8F7F4] flex flex-col items-center justify-center p-4">
+  <div class="min-h-dvh bg-[#F8F7F4] flex flex-col items-center justify-center p-4">
     <div class="w-full max-w-md bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-8 text-center">
         <h1 class="text-3xl font-serif font-bold text-[#1B2A4A] mb-4">Consulta de Processo</h1>
         <p class="text-[#6B7280] mb-8">Digite o número do protocolo para acompanhar o andamento do seu processo.</p>

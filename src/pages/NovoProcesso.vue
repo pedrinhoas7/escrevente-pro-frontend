@@ -44,7 +44,7 @@ const salvar = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F8F7F4] p-4 md:p-8">
+  <div class="min-h-dvh bg-[#F8F7F4] p-4 md:p-8">
     <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-6 md:p-8">
         <h1 class="text-2xl font-serif font-bold text-[#1B2A4A] mb-6 border-b pb-4">Novo Processo</h1>
 

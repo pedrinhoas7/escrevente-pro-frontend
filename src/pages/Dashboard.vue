@@ -87,7 +87,7 @@ const formatDate = (date: any) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F8F7F4] ">
+  <div class="min-h-dvh bg-[#F8F7F4] ">
 
     <main class=" -mt-14">
 

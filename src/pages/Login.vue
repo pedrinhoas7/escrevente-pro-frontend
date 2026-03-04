@@ -27,7 +27,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="bg-blue-900 text-white font-display antialiased h-screen w-full overflow-hidden flex flex-col items-center justify-between">
+  <div class="bg-blue-900 text-white font-display antialiased h-dvh w-full overflow-hidden flex flex-col items-center justify-between">
     <!-- Top Status Bar Area (Visual placeholder for iOS safe area) -->
     <div class="w-full h-12 flex-shrink-0"></div>
     <!-- Main Content Container -->

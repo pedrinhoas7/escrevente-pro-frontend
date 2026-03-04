@@ -85,7 +85,7 @@ export const useProcessosStore = defineStore('processos', {
     async consultarProtocolo(protocolo: string) {
         this.loading = true;
         try {
-            const response = await api.get(`/consulta/${protocolo}`); // Endpoint público sem /api/processos/consulta
+            const response = await api.get(`/processos/consulta/${protocolo}`); // Endpoint público sem /api/processos/consulta
             this.processoAtual = response.data;
             return response.data;
         } catch (error: any) {

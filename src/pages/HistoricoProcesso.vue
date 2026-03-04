@@ -24,7 +24,7 @@ onMounted(async () => {
   <div class="min-h-screen bg-[#F8F7F4] p-8">
       <div class="max-w-4xl mx-auto" v-if="!loading && processosStore.processoAtual">
         <div class="bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-8 mb-8">
-            <h1 class="text-3xl font-serif font-bold text-[#1B2A4A] mb-2">{{ processosStore.processoAtual.titulo }}</h1>
+            <h1 class="text-3xl font-serif font-bold text-[#1B2A4A] mb-2">{{ processosStore.processoAtual.tipoAto }}</h1>
             <p class="text-[#6B7280]">Protocolo: <span class="font-mono text-[#1B2A4A] font-bold">{{ processosStore.processoAtual.protocolo }}</span></p>
             
             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-[#1B2A4A] text-sm bg-gray-50 p-4 rounded-lg">

@@ -47,7 +47,7 @@ const adicionarStatus = async () => {
             <div class="bg-white rounded-lg shadow-sm border border-[#1B2A4A]/10 p-6">
                 <div class="flex justify-between items-start mb-4">
                     <div>
-                        <h1 class="text-2xl font-serif font-bold text-[#1B2A4A]">{{ processosStore.processoAtual.titulo }}</h1>
+                        <h1 class="text-2xl font-serif font-bold text-[#1B2A4A]">{{ processosStore.processoAtual.tipoAto }}</h1>
                         <p class="text-[#6B7280]">Protocolo: <span class="font-mono text-[#1B2A4A] font-bold">{{ processosStore.processoAtual.protocolo }}</span></p>
                     </div>
                 </div>

@@ -201,7 +201,7 @@ const formatDate = (date: any) => {
 
               <!-- Info -->
               <div class="flex-1 min-w-0">
-                <p class="text-[#1B2A4A] text-sm font-semibold truncate">{{ processo.titulo }}</p>
+                <p class="text-[#1B2A4A] text-sm font-semibold truncate">{{ processo.tipoAto }}</p>
                 <p class="text-[#6B7280] text-xs mt-0.5">
                   Prot. {{ processo.protocolo }} &bull; {{ formatDate(processo.criadoEm) }}
                 </p>

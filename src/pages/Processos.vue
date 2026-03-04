@@ -14,8 +14,9 @@ onMounted(() => {
   clientesStore.fetchClientes()
 })
 
-const getClientName = (clientId: string) => {
-  const client = clientesStore.clientes.find(c => c.id === clientId)
+
+const getClientName = (apresentanteId: string) => {
+  const client = clientesStore.clientes.find(c => c.id === apresentanteId)
   return client ? client.nome : 'Cliente não encontrado'
 }
 
@@ -32,9 +33,8 @@ const filteredProcessos = computed(() => {
 
   return sortedProcessos.filter(
     processo =>
-      processo.titulo.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-      processo.protocolo.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-      getClientName(processo.clienteId).toLowerCase().includes(searchTerm.value.toLowerCase())
+      processo.tipoAto.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+      (processo.protocolo && processo.protocolo.toLowerCase().includes(searchTerm.value.toLowerCase()))
   )
 })
 </script>
@@ -89,7 +89,7 @@ const filteredProcessos = computed(() => {
           v-for="processo in filteredProcessos"
           :key="processo.id"
           :processo="processo"
-          :clientName="getClientName(processo.clienteId)"
+          :clientName="getClientName(processo.partes.apresentante)"
         />
       </div>
     </div>

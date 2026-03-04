@@ -31,7 +31,7 @@ onMounted(async () => {
 
 const salvar = async () => {
     try {
-        await processosStore.addProcesso(form.value);
+        await processosStore.addProcesso({ ...form.value, tipoAto: form.value.tipoAto as any });
         router.push('/processos');
     } catch (error) {
         console.error("Erro ao salvar processo", error);

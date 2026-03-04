@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import api from '../services/api';
-import { useAuthStore } from './auth';
 
 interface Cliente {
   id?: string;
@@ -20,12 +19,10 @@ export const useClientesStore = defineStore('clientes', {
   }),
   actions: {
     async fetchClientes() {
-      const authStore = useAuthStore();
-      if (!authStore.userId) return;
-
       this.loading = true;
       try {
-        const response = await api.get(`/clientes`, { params: { userId: authStore.userId } });
+        // The backend now filters clients based on the authenticated user (e.g., JWT).
+        const response = await api.get(`/clientes`);
         this.clientes = response.data;
       } catch (error: any) {
         this.error = error.message;

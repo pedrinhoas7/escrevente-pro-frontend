@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import api from '../services/api';
-import { useAuthStore } from './auth';
+import type { TipoDeAto } from '../types/tipo-ato';
 
 interface Partes {
   outorganteVendedor: string;
@@ -12,7 +12,7 @@ interface Partes {
 interface Processo {
   id?: string;
   protocolo?: string;
-  tipoAto: string;
+  tipoAto: TipoDeAto;
   dataEntrada: string; // ou Date
   partes: Partes;
   notasInternas: string;
@@ -24,35 +24,33 @@ export const useProcessosStore = defineStore('processos', {
   state: () => ({
     processos: [] as Processo[],
     processoAtual: null as Processo | null,
-    tiposAto: [
-        'Ata Notarial',
-        'Autenticação de Cópia',
-        'Contrato de Compra e Venda',
-        'Contrato de Doação',
-        'Contrato de Locação',
-        'Escritura de Imóvel',
-        'Procuração',
-        'Reconhecimento de Firma',
-        'Testamento',
-        'Outro'
-    ] as string[],
+    tiposAto: [] as TipoDeAto[],
     loading: false,
     error: null as string | null,
   }),
   actions: {
     async fetchProcessos() {
-      const authStore = useAuthStore();
-      if (!authStore.userId) return;
-
       this.loading = true;
       try {
-        const response = await api.get('/processos', { params: { userId: authStore.userId } });
+        // The backend now filters processes based on the authenticated user (e.g., JWT).
+        const response = await api.get('/processos');
         this.processos = response.data;
       } catch (error: any) {
         this.error = error.message;
       } finally {
         this.loading = false;
       }
+    },
+    async fetchTiposAto() {
+        this.loading = true;
+        try {
+            const response = await api.get('/tipos-ato');
+            this.tiposAto = response.data;
+        } catch (error: any) {
+            this.error = error.message;
+        } finally {
+            this.loading = false;
+        }
     },
     async getProcesso(id: string) {
         this.loading = true;
@@ -99,3 +97,4 @@ export const useProcessosStore = defineStore('processos', {
     }
   },
 });
+

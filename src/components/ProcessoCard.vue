@@ -40,7 +40,7 @@ const formattedDate = computed(() => {
     <!-- Desktop Row -->
     <div class="hidden md:grid grid-cols-4 gap-4 items-center p-6">
       <div>
-        <p class="font-bold text-gray-800">{{ props.processo.tipoAto.nome }}</p>
+                <p class="font-bold text-gray-800">{{ props.processo.tipoAto }}</p>
         <p class="text-sm text-gray-500">#{{ props.processo.protocolo }}</p>
       </div>
       <div>
@@ -58,7 +58,7 @@ const formattedDate = computed(() => {
     <div class="md:hidden p-6 space-y-4">
         <div class="flex justify-between items-start">
             <div>
-                <p class="font-bold text-gray-800">{{ props.processo.tipoAto.nome }}</p>
+        <p class="font-bold text-gray-800">{{ props.processo.tipoAto }}</p>
                 <p class="text-sm text-gray-500">#{{ props.processo.protocolo }}</p>
             </div>
             <StatusBadge :status="lastStatus.status" />

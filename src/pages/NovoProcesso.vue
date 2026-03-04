@@ -11,7 +11,7 @@ const clientesStore = useClientesStore();
 
 const form = ref({
     protocolo: '',
-    tipoAto: null as TipoDeAto | null,
+    tipoAto: '' as TipoDeAto,
     dataEntrada: new Date().toISOString().slice(0, 10),
     partes: {
         outorganteVendedor: '',
@@ -22,7 +22,7 @@ const form = ref({
     notasInternas: ''
 });
 
-const tiposAto = computed(() => processosStore.tiposAto);
+const tiposAto = computed<TipoDeAto[]>(() => processosStore.tiposAto);
 
 onMounted(async () => {
   await clientesStore.fetchClientes();
@@ -58,7 +58,7 @@ const salvar = async () => {
                     <label for="tipoAto" class="block text-sm font-medium text-gray-700">Tipo de Ato</label>
                     <select v-model="form.tipoAto" id="tipoAto" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]">
                         <option :value="null" disabled>Selecione um tipo</option>
-                        <option v-for="tipo in tiposAto" :key="tipo.id" :value="tipo">{{ tipo.nome }}</option>
+                        <option v-for="tipo in tiposAto" :key="tipo" :value="tipo">{{ tipo }}</option>
                     </select>
                 </div>
                 <div>

@@ -9,7 +9,7 @@ interface Partes {
   apresentante: string;
 }
 
-interface Processo {
+export interface Processo {
   id?: string;
   protocolo?: string;
   tipoAto: TipoDeAto;

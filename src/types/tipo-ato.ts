@@ -1,5 +1,1 @@
-export interface TipoDeAto {
-    id: string;
-    nome: string;
-}
-
+export type TipoDeAto = "Ata Notarial" | "Procuração" | "Escritura de Compra e Venda" | "Testamento" | "Inventário e Partilha" | "Outro";

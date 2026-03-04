@@ -33,7 +33,7 @@ const filteredProcessos = computed(() => {
 
   return sortedProcessos.filter(
     processo =>
-      processo.tipoAto.nome.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+      processo.tipoAto.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
       (processo.protocolo && processo.protocolo.toLowerCase().includes(searchTerm.value.toLowerCase()))
   )
 })

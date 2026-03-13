@@ -107,11 +107,11 @@ const salvarEdicao = async () => {
                 </div>
                 <div>
                     <label for="valorProcesso" class="block text-sm font-medium text-gray-700">Valor do Processo</label>
-                    <input v-model="valorProcessoInput" @blur="onBlurValorProcesso" id="valorProcesso" type="text" inputmode="numeric" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                    <input v-model="valorProcessoInput" @blur="onBlurValorProcesso" id="valorProcesso" type="text"  class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
                 <div>
                     <label for="valorEmolumentos" class="block text-sm font-medium text-gray-700">Valor dos Emolumentos</label>
-                    <input v-model="valorEmolumentosInput" @blur="onBlurValorEmolumentos" id="valorEmolumentos" type="text" inputmode="numeric" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                    <input v-model="valorEmolumentosInput" @blur="onBlurValorEmolumentos" id="valorEmolumentos" type="text"  class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
             </div>
 

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useProcessosStore } from '../stores/processos';
 import { useClientesStore } from '../stores/clientes';
 import type { TipoDeAto } from '../types/tipo-ato';
+import { formatCurrency, parseCurrency } from '../utils/currency';
 
 const route = useRoute();
 const router = useRouter();
@@ -26,6 +27,9 @@ const form = ref({
     valorEmolumentos: undefined as number | undefined,
     notasInternas: ''
 });
+
+const valorProcessoInput = ref<string>('');
+const valorEmolumentosInput = ref<string>('');
 
 const tiposAto = computed<TipoDeAto[]>(() => processosStore.tiposAto);
 const clientes = computed(() => clientesStore.clientes);
@@ -50,8 +54,20 @@ onMounted(async () => {
             valorEmolumentos: processosStore.processoAtual.valorEmolumentos,
             notasInternas: processosStore.processoAtual.notasInternas || ''
         };
+        valorProcessoInput.value = formatCurrency(form.value.valorProcesso); // Inicializar input formatado
+        valorEmolumentosInput.value = formatCurrency(form.value.valorEmolumentos); // Inicializar input formatado
     }
 });
+
+const onBlurValorProcesso = () => {
+  form.value.valorProcesso = parseCurrency(valorProcessoInput.value);
+  valorProcessoInput.value = formatCurrency(form.value.valorProcesso);
+};
+
+const onBlurValorEmolumentos = () => {
+  form.value.valorEmolumentos = parseCurrency(valorEmolumentosInput.value);
+  valorEmolumentosInput.value = formatCurrency(form.value.valorEmolumentos);
+};
 
 const salvarEdicao = async () => {
     try {
@@ -91,11 +107,11 @@ const salvarEdicao = async () => {
                 </div>
                 <div>
                     <label for="valorProcesso" class="block text-sm font-medium text-gray-700">Valor do Processo</label>
-                    <input v-model.number="form.valorProcesso" id="valorProcesso" type="number" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                    <input v-model="valorProcessoInput" @blur="onBlurValorProcesso" id="valorProcesso" type="text" inputmode="numeric" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
                 <div>
                     <label for="valorEmolumentos" class="block text-sm font-medium text-gray-700">Valor dos Emolumentos</label>
-                    <input v-model.number="form.valorEmolumentos" id="valorEmolumentos" type="number" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                    <input v-model="valorEmolumentosInput" @blur="onBlurValorEmolumentos" id="valorEmolumentos" type="text" inputmode="numeric" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
             </div>
 
@@ -109,10 +125,6 @@ const salvarEdicao = async () => {
                      <div>
                         <label for="outorganteComprador" class="block text-sm font-medium text-gray-700">Outorgante Comprador</label>
                         <input v-model="form.partes.outorganteComprador" id="outorganteComprador" type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                    </div>
-                     <div>
-                        <label for="escrevente" class="block text-sm font-medium text-gray-700">Escrevente Responsável</label>
-                        <input v-model="form.partes.escrevente" id="escrevente" type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                     </div>
                      <div>
                         <label for="apresentante" class="block text-sm font-medium text-gray-700">Apresentante</label>

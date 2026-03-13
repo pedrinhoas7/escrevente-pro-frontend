@@ -33,7 +33,7 @@ const pendentes = computed(() =>
 const orcamentos = computed(() =>
 
   processos.value.filter(p =>
-    p.protocolo
+    p.protocolo == undefined
   ).length
 );
 

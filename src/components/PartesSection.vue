@@ -33,10 +33,6 @@ const getClientName = (apresentanteId: string) => {
         <p class="text-[#1B2A4A] font-medium">{{ props.partes.outorganteComprador }}</p>
       </div>
       <div>
-        <label class="block text-xs uppercase tracking-wide text-[#6B7280] font-bold mb-1">Escrevente Responsável</label>
-        <p class="text-[#1B2A4A] font-medium">{{ props.partes.escrevente }}</p>
-      </div>
-      <div>
         <label class="block text-xs uppercase tracking-wide text-[#6B7280] font-bold mb-1">Apresentante</label>
         <p class="text-[#1B2A4A] font-medium">{{ getClientName(props.partes.apresentante) }}</p>
       </div>

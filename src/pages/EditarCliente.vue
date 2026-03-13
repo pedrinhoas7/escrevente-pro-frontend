@@ -54,11 +54,11 @@ const salvarEdicao = async () => {
                 </div>
                 <div>
                     <label for="cpf" class="block text-sm font-medium text-gray-700">CPF (opcional)</label>
-                    <input v-model="form.cpf" id="cpf" type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                    <input v-model="form.cpf" v-maska data-maska="['###.###.###-##', '##.###.###/####-##']" id="cpf" type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
                 <div>
                     <label for="telefone" class="block text-sm font-medium text-gray-700">Telefone</label>
-                    <input v-model="form.telefone" id="telefone" type="text" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                    <input v-model="form.telefone" v-maska data-maska="['(##) ####-####', '(##) #####-####']" id="telefone" type="text" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">Email (opcional)</label>

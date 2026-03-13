@@ -22,8 +22,8 @@ const getClientName = (apresentanteId: string) => {
 
 const filteredProcessos = computed(() => {
   const sortedProcessos = [...processosStore.processos].sort((a, b) => {
-    const aDate = a.statusHistory?.[a.statusHistory.length - 1]?.timestamp?._seconds || 0
-    const bDate = b.statusHistory?.[b.statusHistory.length - 1]?.timestamp?._seconds || 0
+    const aDate = a.statusHistory?.[0]?.data?._seconds || 0;
+    const bDate = b.statusHistory?.[0]?.data?._seconds || 0;
     return bDate - aDate
   })
 
@@ -82,7 +82,7 @@ const filteredProcessos = computed(() => {
       <div v-else class="divide-y divide-gray-200">
         <div  v-for="processo in filteredProcessos" :key="processo.id">
           <ProcessoCard :processo="processo"
-            :clientName="getClientName(processo.partes.apresentante)" />
+            :clientName="getClientName(processo.partes.apresentante || '')" />
         </div>
       </div>
     </div>

@@ -3,25 +3,33 @@ import api from '../services/api';
 import type { TipoDeAto } from '../types/tipo-ato';
 
 interface Partes {
-  outorganteVendedor: string;
-  outorganteComprador: string;
-  escrevente: string;
-  apresentante: string;
+  outorganteVendedor?: string;
+  outorganteComprador?: string;
+  escrevente?: string;
+  apresentante?: string;
+}
+
+interface StatusEntry {
+  id: string;
+  status: string;
+  data: any; // admin.firestore.Timestamp
+  observacao?: string;
+  registradoEm: any; // admin.firestore.Timestamp
 }
 
 export interface Processo {
   id?: string;
   protocolo?: string;
   tipoAto: TipoDeAto;
-  dataEntrada: string; // ou Date
+  dataEntrada: any; // admin.firestore.Timestamp
   partes: Partes;
   notasInternas: string;
   valorProcesso?: number;
   valorEmolumentos?: number;
   comissaoApresentante?: number;
   comissaoEscrevente?: number;
-  criadoEm?: any;
-  statusHistory?: any[];
+  criadoEm?: any; // admin.firestore.Timestamp
+  statusHistory?: StatusEntry[];
 }
 
 export const useProcessosStore = defineStore('processos', {

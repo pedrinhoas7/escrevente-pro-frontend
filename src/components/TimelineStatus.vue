@@ -5,8 +5,9 @@ import StatusBadge from './StatusBadge.vue';
 interface StatusHistory {
   id: string;
   status: string;
-  data: any; // Timestamp or string
+  data: any; // admin.firestore.Timestamp
   observacao?: string;
+  registradoEm: any; // admin.firestore.Timestamp
 }
 
 const props = defineProps<{

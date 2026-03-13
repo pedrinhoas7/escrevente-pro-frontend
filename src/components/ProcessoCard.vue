@@ -16,11 +16,22 @@ const irParaDetalhes = () => {
 }
 
 const lastStatus = computed(() => {
-  console.log(props.processo.statusHistory)
   if (!props.processo.statusHistory || props.processo.statusHistory.length === 0) {
-    return { status: 'Entrada', date: props.processo.dataEntrada }
+    return { status: 'Entrada', date: props.processo.criadoEm };
   }
-  const last = props.processo.statusHistory[props.processo.statusHistory.length - 1]
+
+  // Sort the statusHistory by 'registradoEm' in descending order (latest first)
+  const sortedHistory = [...props.processo.statusHistory].sort((a, b) => {
+    const dateA = a.registradoEm?._seconds || 0;
+    const dateB = b.registradoEm?._seconds || 0;
+    return dateB - dateA;
+  });
+
+  const last = sortedHistory[0];
+  if (!last) {
+    return { status: 'Entrada', date: props.processo.criadoEm };
+  }
+
   return {
     status: last.status,
     date: last.registradoEm,
@@ -47,6 +58,9 @@ const formattedDate = computed(() => {
     <!-- Desktop Row -->
     <div class="hidden md:grid grid-cols-4 gap-4 items-center p-6">
       <div>
+        <StatusBadge :status="lastStatus.status" />
+      </div>
+      <div>
         <p class="font-bold text-gray-800">{{ props.processo.tipoAto }}</p>
         <p class="text-sm text-gray-500">#{{ props.processo.protocolo }}</p>
         <p v-if="props.processo.valorProcesso" class="text-sm text-gray-500">Valor: {{
@@ -56,9 +70,6 @@ const formattedDate = computed(() => {
       </div>
       <div>
         <p class="text-gray-700">{{ props.clientName }}</p>
-      </div>
-      <div>
-        <StatusBadge :status="lastStatus.status" />
       </div>
       <div class="text-right">
         <p class="text-sm text-gray-500">{{ formattedDate }}</p>

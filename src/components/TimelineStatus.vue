@@ -12,7 +12,10 @@ interface StatusHistory {
 const props = defineProps<{
   history: StatusHistory[];
   isPublic?: boolean;
+  processoId: string; // Adicionar esta linha
 }>();
+
+const emit = defineEmits(['remove-status']); // Adicionar esta linha
 
 const showAll = ref(false);
 
@@ -56,7 +59,12 @@ const formatDate = (date: any) => {
       <div v-for="status in previousStatus" :key="status.id" class="bg-[#1B2A4A]/5 border-l-4 border-[#1B2A4A]/20 p-4 rounded-r-lg">
         <div class="flex justify-between items-center mb-2">
            <StatusBadge :status="status.status" />
-           <span class="text-xs text-[#6B7280]">{{ formatDate(status.data) }}</span>
+           <div class="flex items-center space-x-2">
+               <span class="text-xs text-[#6B7280]">{{ formatDate(status.data) }}</span>
+               <button v-if="!isPublic" @click.stop="emit('remove-status', status.id)" class="text-red-500 hover:text-red-700 text-xs">
+                   Remover
+               </button>
+           </div>
         </div>
         <p v-if="status.observacao" class="text-sm text-[#6B7280] mt-1">
           {{ status.observacao }}

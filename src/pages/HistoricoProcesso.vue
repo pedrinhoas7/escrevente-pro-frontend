@@ -36,7 +36,7 @@ onMounted(async () => {
 
         <div class="bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-8">
             <h2 class="text-2xl font-serif font-bold text-[#1B2A4A] mb-6">Histórico do Processo</h2>
-            <TimelineStatus :history="processosStore.processoAtual.statusHistory || []" :isPublic="true" />
+            <TimelineStatus :history="processosStore.processoAtual.statusHistory || []" :isPublic="true" :processoId="processosStore.processoAtual.id as string" />
         </div>
 
         <div class="mt-8 text-center">

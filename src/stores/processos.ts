@@ -77,12 +77,36 @@ export const useProcessosStore = defineStore('processos', {
             throw error;
         }
     },
+    async updateProcesso(id: string, processo: Partial<Processo>) {
+        try {
+            const response = await api.put(`/processos/${id}`, processo);
+            // Atualizar o processo na lista local se necessário, ou re-fetch
+            const index = this.processos.findIndex(p => p.id === id);
+            if (index !== -1) {
+                this.processos[index] = { ...this.processos[index], ...response.data };
+            }
+            await this.getProcesso(id); // Re-fetch para garantir dados atualizados
+            return response.data;
+        } catch (error: any) {
+            this.error = error.message;
+            throw error;
+        }
+    },
     async addStatus(id: string, statusData: { status: string; observacao: string }) {
         try {
             await api.post(`/processos/${id}/status`, statusData);
             // Atualiza o processo atual para refletir o novo status
             await this.getProcesso(id);
         } catch (error: any) {
+            throw error;
+        }
+    },
+    async removeStatus(processoId: string, statusId: string) {
+        try {
+            await api.delete(`/processos/${processoId}/status/${statusId}`);
+            await this.getProcesso(processoId); // Re-fetch para atualizar a timeline
+        } catch (error: any) {
+            this.error = error.message;
             throw error;
         }
     },

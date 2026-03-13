@@ -59,7 +59,7 @@ const salvarCliente = async () => {
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cliente.email }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cliente.telefone }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="#" class="text-[#1B2A4A] hover:text-[#C9A84C]">Editar</a>
+                            <router-link :to="`/clientes/${cliente.id}/editar`" class="text-[#1B2A4A] hover:text-[#C9A84C]">Editar</router-link>
                         </td>
                     </tr>
                 </tbody>
@@ -74,7 +74,7 @@ const salvarCliente = async () => {
                 <p class="text-sm font-bold text-[#1B2A4A]">{{ cliente.nome }}</p>
                 <p class="text-sm text-gray-500">{{ cliente.cpf }}</p>
               </div>
-              <a href="#" class="text-sm font-medium text-[#1B2A4A] hover:text-[#C9A84C]">Editar</a>
+              <router-link :to="`/clientes/${cliente.id}/editar`" class="text-sm font-medium text-[#1B2A4A] hover:text-[#C9A84C]">Editar</router-link>
             </div>
             <div class="mt-4 space-y-2">
               <p class="text-sm text-gray-600"><strong class="font-medium text-gray-800">Email:</strong> {{ cliente.email }}</p>

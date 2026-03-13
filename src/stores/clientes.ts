@@ -14,6 +14,7 @@ interface Cliente {
 export const useClientesStore = defineStore('clientes', {
   state: () => ({
     clientes: [] as Cliente[],
+    clienteAtual: null as Cliente | null,
     loading: false,
     error: null as string | null,
   }),
@@ -26,6 +27,34 @@ export const useClientesStore = defineStore('clientes', {
         this.clientes = response.data;
       } catch (error: any) {
         this.error = error.message;
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchCliente(id: string) {
+      this.loading = true;
+      try {
+        const response = await api.get(`/clientes/${id}`);
+        this.clienteAtual = response.data;
+      } catch (error: any) {
+        this.error = error.message;
+      } finally {
+        this.loading = false;
+      }
+    },
+    async updateCliente(id: string, cliente: Partial<Cliente>) {
+      this.loading = true;
+      try {
+        const response = await api.put(`/clientes/${id}`, cliente);
+        const index = this.clientes.findIndex(c => c.id === id);
+        if (index !== -1) {
+          this.clientes[index] = { ...this.clientes[index], ...response.data };
+        }
+        await this.fetchClientes(); // Re-fetch para garantir dados atualizados
+        return response.data;
+      } catch (error: any) {
+        this.error = error.message;
+        throw error;
       } finally {
         this.loading = false;
       }

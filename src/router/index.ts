@@ -5,6 +5,8 @@ import Clientes from '../pages/Clientes.vue';
 import Processos from '../pages/Processos.vue';
 import NovoProcesso from '../pages/NovoProcesso.vue';
 import DetalhesProcesso from '../pages/DetalhesProcesso.vue';
+import EditarProcesso from '../pages/EditarProcesso.vue';
+import EditarCliente from '../pages/EditarCliente.vue'; // Adicionar esta linha
 import ConsultaProtocolo from '../pages/ConsultaProtocolo.vue';
 import HistoricoProcesso from '../pages/HistoricoProcesso.vue';
 import MainLayout from '../layouts/MainLayout.vue';
@@ -46,6 +48,11 @@ const routes: Array<RouteRecordRaw> = [
         component: Clientes,
       },
       {
+        path: 'clientes/:id/editar',
+        name: 'EditarCliente',
+        component: EditarCliente,
+      },
+      {
         path: 'processos',
         name: 'Processos',
         component: Processos,
@@ -59,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'processos/:id',
         name: 'DetalhesProcesso',
         component: DetalhesProcesso,
+      },
+      {
+        path: 'processos/:id/editar',
+        name: 'EditarProcesso',
+        component: EditarProcesso,
       },
     ]
   },

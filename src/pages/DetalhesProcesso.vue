@@ -36,6 +36,16 @@ const adicionarStatus = async () => {
         alert("Erro ao adicionar status: " + error);
     }
 };
+
+const handleRemoveStatus = async (statusId: string) => {
+    if (confirm('Tem certeza que deseja remover este status?')) {
+        try {
+            await processosStore.removeStatus(route.params.id as string, statusId);
+        } catch (error) {
+            alert("Erro ao remover status: " + error);
+        }
+    }
+};
 </script>
 
 <template>
@@ -52,6 +62,9 @@ const adicionarStatus = async () => {
                      <p v-if="processosStore.processoAtual.valorProcesso" class="text-[#6B7280]">Valor do Processo: <span class="font-bold">{{ processosStore.processoAtual.valorProcesso.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
                      <p v-if="processosStore.processoAtual.valorEmolumentos" class="text-[#6B7280]">Valor dos Emolumentos: <span class="font-bold">{{ processosStore.processoAtual.valorEmolumentos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
                      </div>
+                    <router-link :to="`/processos/${route.params.id}/editar`" class="btn-secondary py-2 px-4 text-sm">
+                        Editar Processo
+                    </router-link>
                  </div>
                  <div class="text-sm text-[#1B2A4A] mt-4">
 -                    <p><span class="font-bold">Tipo de Ato:</span> {{ processosStore.processoAtual.tipoAto }}</p>
@@ -93,7 +106,11 @@ const adicionarStatus = async () => {
             </div>
 
             <!-- Timeline -->
-            <TimelineStatus :history="processosStore.processoAtual.statusHistory || []" />
+            <TimelineStatus 
+                :history="processosStore.processoAtual.statusHistory || []"
+                :processoId="route.params.id as string"
+                @remove-status="handleRemoveStatus"
+            />
         </div>
     </div>
     <div v-else class="text-center py-20 text-[#1B2A4A]">

@@ -49,6 +49,8 @@ const adicionarStatus = async () => {
                     <div>
                         <h1 class="text-2xl font-serif font-bold text-[#1B2A4A]">{{ processosStore.processoAtual.tipoAto }}</h1>
                          <p class="text-[#6B7280]">Protocolo: <span class="font-mono text-[#1B2A4A] font-bold">{{ processosStore.processoAtual.protocolo }}</span></p>
+                     <p v-if="processosStore.processoAtual.valorProcesso" class="text-[#6B7280]">Valor do Processo: <span class="font-bold">{{ processosStore.processoAtual.valorProcesso.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
+                     <p v-if="processosStore.processoAtual.valorEmolumentos" class="text-[#6B7280]">Valor dos Emolumentos: <span class="font-bold">{{ processosStore.processoAtual.valorEmolumentos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
                      </div>
                  </div>
                  <div class="text-sm text-[#1B2A4A] mt-4">
@@ -56,8 +58,14 @@ const adicionarStatus = async () => {
 +                    <p><span class="font-bold">Tipo de Ato:</span> {{ processosStore.processoAtual.tipoAto }}</p>
                      <p class="mt-2"><span class="font-bold">Notas Internas:</span></p>
                      <p class="bg-gray-50 p-3 rounded mt-1 border border-gray-100">{{ processosStore.processoAtual.notasInternas || 'Nenhuma nota interna.' }}</p>
+
+                     <div v-if="processosStore.processoAtual.comissaoApresentante !== undefined && processosStore.processoAtual.comissaoEscrevente !== undefined" class="mt-4 p-4 bg-yellow-50 rounded-md border border-yellow-200">
+                         <h4 class="font-bold text-yellow-800 mb-2">Detalhes da Comissão (Apenas para Escreventes)</h4>
+                         <p class="text-yellow-700">Comissão Apresentante (30%): <span class="font-bold">{{ processosStore.processoAtual.comissaoApresentante.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
+                         <p class="text-yellow-700">Comissão Escrevente (10%): <span class="font-bold">{{ processosStore.processoAtual.comissaoEscrevente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
+                     </div>
                  </div>
-            </div>
+             </div>
 
             <PartesSection :partes="processosStore.processoAtual.partes" />
         </div>

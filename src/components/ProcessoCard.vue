@@ -49,6 +49,8 @@ const formattedDate = computed(() => {
       <div>
         <p class="font-bold text-gray-800">{{ props.processo.tipoAto }}</p>
         <p class="text-sm text-gray-500">#{{ props.processo.protocolo }}</p>
+        <p v-if="props.processo.valorProcesso" class="text-sm text-gray-500">Valor: {{ props.processo.valorProcesso.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+        <p v-if="props.processo.valorEmolumentos" class="text-sm text-gray-500">Emolumentos: {{ props.processo.valorEmolumentos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
       </div>
       <div>
         <p class="text-gray-700">{{ props.clientName }}</p>
@@ -67,6 +69,8 @@ const formattedDate = computed(() => {
         <div>
           <p class="font-bold text-gray-800">{{ props.processo.tipoAto }}</p>
           <p class="text-sm text-gray-500">#{{ props.processo.protocolo }}</p>
+          <p v-if="props.processo.valorProcesso" class="text-sm text-gray-500">Valor: {{ props.processo.valorProcesso.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
+          <p v-if="props.processo.valorEmolumentos" class="text-sm text-gray-500">Emolumentos: {{ props.processo.valorEmolumentos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</p>
         </div>
         <StatusBadge :status="lastStatus.status" />
       </div>

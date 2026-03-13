@@ -19,6 +19,8 @@ const form = ref({
         escrevente: '',
         apresentante: ''
     },
+    valorProcesso: undefined as number | undefined,
+    valorEmolumentos: undefined as number | undefined,
     notasInternas: ''
 });
 
@@ -64,6 +66,14 @@ const salvar = async () => {
                 <div>
                     <label for="dataEntrada" class="block text-sm font-medium text-gray-700">Data de Entrada</label>
                     <input v-model="form.dataEntrada" id="dataEntrada" type="date" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                </div>
+                <div>
+                    <label for="valorProcesso" class="block text-sm font-medium text-gray-700">Valor do Processo</label>
+                    <input v-model.number="form.valorProcesso" id="valorProcesso" type="number" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+                </div>
+                <div>
+                    <label for="valorEmolumentos" class="block text-sm font-medium text-gray-700">Valor dos Emolumentos</label>
+                    <input v-model.number="form.valorEmolumentos" id="valorEmolumentos" type="number" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
             </div>
 

@@ -16,6 +16,10 @@ export interface Processo {
   dataEntrada: string; // ou Date
   partes: Partes;
   notasInternas: string;
+  valorProcesso?: number;
+  valorEmolumentos?: number;
+  comissaoApresentante?: number;
+  comissaoEscrevente?: number;
   criadoEm?: any;
   statusHistory?: any[];
 }

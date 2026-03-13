@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useProcessosStore } from '../stores/processos';
+import { useAuthStore } from '../stores/auth'; // Importar useAuthStore
 
 const processosStore = useProcessosStore();
+const authStore = useAuthStore(); // Instanciar authStore
 
 onMounted(() => {
   processosStore.fetchProcessos();
@@ -75,6 +77,15 @@ const concluidos = computed(() =>
   ).length
 );
 
+// Total de comissões
+const totalComissaoApresentante = computed(() => {
+  return processos.value.reduce((sum, p) => sum + (p.comissaoApresentante || 0), 0);
+});
+
+const totalComissaoEscrevente = computed(() => {
+  return processos.value.reduce((sum, p) => sum + (p.comissaoEscrevente || 0), 0);
+});
+
 // Processos recentes (últimos 4)
 const processosRecentes = computed(() =>
   [...processos.value]
@@ -143,6 +154,13 @@ const formatDate = (date: any) => {
       </div>
       <!-- Cards de resumo -->
       <div class="grid grid-cols-2 gap-3 mb-6">
+
+        <!-- Comissão Total (apenas para escreventes) -->
+        <div v-if="authStore.userRole === 'escrevente'" class="col-span-2 bg-yellow-50 rounded-2xl p-4 shadow-sm border border-yellow-200">
+          <h3 class="text-lg font-serif font-bold text-yellow-800 mb-2">Minhas Comissões</h3>
+          <p class="text-yellow-700">Total Apresentante: <span class="font-bold">{{ totalComissaoApresentante.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
+          <p class="text-yellow-700">Total Escrevente: <span class="font-bold">{{ totalComissaoEscrevente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
+        </div>
 
         <!-- Processos Abertos -->
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-[#1B2A4A]/8">

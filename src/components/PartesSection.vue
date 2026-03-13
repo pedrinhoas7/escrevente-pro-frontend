@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { useClientesStore } from '../stores/clientes';
 
 const props = defineProps<{
@@ -11,11 +12,16 @@ const props = defineProps<{
 }>();
 
 const clientStore = useClientesStore()
+const getClients = async () => {
+  await clientStore.fetchClientes();
+}
 
 const getClientName = (apresentanteId: string) => {
   const client = clientStore.clientes.find(c => c.id === apresentanteId)
-  return client ? client.nome : apresentanteId
+  return client ? client.nome : 'Carregando...'
 }
+
+onMounted(async () => getClients())
 </script>
 
 <template>

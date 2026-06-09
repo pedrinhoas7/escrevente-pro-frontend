@@ -5,11 +5,28 @@ import AppHeader from '../components/AppHeader.vue'
 </script>
 
 <template>
-  <div class="bg-background min-h-screen">
+  <div class="main-layout">
     <AppHeader />
     <AppMenu />
-    <main class="pt-16 md:ml-[280px]">
+    <main class="main-content">
       <RouterView />
     </main>
   </div>
 </template>
+
+<style scoped>
+.main-layout {
+  background-color: #faf9f6;
+  min-height: 100vh;
+}
+
+.main-content {
+  padding-top: 64px;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    margin-left: 280px;
+  }
+}
+</style>

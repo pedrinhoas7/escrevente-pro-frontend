@@ -77,18 +77,18 @@ const processosRecentes = computed(() =>
     .slice(0, 5)
 );
 
-const statusConfig: Record<string, { label: string; bg: string; text: string }> = {
-  'Entrada': { label: 'Entrada', bg: 'bg-secondary-container/30', text: 'text-secondary' },
-  'Em análise': { label: 'Em Análise', bg: 'bg-blue-100', text: 'text-blue-700' },
-  'Falta de documento': { label: 'Pendente', bg: 'bg-orange-100', text: 'text-orange-700' },
-  'Indeferido': { label: 'Indeferido', bg: 'bg-error-container/50', text: 'text-error' },
-  'Aguardando assinatura': { label: 'Assinatura', bg: 'bg-tertiary-container/30', text: 'text-green-700' },
-  'Documentação entregue ao cliente': { label: 'Entregue', bg: 'bg-emerald-100', text: 'text-emerald-700' },
-  'Concluído / Registrado': { label: 'Concluído', bg: 'bg-surface-container-high', text: 'text-on-surface-variant' },
+const statusConfig: Record<string, { label: string; bgColor: string; textColor: string }> = {
+  'Entrada': { label: 'Entrada', bgColor: 'rgba(255, 226, 99, 0.3)', textColor: '#CFB53B' },
+  'Em análise': { label: 'Em Análise', bgColor: '#DBEAFE', textColor: '#1D4ED8' },
+  'Falta de documento': { label: 'Pendente', bgColor: '#FED7AA', textColor: '#EA580C' },
+  'Indeferido': { label: 'Indeferido', bgColor: '#FCA5A5', textColor: '#DC2626' },
+  'Aguardando assinatura': { label: 'Assinatura', bgColor: '#D1FAE5', textColor: '#059669' },
+  'Documentação entregue ao cliente': { label: 'Entregue', bgColor: '#A7F3D0', textColor: '#047857' },
+  'Concluído / Registrado': { label: 'Concluído', bgColor: '#E5E7EB', textColor: '#6B7280' },
 };
 
 function getStatusInfo(status: string) {
-  return statusConfig[status] ?? { label: status, bg: 'bg-surface-container', text: 'text-on-surface-variant' };
+  return statusConfig[status] ?? { label: status, bgColor: '#F3F4F6', textColor: '#6B7280' };
 }
 
 function getIconColor(tipoAto: string): string {
@@ -127,44 +127,39 @@ const formatDateSimple = (date: any) => {
 </script>
 
 <template>
-  <div class="bg-background min-h-screen">
-    <main class="pb-24 md:pb-8">
-      <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+  <div class="dashboard-container">
+    <main class="dashboard-main">
+      <div class="dashboard-content">
         
-        <section class="flex flex-col md:flex-row md:items-end justify-between mb-stack-lg gap-md">
+        <section class="dashboard-header">
           <div>
-            <h1 class="text-headline-lg font-serif font-bold text-primary mb-2">
-              Olá, Assessor
-            </h1>
-            <p class="text-body-md text-on-surface-variant">
-              Bem-vindo ao seu painel de controle notarial. Você tem <span class="font-semibold text-primary">{{ processosAbertos }}</span> processos ativos.
+            <h1 class="dashboard-title">Olá, Assessor</h1>
+            <p class="dashboard-subtitle">
+              Bem-vindo ao seu painel de controle notarial. Você tem <strong>{{ processosAbertos }}</strong> processos ativos.
             </p>
           </div>
-          <router-link
-            to="/processos/novo"
-            class="hidden md:flex bg-primary text-on-primary px-xl py-md rounded-xl font-label-md items-center gap-xs hover:scale-105 active:scale-95 transition-all shadow-sm"
-          >
-            <span class="material-symbols-outlined">add</span>
+          <router-link to="/processos/novo" class="btn-primary hidden-mobile">
+            <span class="material-symbols-outlined btn-icon">add</span>
             Novo Processo
           </router-link>
         </section>
 
-        <section v-if="authStore.userRole === 'escrevente'" class="mb-stack-lg">
-          <div class="bg-gradient-to-r from-secondary/10 to-secondary/5 border border-secondary/30 rounded-xl p-lg">
-            <div class="flex items-center gap-sm mb-md">
-              <span class="material-symbols-outlined text-secondary">payments</span>
-              <h3 class="text-headline-md font-serif font-bold text-primary">Minhas Comissões</h3>
+        <section v-if="authStore.userRole === 'escrevente'" class="commissions-section">
+          <div class="commissions-card">
+            <div class="commissions-header">
+              <span class="material-symbols-outlined commissions-icon">payments</span>
+              <h3 class="commissions-title">Minhas Comissões</h3>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+            <div class="commissions-grid">
               <div>
-                <p class="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Total Apresentante</p>
-                <p class="text-body-lg font-bold text-primary">
+                <p class="commissions-label">Total Apresentante</p>
+                <p class="commissions-value">
                   {{ totalComissaoApresentante.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
                 </p>
               </div>
               <div>
-                <p class="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Total Escrevente</p>
-                <p class="text-body-lg font-bold text-primary">
+                <p class="commissions-label">Total Escrevente</p>
+                <p class="commissions-value">
                   {{ totalComissaoEscrevente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
                 </p>
               </div>
@@ -172,185 +167,159 @@ const formatDateSimple = (date: any) => {
           </div>
         </section>
 
-        <section class="grid grid-cols-2 lg:grid-cols-4 gap-md md:gap-lg mb-3xl">
-          <div class="glass-card p-lg rounded-xl flex flex-col gap-sm hover:shadow-lg transition-all cursor-pointer group">
-            <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
-              <span class="material-symbols-outlined text-on-secondary-fixed-variant">account_tree</span>
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-primary">
+              <span class="material-symbols-outlined">account_tree</span>
             </div>
-            <div>
-              <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Processos Abertos</p>
-              <h3 class="text-headline-md font-serif font-bold mt-base text-primary">{{ String(processosAbertos).padStart(2, '0') }}</h3>
+            <p class="kpi-label">Processos Abertos</p>
+            <h3 class="kpi-value kpi-value-primary">{{ String(processosAbertos).padStart(2, '0') }}</h3>
+            <div v-if="hoje > 0" class="kpi-trend">
+              <span class="material-symbols-outlined kpi-trend-icon">trending_up</span>
+              <span>+{{ hoje }} hoje</span>
             </div>
-            <div v-if="hoje > 0" class="flex items-center gap-xs text-sm text-emerald-600">
-              <span class="material-symbols-outlined text-sm">trending_up</span>
-              <span class="font-medium">+{{ hoje }} hoje</span>
-            </div>
-            <div v-else-if="lastSevenDays > 0" class="flex items-center gap-xs text-sm text-emerald-600">
-              <span class="material-symbols-outlined text-sm">trending_up</span>
-              <span class="font-medium">+{{ lastSevenDays }} essa semana</span>
+            <div v-else-if="lastSevenDays > 0" class="kpi-trend">
+              <span class="material-symbols-outlined kpi-trend-icon">trending_up</span>
+              <span>+{{ lastSevenDays }} essa semana</span>
             </div>
           </div>
 
-          <div class="glass-card p-lg rounded-xl flex flex-col gap-sm hover:shadow-lg transition-all cursor-pointer group">
-            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-              <span class="material-symbols-outlined text-blue-700">draw</span>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-blue">
+              <span class="material-symbols-outlined">draw</span>
             </div>
-            <div>
-              <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Assinaturas Pendentes</p>
-              <h3 class="text-headline-md font-serif font-bold mt-base text-primary">{{ String(pendentes).padStart(2, '0') }}</h3>
-            </div>
-            <p class="text-label-sm text-on-surface-variant">Aguardando</p>
+            <p class="kpi-label">Assinaturas Pendentes</p>
+            <h3 class="kpi-value">{{ String(pendentes).padStart(2, '0') }}</h3>
+            <p class="kpi-subtext">Aguardando</p>
           </div>
 
-          <div class="glass-card p-lg rounded-xl flex flex-col gap-sm hover:shadow-lg transition-all cursor-pointer group">
-            <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
-              <span class="material-symbols-outlined text-on-surface-variant">description</span>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-gray">
+              <span class="material-symbols-outlined">description</span>
             </div>
-            <div>
-              <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Orçamentos</p>
-              <h3 class="text-headline-md font-serif font-bold mt-base text-primary">{{ String(orcamentos).padStart(2, '0') }}</h3>
-            </div>
-            <p class="text-label-sm text-error font-medium">Não aderiram</p>
+            <p class="kpi-label">Orçamentos</p>
+            <h3 class="kpi-value">{{ String(orcamentos).padStart(2, '0') }}</h3>
+            <p class="kpi-subtext kpi-subtext-danger">Não aderiram</p>
           </div>
 
-          <div class="glass-card p-lg rounded-xl flex flex-col gap-sm hover:shadow-lg transition-all cursor-pointer group">
-            <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center">
-              <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-icon-success">
+              <span class="material-symbols-outlined">check_circle</span>
             </div>
-            <div>
-              <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Concluídos</p>
-              <h3 class="text-headline-md font-serif font-bold mt-base text-primary">{{ String(concluidos).padStart(2, '0') }}</h3>
-            </div>
-            <p class="text-label-sm text-on-surface-variant">Total</p>
+            <p class="kpi-label">Concluídos</p>
+            <h3 class="kpi-value">{{ String(concluidos).padStart(2, '0') }}</h3>
+            <p class="kpi-subtext">Total</p>
           </div>
         </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-xl">
-          <section class="lg:col-span-2">
-            <div class="flex items-center justify-between mb-lg">
-              <h3 class="text-headline-md font-serif font-bold text-primary">Atividade Recente</h3>
-              <router-link to="/processos" class="text-secondary text-label-md font-label-md hover:underline">
-                Ver todos
-              </router-link>
+        <div class="activity-grid">
+          <section class="activity-section">
+            <div class="activity-header">
+              <h3 class="activity-title">Atividade Recente</h3>
+              <router-link to="/processos" class="activity-link">Ver todos</router-link>
             </div>
 
-            <div v-if="processosStore.loading" class="bg-white border border-outline-variant/30 rounded-xl overflow-hidden">
-              <div v-for="i in 4" :key="i" class="px-lg py-lg border-b border-outline-variant/10 last:border-b-0">
-                <div class="flex items-center gap-sm animate-pulse">
-                  <div class="w-10 h-10 bg-surface-container rounded-lg"></div>
-                  <div class="flex-1">
-                    <div class="h-4 bg-surface-container rounded w-1/3 mb-2"></div>
-                    <div class="h-3 bg-surface-container rounded w-1/2"></div>
-                  </div>
+            <div v-if="processosStore.loading" class="loading-container">
+              <div v-for="i in 4" :key="i" class="loading-item">
+                <div class="loading-avatar"></div>
+                <div class="loading-content">
+                  <div class="loading-line loading-line-wide"></div>
+                  <div class="loading-line loading-line-narrow"></div>
                 </div>
               </div>
             </div>
 
-            <div v-else-if="processosRecentes.length > 0" class="bg-white border border-outline-variant/30 rounded-xl overflow-hidden">
-              <table class="w-full text-left border-collapse">
-                <thead class="bg-surface-container-low text-on-surface-variant text-label-sm uppercase tracking-wider">
-                  <tr>
-                    <th class="px-lg py-md border-b border-outline-variant/20 font-medium">Identificador</th>
-                    <th class="px-lg py-md border-b border-outline-variant/20 font-medium hidden md:table-cell">Tipo</th>
-                    <th class="px-lg py-md border-b border-outline-variant/20 font-medium">Status</th>
-                    <th class="px-lg py-md border-b border-outline-variant/20 text-right font-medium">Data</th>
-                  </tr>
-                </thead>
-                <tbody class="text-body-md">
-                  <router-link
-                    v-for="processo in processosRecentes"
-                    :key="processo.id"
-                    :to="`/processos/${processo.id}`"
-                    class="hover:bg-surface-container-low transition-colors group cursor-pointer block"
-                    tag="tr"
-                  >
-                    <td class="px-lg py-lg border-b border-outline-variant/10 group-hover:bg-surface-container-low">
-                      <div class="flex items-center gap-sm">
-                        <div
-                          class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                          :style="{ backgroundColor: getIconColor(processo.tipoAto) + '20' }"
-                        >
-                          <span class="material-symbols-outlined text-base" :style="{ color: getIconColor(processo.tipoAto) }">description</span>
-                        </div>
-                        <div class="min-w-0">
-                          <p class="font-bold text-primary truncate">{{ processo.tipoAto }}</p>
-                          <p class="text-label-sm text-on-surface-variant">Prot. {{ processo.protocolo || 'N/A' }}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-lg py-lg border-b border-outline-variant/10 hidden md:table-cell text-on-surface-variant">
-                      {{ processo.tipoAto }}
-                    </td>
-                    <td class="px-lg py-lg border-b border-outline-variant/10">
+            <div v-else-if="processosRecentes.length > 0" class="activity-table">
+              <div class="activity-table-header">
+                <div class="table-cell">Identificador</div>
+                <div class="table-cell hidden-mobile">Tipo</div>
+                <div class="table-cell">Status</div>
+                <div class="table-cell table-cell-right">Data</div>
+              </div>
+              
+              <router-link
+                v-for="processo in processosRecentes"
+                :key="processo.id"
+                :to="`/processos/${processo.id}`"
+                class="activity-row"
+              >
+                <div class="table-cell">
+                  <div class="process-info">
+                    <div
+                      class="process-icon"
+                      :style="{ backgroundColor: getIconColor(processo.tipoAto) + '20' }"
+                    >
                       <span
-                        v-if="processo.statusHistory?.[0]?.status"
-                        class="px-md py-1 rounded-full text-label-sm font-label-sm"
-                        :class="[getStatusInfo(processo.statusHistory[0].status).bg, getStatusInfo(processo.statusHistory[0].status).text]"
-                      >
-                        {{ getStatusInfo(processo.statusHistory[0].status).label }}
-                      </span>
-                    </td>
-                    <td class="px-lg py-lg border-b border-outline-variant/10 text-right text-label-sm text-on-surface-variant">
-                      {{ formatDateSimple(processo.criadoEm) }}
-                    </td>
-                  </router-link>
-                </tbody>
-              </table>
+                        class="material-symbols-outlined"
+                        :style="{ color: getIconColor(processo.tipoAto) }"
+                      >description</span>
+                    </div>
+                    <div>
+                      <p class="process-title">{{ processo.tipoAto }}</p>
+                      <p class="process-subtitle">Prot. {{ processo.protocolo || 'N/A' }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="table-cell hidden-mobile">{{ processo.tipoAto }}</div>
+                <div class="table-cell">
+                  <span
+                    v-if="processo.statusHistory?.[0]?.status"
+                    class="status-badge"
+                    :style="{
+                      backgroundColor: getStatusInfo(processo.statusHistory[0].status).bgColor,
+                      color: getStatusInfo(processo.statusHistory[0].status).textColor
+                    }"
+                  >
+                    {{ getStatusInfo(processo.statusHistory[0].status).label }}
+                  </span>
+                </div>
+                <div class="table-cell table-cell-right">
+                  {{ formatDateSimple(processo.criadoEm) }}
+                </div>
+              </router-link>
             </div>
 
-            <div v-else class="bg-white border border-outline-variant/30 rounded-xl p-xl text-center">
-              <div class="w-14 h-14 bg-surface-container rounded-full flex items-center justify-center mx-auto mb-md">
-                <span class="material-symbols-outlined text-on-surface-variant">description</span>
+            <div v-else class="empty-state">
+              <div class="empty-icon">
+                <span class="material-symbols-outlined">description</span>
               </div>
-              <p class="text-primary font-semibold">Nenhum processo ainda</p>
-              <p class="text-on-surface-variant text-body-sm mt-1">Crie o primeiro processo clicando abaixo</p>
+              <p class="empty-title">Nenhum processo ainda</p>
+              <p class="empty-subtitle">Crie o primeiro processo clicando abaixo</p>
             </div>
           </section>
 
-          <aside class="space-y-lg">
-            <div>
-              <h3 class="text-headline-md font-serif font-bold text-primary mb-lg">Atalhos Rápidos</h3>
-              <div class="grid grid-cols-1 gap-md">
-                <router-link
-                  to="/processos"
-                  class="flex items-center gap-md p-md bg-white border border-outline-variant/30 rounded-xl hover:shadow-md transition-all group"
-                >
-                  <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">
+          <aside class="sidebar">
+            <div class="shortcuts-section">
+              <h3 class="shortcuts-title">Atalhos Rápidos</h3>
+              <div class="shortcuts-grid">
+                <router-link to="/processos" class="shortcut-card">
+                  <div class="shortcut-icon">
                     <span class="material-symbols-outlined">search</span>
                   </div>
-                  <div class="text-left">
-                    <p class="font-bold text-label-md text-primary">Buscar Processo</p>
-                    <p class="text-label-sm text-on-surface-variant">Localize por ID ou nome</p>
+                  <div class="shortcut-content">
+                    <p class="shortcut-title">Buscar Processo</p>
+                    <p class="shortcut-subtitle">Localize por ID ou nome</p>
                   </div>
                 </router-link>
 
-                <router-link
-                  to="/clientes"
-                  class="flex items-center gap-md p-md bg-white border border-outline-variant/30 rounded-xl hover:shadow-md transition-all group"
-                >
-                  <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">
+                <router-link to="/clientes" class="shortcut-card">
+                  <div class="shortcut-icon">
                     <span class="material-symbols-outlined">groups</span>
                   </div>
-                  <div class="text-left">
-                    <p class="font-bold text-label-md text-primary">Novo Cliente</p>
-                    <p class="text-label-sm text-on-surface-variant">Cadastrar pessoa ou empresa</p>
+                  <div class="shortcut-content">
+                    <p class="shortcut-title">Novo Cliente</p>
+                    <p class="shortcut-subtitle">Cadastrar pessoa ou empresa</p>
                   </div>
                 </router-link>
               </div>
             </div>
 
-            <div class="p-lg rounded-xl bg-primary text-white relative overflow-hidden">
-              <div class="relative z-10">
-                <h4 class="text-headline-md font-serif font-bold mb-sm">Upgrade para Premium</h4>
-                <p class="text-body-sm opacity-90 mb-lg">
-                  Acesse automação de minutas via IA e integração direta com o e-Notariado.
-                </p>
-                <button class="bg-secondary text-primary px-lg py-md rounded-lg font-bold hover:scale-105 transition-transform text-label-md">
-                  Saiba Mais
-                </button>
-              </div>
-              <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white opacity-5 rotate-12 rounded-2xl"></div>
-              <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-white opacity-10 rotate-45 rounded-3xl"></div>
+            <div class="upgrade-card">
+              <h4 class="upgrade-title">Upgrade para Premium</h4>
+              <p class="upgrade-text">
+                Acesse automação de minutas via IA e integração direta com o e-Notariado.
+              </p>
+              <button class="upgrade-button">Saiba Mais</button>
             </div>
           </aside>
         </div>
@@ -358,20 +327,13 @@ const formatDateSimple = (date: any) => {
       </div>
     </main>
 
-    <div class="md:hidden fixed bottom-18 left-0 right-0 bg-surface/90 backdrop-blur-lg border-t border-outline-variant/30 px-margin-mobile py-md flex gap-md shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-      <router-link
-        to="/processos/novo"
-        class="flex-1 bg-primary text-on-primary rounded-xl py-md flex items-center justify-center gap-xs font-label-md active:scale-95 transition-transform"
-      >
-        <span class="material-symbols-outlined text-sm">add</span>
+    <div class="mobile-actions">
+      <router-link to="/processos/novo" class="btn-primary-mobile">
+        <span class="material-symbols-outlined">add</span>
         Novo Processo
       </router-link>
-
-      <router-link
-        to="/processos"
-        class="flex-1 border border-outline-variant/50 text-primary rounded-xl py-md flex items-center justify-center gap-xs font-label-md active:scale-95 transition-transform"
-      >
-        <span class="material-symbols-outlined text-sm">search</span>
+      <router-link to="/processos" class="btn-secondary-mobile">
+        <span class="material-symbols-outlined">search</span>
         Buscar
       </router-link>
     </div>
@@ -379,15 +341,694 @@ const formatDateSimple = (date: any) => {
 </template>
 
 <style scoped>
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+.dashboard-container {
+  background-color: #faf9f6;
+  min-height: 100vh;
 }
 
-.glass-card:hover {
-  -webkit-transform: translateY(-2px);
+.dashboard-main {
+  padding-bottom: 88px;
+}
+
+@media (min-width: 768px) {
+  .dashboard-main {
+    padding-bottom: 32px;
+    margin-left: 280px;
+  }
+}
+
+.dashboard-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 40px;
+}
+
+@media (max-width: 767px) {
+  .dashboard-content {
+    padding: 16px;
+  }
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .dashboard-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.dashboard-title {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #112752;
+  margin: 0 0 8px 0;
+}
+
+@media (max-width: 767px) {
+  .dashboard-title {
+    font-size: 24px;
+  }
+}
+
+.dashboard-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #44464f;
+  margin: 0;
+}
+
+.dashboard-subtitle strong {
+  color: #112752;
+}
+
+.btn-primary {
+  background-color: #112752;
+  color: #ffffff;
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.hidden-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hidden-mobile {
+    display: flex;
+  }
+}
+
+.btn-icon {
+  font-size: 20px;
+}
+
+.commissions-section {
+  margin-bottom: 32px;
+}
+
+.commissions-card {
+  background: linear-gradient(135deg, rgba(207, 181, 59, 0.15) 0%, rgba(207, 181, 59, 0.08) 100%);
+  border: 1px solid rgba(207, 181, 59, 0.4);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.commissions-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.commissions-icon {
+  color: #CFB53B;
+}
+
+.commissions-title {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0;
+}
+
+.commissions-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .commissions-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.commissions-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #44464f;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 4px 0;
+}
+
+.commissions-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #112752;
+  margin: 0;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+@media (min-width: 1024px) {
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 24px;
+  }
+}
+
+.kpi-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.kpi-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.kpi-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.kpi-icon-primary {
+  background-color: rgba(207, 181, 59, 0.2);
+  color: #112752;
+}
+
+.kpi-icon-blue {
+  background-color: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.kpi-icon-gray {
+  background-color: #F3F4F6;
+  color: #6B7280;
+}
+
+.kpi-icon-success {
+  background-color: #D1FAE5;
+  color: #059669;
+}
+
+.kpi-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #44464f;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 8px 0;
+}
+
+.kpi-value {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0;
+}
+
+.kpi-value-primary {
+  color: #112752;
+}
+
+.kpi-subtext {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #6B7280;
+  margin: 4px 0 0 0;
+}
+
+.kpi-subtext-danger {
+  color: #DC2626;
+  font-weight: 500;
+}
+
+.kpi-trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #059669;
+}
+
+.kpi-trend-icon {
+  font-size: 16px;
+}
+
+.activity-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 1024px) {
+  .activity-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.activity-section {
+  background: #ffffff;
+  border: 1px solid rgba(117, 119, 128, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.activity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(117, 119, 128, 0.1);
+}
+
+.activity-title {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0;
+}
+
+.activity-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #CFB53B;
+  text-decoration: none;
+}
+
+.activity-link:hover {
+  text-decoration: underline;
+}
+
+.loading-container {
+  padding: 24px;
+}
+
+.loading-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.loading-avatar {
+  width: 40px;
+  height: 40px;
+  background: #F3F4F6;
+  border-radius: 8px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.loading-content {
+  flex: 1;
+}
+
+.loading-line {
+  background: #F3F4F6;
+  height: 14px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.loading-line-wide {
+  width: 75%;
+}
+
+.loading-line-narrow {
+  width: 50%;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.activity-table {
+  width: 100%;
+}
+
+.activity-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 16px 24px;
+  background: #F4F3F0;
+  border-bottom: 1px solid rgba(117, 119, 128, 0.1);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #44464f;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 767px) {
+  .activity-table-header {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+.table-cell {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #1a1c1a;
+}
+
+.table-cell-right {
+  text-align: right;
+}
+
+.hidden-mobile {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none;
+  }
+}
+
+.activity-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(117, 119, 128, 0.05);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.activity-row:hover {
+  background-color: #F4F3F0;
+}
+
+@media (max-width: 767px) {
+  .activity-row {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+.process-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.process-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.process-icon .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.process-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0 0 4px 0;
+}
+
+.process-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #6B7280;
+  margin: 0;
+}
+
+.status-badge {
+  display: inline-flex;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.empty-state {
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 56px;
+  height: 56px;
+  background: #F3F4F6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+}
+
+.empty-icon .material-symbols-outlined {
+  color: #6B7280;
+}
+
+.empty-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0 0 4px 0;
+}
+
+.empty-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #6B7280;
+  margin: 0;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.shortcuts-section {
+  background: transparent;
+}
+
+.shortcuts-title {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0 0 24px 0;
+}
+
+.shortcuts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.shortcut-card {
+  background: #ffffff;
+  border: 1px solid rgba(117, 119, 128, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.shortcut-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shortcut-icon {
+  width: 48px;
+  height: 48px;
+  background: #F3F4F6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #112752;
+  transition: all 0.2s;
+}
+
+.shortcut-card:hover .shortcut-icon {
+  background: #112752;
+  color: #ffffff;
+}
+
+.shortcut-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0 0 4px 0;
+}
+
+.shortcut-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #6B7280;
+  margin: 0;
+}
+
+.upgrade-card {
+  background: #112752;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.upgrade-title {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.upgrade-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0.9;
+  margin: 0 0 24px 0;
+}
+
+.upgrade-button {
+  background: #CFB53B;
+  color: #112752;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.upgrade-button:hover {
+  transform: scale(1.05);
+}
+
+.mobile-actions {
+  position: fixed;
+  bottom: 64px;
+  left: 0;
+  right: 0;
+  background: rgba(250, 249, 246, 0.9);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(117, 119, 128, 0.2);
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .mobile-actions {
+    display: none;
+  }
+}
+
+.btn-primary-mobile {
+  flex: 1;
+  background: #112752;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.btn-primary-mobile:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary-mobile {
+  flex: 1;
+  background: transparent;
+  color: #112752;
+  border: 1px solid rgba(17, 39, 82, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.btn-secondary-mobile:active {
+  transform: scale(0.95);
 }
 
 .material-symbols-outlined {

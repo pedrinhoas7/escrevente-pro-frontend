@@ -10,38 +10,43 @@ const isDashboard = computed(() => route.name === 'Dashboard')
 const goBack = () => {
   router.back()
 }
-
-function formatRouteName(name: string) {
-  return name
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .trim();
-}
 </script>
 
 <template>
-  <header class="sticky top-0 z-10 bg-white shadow-md md:hidden">
-    <!-- Dashboard Header -->
-    <div v-if="isDashboard">
-      <div class="flex items-center justify-between p-4">
-        <div class="flex items-center">
-          <span class="material-symbols-outlined">gavel</span>
-          <div class="ml-3">
-            <p class="text-md font-bold text-[#1b2a4b]">Escrevente Pro</p>
-            <p class="text-sm font-normal text-gray-900">Cartório Souza Martins</p>
+  <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 h-16">
+    <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-full">
+      <div class="flex items-center gap-md">
+        <div v-if="isDashboard" class="flex items-center gap-sm">
+          <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">description</span>
           </div>
-
+          <div>
+            <h2 class="text-label-md font-bold text-primary">Cartorial Tech</h2>
+            <p class="text-label-sm text-on-surface-variant">Sistema Notarial</p>
+          </div>
+        </div>
+        <button v-else @click="goBack" class="p-xs hover:bg-surface-container-low transition-all text-on-surface-variant">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+      </div>
+      
+      <div class="flex items-center gap-md">
+        <div v-if="isDashboard" class="hidden md:flex gap-lg mr-lg">
+          <span class="text-secondary font-bold border-b-2 border-secondary text-label-md">Dashboard</span>
+          <router-link to="/clientes" class="text-on-surface-variant hover:text-on-surface transition-colors text-label-md">Clientes</router-link>
+          <router-link to="/processos" class="text-on-surface-variant hover:text-on-surface transition-colors text-label-md">Processos</router-link>
+        </div>
+        <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center">
+          <span class="material-symbols-outlined text-on-surface-variant text-sm">person</span>
         </div>
       </div>
     </div>
-
-    <!-- Other Pages Header -->
-    <div v-else class="flex items-center p-4">
-      <button @click="goBack" class="mr-4 text-gray-500">
-        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-      </button>
-      <h1 class="text-lg font-bold text-gray-900">{{ formatRouteName(String(route.name)) }}</h1>
-    </div>
   </header>
 </template>
+
+<style scoped>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+</style>

@@ -5,13 +5,11 @@ import AppHeader from '../components/AppHeader.vue'
 </script>
 
 <template>
-  <div class="bg-[#F8F7F4] min-h-dvh">
+  <div class="bg-background min-h-screen">
     <AppHeader />
     <AppMenu />
-    <main class=" md:pt-0 pb-16 md:pb-0 md:ml-64">
-      <div class="p-4 md:p-8">
-        <RouterView />
-      </div>
+    <main class="pt-16 md:ml-[280px]">
+      <RouterView />
     </main>
   </div>
 </template>

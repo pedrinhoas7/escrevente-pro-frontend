@@ -1,116 +1,328 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useClientesStore } from '../stores/clientes';
 
 const clientesStore = useClientesStore();
 const showModal = ref(false);
+const searchTerm = ref('');
 const novoCliente = ref({
-    nome: '',
-    cpf: '',
-    email: '',
-    telefone: '',
-    endereco: ''
+  nome: '',
+  cpf: '',
+  email: '',
+  telefone: '',
+  endereco: ''
 });
 
 onMounted(() => {
-    clientesStore.fetchClientes();
+  clientesStore.fetchClientes();
 });
 
+const filteredClientes = computed(() => {
+  if (!searchTerm.value) {
+    return clientesStore.clientes;
+  }
+  const term = searchTerm.value.toLowerCase();
+  return clientesStore.clientes.filter(cliente =>
+    cliente.nome.toLowerCase().includes(term) ||
+    cliente.cpf?.toLowerCase().includes(term) ||
+    cliente.email?.toLowerCase().includes(term)
+  );
+});
+
+const totalClientes = computed(() => clientesStore.clientes.length);
+
+const clientesPremium = computed(() =>
+  clientesStore.clientes.filter((cliente: any) => cliente.status === 'premium').length
+);
+
+const clientesAtivos = computed(() =>
+  clientesStore.clientes.filter((cliente: any) => cliente.status === 'ativo').length
+);
+
+const getInitials = (nome: string) => {
+  return nome
+    .split(' ')
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+};
+
 const salvarCliente = async () => {
-    try {
-        await clientesStore.addCliente(novoCliente.value);
-        showModal.value = false;
-        novoCliente.value = { nome: '', cpf: '', email: '', telefone: '', endereco: '' };
-    } catch (error) {
-        alert("Erro ao salvar cliente. Verifique o console ou a conexão.");
-        console.error(error);
-    }
+  try {
+    await clientesStore.addCliente(novoCliente.value);
+    showModal.value = false;
+    novoCliente.value = { nome: '', cpf: '', email: '', telefone: '', endereco: '' };
+  } catch (error) {
+    alert('Erro ao salvar cliente. Verifique o console ou a conexão.');
+    console.error(error);
+  }
+};
+
+const formatCPF = (cpf: string) => {
+  if (!cpf) return '---';
+  const cleaned = cpf.replace(/\D/g, '');
+  if (cleaned.length === 11) {
+    return `***.${cleaned.slice(3, 6)}.${cleaned.slice(6, 9)}*-**`;
+  } else if (cleaned.length === 14) {
+    return `**.${cleaned.slice(2, 5)}.${cleaned.slice(5, 8)}/****-**`;
+  }
+  return cpf;
 };
 </script>
 
 <template>
-  <div class="min-h-dvh bg-[#F8F7F4] p-4 md:p-8">
-      <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between md:items-center mb-8">
-            <h1 class="text-3xl font-serif font-bold text-[#1B2A4A] mb-4 md:mb-0">Clientes</h1>
-            <button @click="showModal = true" class="btn-primary min-h-[44px] w-full md:w-auto">
-                Novo Cliente
+  <div class="bg-background min-h-screen pb-24 md:pb-8">
+    <main class="pt-16 md:pt-0 md:ml-[280px]">
+      <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+        
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-lg mb-xl">
+          <div>
+            <h1 class="text-headline-lg font-serif font-bold text-primary mb-2">Gestão de Clientes</h1>
+            <p class="text-body-md text-on-surface-variant">Visualize e gerencie processos e protocolos ativos.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-md items-center w-full lg:w-auto">
+            <div class="relative w-full sm:w-80">
+              <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">search</span>
+              <input
+                v-model="searchTerm"
+                class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-label-md font-sans"
+                placeholder="Buscar cliente ou protocolo..."
+                type="text"
+              />
+            </div>
+            <button
+              @click="showModal = true"
+              class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md flex items-center justify-center gap-xs hover:shadow-lg transition-all active:scale-95"
+            >
+              <span class="material-symbols-outlined">add</span>
+              Novo Cliente
             </button>
+          </div>
         </div>
 
-        <!-- Table for Desktop -->
-        <div class="hidden md:block bg-white shadow overflow-x-auto border-b border-gray-200 sm:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CPF/CNPJ</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
-                        <th scope="col" class="relative px-6 py-3">
-                          <span class="sr-only">Ações</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="cliente in clientesStore.clientes" :key="cliente.id">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ cliente.nome }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cliente.cpf }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cliente.email }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cliente.telefone }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <router-link :to="`/clientes/${cliente.id}/editar`" class="text-[#1B2A4A] hover:text-[#C9A84C]">Editar</router-link>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Cards for Mobile -->
-        <div class="md:hidden space-y-4">
-          <div v-for="cliente in clientesStore.clientes" :key="cliente.id" class="bg-white shadow rounded-lg p-4">
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="text-sm font-bold text-[#1B2A4A]">{{ cliente.nome }}</p>
-                <p class="text-sm text-gray-500">{{ cliente.cpf }}</p>
-              </div>
-              <router-link :to="`/clientes/${cliente.id}/editar`" class="text-sm font-medium text-[#1B2A4A] hover:text-[#C9A84C]">Editar</router-link>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg mb-xl">
+          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Total de Clientes</span>
+            <span class="text-headline-md font-serif font-bold">{{ totalClientes }}</span>
+            <div class="flex items-center gap-xs text-on-tertiary-container text-label-sm">
+              <span class="material-symbols-outlined text-base">groups</span>
+              <span>Cadastrados no sistema</span>
             </div>
-            <div class="mt-4 space-y-2">
-              <p class="text-sm text-gray-600"><strong class="font-medium text-gray-800">Email:</strong> {{ cliente.email }}</p>
-              <p class="text-sm text-gray-600"><strong class="font-medium text-gray-800">Telefone:</strong> {{ cliente.telefone }}</p>
+          </div>
+
+          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Clientes Premium</span>
+            <span class="text-headline-md font-serif font-bold">{{ clientesPremium }}</span>
+            <div class="flex items-center gap-xs text-secondary text-label-sm">
+              <span class="material-symbols-outlined text-base">star</span>
+              <span>Relacionamento especial</span>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Clientes Ativos</span>
+            <span class="text-headline-md font-serif font-bold">{{ clientesAtivos }}</span>
+            <div class="flex items-center gap-xs text-emerald-600 text-label-sm">
+              <span class="material-symbols-outlined text-base">check_circle</span>
+              <span>Com processos em andamento</span>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Taxa de Conversão</span>
+            <span class="text-headline-md font-serif font-bold">94.2%</span>
+            <div class="w-full bg-surface-container h-1.5 rounded-full mt-base">
+              <div class="bg-secondary h-full rounded-full" style="width: 94%"></div>
             </div>
           </div>
         </div>
 
-      </div>
-
-      <!-- Modal -->
-      <div v-if="showModal" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-dvh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class=" transition-opacity" aria-hidden="true" @click="showModal = false"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-dvh" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <h3 class="text-lg leading-6 font-serif font-medium text-[#1B2A4A]" id="modal-title">Novo Cliente</h3>
-                    <div class="mt-4 space-y-4">
-                        <input v-model="novoCliente.nome" type="text" placeholder="Nome Completo" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                        <input v-model="novoCliente.cpf" v-maska data-maska="['###.###.###-##', '##.###.###/####-##']" type="text" placeholder="CPF/CNPJ (opcional)" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                        <input v-model="novoCliente.email" type="email" placeholder="Email (opcional)" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                        <input v-model="novoCliente.telefone" v-maska data-maska="['(##) ####-####', '(##) #####-####']" type="text" placeholder="Telefone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                        <input v-model="novoCliente.endereco" type="text" placeholder="Endereço" class="w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
-                    </div>
-                </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button @click="salvarCliente" type="button" class="btn-primary w-full sm:w-auto py-3">
-                        Salvar
-                    </button>
-                    <button @click="showModal = false" type="button" class="btn-secondary w-full mt-3 sm:mt-0 sm:w-auto py-3">
-                        Cancelar
-                    </button>
-                </div>
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 overflow-hidden">
+          <div class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
+            <h3 class="text-body-lg font-serif font-bold">Listagem de Clientes</h3>
+            <div class="flex gap-xs">
+              <button class="p-xs hover:bg-surface-container rounded-md transition-colors">
+                <span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
+              </button>
+              <button class="p-xs hover:bg-surface-container rounded-md transition-colors">
+                <span class="material-symbols-outlined text-on-surface-variant">sort</span>
+              </button>
             </div>
+          </div>
+
+          <div v-if="clientesStore.loading" class="p-xl text-center">
+            <div class="animate-pulse flex flex-col items-center gap-md">
+              <div class="w-10 h-10 bg-surface-container rounded-full"></div>
+              <div class="h-4 bg-surface-container rounded w-1/2"></div>
+              <p class="text-on-surface-variant">Carregando clientes...</p>
+            </div>
+          </div>
+
+          <div v-else-if="filteredClientes.length === 0" class="p-xl text-center">
+            <div class="w-14 h-14 bg-surface-container rounded-full flex items-center justify-center mx-auto mb-md">
+              <span class="material-symbols-outlined text-on-surface-variant">groups</span>
+            </div>
+            <p class="text-primary font-semibold">Nenhum cliente encontrado</p>
+            <p class="text-on-surface-variant text-body-sm mt-1">Cadastre o primeiro cliente clicando em "Novo Cliente"</p>
+          </div>
+
+          <div v-else class="hidden md:block overflow-x-auto">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="text-left bg-surface-container-low">
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">NOME DO CLIENTE</th>
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">CPF REDIGIDO</th>
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">CONTATO</th>
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant text-right">AÇÕES</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant/20">
+                <tr
+                  v-for="cliente in filteredClientes"
+                  :key="cliente.id"
+                  class="hover:bg-surface-container-lowest transition-colors group"
+                >
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary text-label-sm">
+                        {{ getInitials(cliente.nome) }}
+                      </div>
+                      <div>
+                        <p class="text-label-md font-bold">{{ cliente.nome }}</p>
+                        <p class="text-label-sm text-on-surface-variant">{{ cliente.email || '---' }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md text-label-md font-mono text-on-surface-variant">
+                    {{ formatCPF(cliente.cpf || '') }}
+                  </td>
+                  <td class="px-lg py-md text-label-md text-on-surface-variant">
+                    {{ cliente.telefone || '---' }}
+                  </td>
+                  <td class="px-lg py-md text-right">
+                    <router-link
+                      :to="`/clientes/${cliente.id}/editar`"
+                      class="text-secondary hover:underline font-label-md transition-all"
+                    >
+                      Ver Detalhes
+                    </router-link>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div v-if="filteredClientes.length > 0" class="md:hidden flex flex-col divide-y divide-outline-variant/20">
+            <div
+              v-for="cliente in filteredClientes"
+              :key="cliente.id"
+              class="p-lg flex flex-col gap-md"
+            >
+              <div class="flex justify-between items-start">
+                <div class="flex items-center gap-md">
+                  <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary text-label-sm">
+                    {{ getInitials(cliente.nome) }}
+                  </div>
+                  <div>
+                    <p class="text-label-md font-bold">{{ cliente.nome }}</p>
+                    <p class="text-label-sm text-on-surface-variant">{{ formatCPF(cliente.cpf || '') }}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-between items-center text-label-sm">
+                <span class="text-on-surface-variant">{{ cliente.telefone || '---' }}</span>
+                <router-link
+                  :to="`/clientes/${cliente.id}/editar`"
+                  class="text-secondary font-bold"
+                >
+                  Ver Detalhes
+                </router-link>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="filteredClientes.length > 0" class="px-lg py-md bg-surface-bright flex flex-col sm:flex-row justify-between items-center gap-md">
+            <p class="text-label-sm text-on-surface-variant">Mostrando {{ filteredClientes.length }} de {{ totalClientes }} clientes</p>
+          </div>
         </div>
       </div>
+    </main>
+
+    <div
+      v-if="showModal"
+      class="fixed z-50 inset-0 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+        <div class="fixed inset-0 bg-black/50 transition-opacity" @click="showModal = false"></div>
+        
+        <div class="inline-block bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+          <div class="bg-white px-lg py-xl">
+            <h3 class="text-headline-md font-serif font-bold text-primary mb-lg">Novo Cliente</h3>
+            <div class="space-y-md">
+              <input
+                v-model="novoCliente.nome"
+                type="text"
+                placeholder="Nome Completo"
+                class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md"
+              />
+              <input
+                v-model="novoCliente.cpf"
+                v-maska
+                data-maska="['###.###.###-##', '##.###.###/####-##']"
+                type="text"
+                placeholder="CPF/CNPJ (opcional)"
+                class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md"
+              />
+              <input
+                v-model="novoCliente.email"
+                type="email"
+                placeholder="Email (opcional)"
+                class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md"
+              />
+              <input
+                v-model="novoCliente.telefone"
+                v-maska
+                data-maska="['(##) ####-####', '(##) #####-####']"
+                type="text"
+                placeholder="Telefone"
+                class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md"
+              />
+              <input
+                v-model="novoCliente.endereco"
+                type="text"
+                placeholder="Endereço"
+                class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md"
+              />
+            </div>
+          </div>
+          <div class="bg-surface-container-low px-lg py-md sm:flex sm:flex-row-reverse gap-md">
+            <button
+              @click="salvarCliente"
+              type="button"
+              class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md hover:shadow-lg transition-all"
+            >
+              Salvar
+            </button>
+            <button
+              @click="showModal = false"
+              type="button"
+              class="w-full mt-md sm:mt-0 sm:w-auto border border-outline-variant text-primary px-lg py-sm rounded-lg font-label-md hover:bg-surface-container transition-all"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+</style>

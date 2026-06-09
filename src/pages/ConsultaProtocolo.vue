@@ -44,7 +44,7 @@ const consultar = () => {
         </form>
 
         <div class="mt-8 text-sm text-[#6B7280]">
-            <router-link to="/login" class="hover:text-[#1B2A4A] underline">Área do Escrevente</router-link>
+            <router-link to="/login" class="hover:text-[#1B2A4A] underline">Área do Assessor</router-link>
         </div>
     </div>
   </div>

@@ -7,7 +7,6 @@ const email = ref('');
 const password = ref('');
 const error = ref('');
 const loading = ref(false);
-
 const showPassword = ref(false);
 
 const togglePassword = () => {
@@ -25,7 +24,7 @@ const handleLogin = async () => {
     await authStore.login(email.value, password.value);
     router.push('/dashboard');
   } catch (e: any) {
-    error.value = 'Falha no login. Verifique suas credenciais.';
+    error.value = 'Credenciais inválidas. Por favor, tente novamente.';
   } finally {
     loading.value = false;
   }
@@ -33,75 +32,186 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div
-    class="bg-blue-900 text-white font-display antialiased h-dvh w-full overflow-hidden flex flex-col items-center justify-between">
-    <!-- Top Status Bar Area (Visual placeholder for iOS safe area) -->
-    <div class="w-full h-12 flex-shrink-0"></div>
-    <!-- Main Content Container -->
-    <div class="flex-1 w-full max-w-md flex flex-col px-8 relative z-10">
-      <!-- Header / Logo Area -->
-      <div class="flex flex-col items-center justify-center pt-8 pb-12 flex-1">
-        <div
-          class="relative flex items-center justify-center w-24 h-24 mb-6 rounded-full border-2 border-secondary/30 bg-primary shadow-[0_0_30px_rgba(201,168,76,0.15)]">
-          <span class="font-serif text-4xl text-[#C9A84C] font-bold tracking-widest pt-1">EP</span>
+  <div class="min-h-screen bg-background flex flex-col">
+    <!-- Background Gradient -->
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-transparent pointer-events-none"></div>
+    
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-gutter relative z-10">
+      <div class="w-full max-w-[440px]">
+        
+        <!-- Logo Section -->
+        <div class="flex flex-col items-center mb-xl">
+          <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mb-md shadow-lg shadow-primary/10">
+            <span class="material-symbols-outlined text-white text-[28px]" style="font-variation-settings: 'FILL' 1;">
+              gavel
+            </span>
+          </div>
+          <h1 class="font-serif text-headline-md text-primary tracking-tight">Cartorial Tech</h1>
+          <p class="text-on-surface-variant text-label-md mt-base opacity-70">Sistema Notarial Avançado</p>
         </div>
-        <h1 class="text-3xl font-serif text-white font-bold tracking-wide mb-2 text-center">Escrevente Pro</h1>
-        <p class="text-slate-300 text-sm font-medium tracking-wide opacity-80 uppercase text-center">Gestão Notarial
-          Premium</p>
-      </div>
-      <!-- Form Area -->
-      <div class="w-full pb-8">
-        <form @submit.prevent="handleLogin" class="flex flex-col gap-6">
-          <!-- Email Input -->
-          <label class="flex flex-col w-full">
-            <p class="text-[#C9A84C]/90 text-sm font-medium leading-normal pb-2 ml-1">Email Corporativo</p>
-            <div class="relative group">
-              <div
-                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#C9A84C] transition-colors">
-                <span class="material-symbols-outlined text-[20px]">mail</span>
-              </div>
-              <input v-model="email"
-                class="form-input flex w-full rounded-xl text-white focus:outline-0 focus:ring-1 focus:ring-secondary border border-white/20 bg-white/5 focus:border-secondary h-14 placeholder:text-slate-500 pl-11 pr-4 text-base font-normal leading-normal transition-all duration-200"
-                placeholder="exemplo@cartorio.com.br" type="email" required />
-            </div>
-          </label>
-          <!-- Password Input -->
-          <label class="flex flex-col w-full">
-            <p class="text-[#C9A84C]/90 text-sm font-medium leading-normal pb-2 ml-1">Senha de Acesso</p>
-            <div class="relative group flex w-full items-stretch rounded-xl">
-              <div
-                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#C9A84C] transition-colors z-10">
-                <span class="material-symbols-outlined text-[20px]">lock</span>
-              </div>
-              <input v-model="password" 
-                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-1 focus:ring-secondary border border-white/20 bg-white/5 focus:border-secondary h-14 placeholder:text-slate-500 pl-11 pr-12 text-base font-normal leading-normal transition-all duration-200 border-r-0 rounded-r-none"
-                 :type="showPassword ? 'text' : 'password'" required />
-              <button type="button" @click="togglePassword"
-                class="text-slate-400 hover:text-[#C9A84C] cursor-pointer flex border border-white/20 bg-white/5 items-center justify-center px-4 rounded-r-xl border-l-0 focus:border-secondary focus:ring-1 focus:ring-secondary focus:outline-none transition-colors duration-200 group-focus-within:border-secondary">
-                <span class="material-symbols-outlined text-[20px]">
-                  {{ showPassword ? 'visibility' : 'visibility_off' }}
-                </span>
-              </button>
-            </div>
-          </label>
 
-          <div v-if="error" class="text-red-500 text-sm text-center">
-            {{ error }}
+        <!-- Login Card -->
+        <div class="glass-card rounded-2xl p-xl shadow-xl shadow-slate-200/50">
+          <div class="mb-xl text-center md:text-left">
+            <h2 class="font-serif text-headline-md text-on-surface">Bem-vindo de volta</h2>
+            <p class="text-on-surface-variant text-body-md mt-xs">Acesse sua conta para gerenciar processos.</p>
           </div>
 
-          <!-- Action Button -->
-          <button :disabled="loading" type="submit"
-            class="mt-4 w-full h-14 bg-secondary hover:bg-[#b09342] text-primary font-bold text-lg rounded-xl shadow-lg shadow-black/20 transition-all duration-200 transform active:scale-[0.98] flex items-center justify-center gap-2">
-            <span v-if="loading">Entrando...</span>
-            <span v-else>Entrar</span>
-            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-          </button>
-          <router-link to="/consulta"
-            class="mt-4 mb-4 w-full h-14 bg-white/10 hover:bg-white/20 text-white font-bold text-lg rounded-xl shadow-lg shadow-black/20 transition-all duration-200 transform active:scale-[0.98] flex items-center justify-center gap-2">
-            Consultar Processo
-          </router-link>
-        </form>
+          <!-- Error Message -->
+          <div 
+            v-if="error" 
+            class="flex items-center gap-sm p-md bg-error-container text-on-error-container rounded-lg mb-lg border border-error/10 animate-pulse"
+          >
+            <span class="material-symbols-outlined text-[20px]">error</span>
+            <span class="text-label-md">{{ error }}</span>
+          </div>
+
+          <form @submit.prevent="handleLogin" class="space-y-lg">
+            <!-- Email Field -->
+            <div class="space-y-base">
+              <label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="email">
+                E-mail corporativo
+              </label>
+              <div class="relative group">
+                <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]">
+                  mail
+                </span>
+                <input
+                  id="email"
+                  v-model="email"
+                  type="email"
+                  required
+                  placeholder="nome@cartorial.tech"
+                  class="w-full pl-xl pr-md py-md bg-surface border border-outline-variant rounded-xl outline-none transition-all placeholder:text-outline-variant text-on-surface font-body-md focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
+                />
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="space-y-base">
+              <div class="flex justify-between items-center ml-1">
+                <label class="font-label-md text-label-md text-on-surface-variant" for="password">
+                  Senha
+                </label>
+                <a href="#" class="text-label-sm text-secondary hover:underline transition-all">
+                  Esqueceu a senha?
+                </a>
+              </div>
+              <div class="relative group">
+                <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]">
+                  lock
+                </span>
+                <input
+                  id="password"
+                  v-model="password"
+                  :type="showPassword ? 'text' : 'password'"
+                  required
+                  placeholder="••••••••"
+                  class="w-full pl-xl pr-xl py-md bg-surface border border-outline-variant rounded-xl outline-none transition-all placeholder:text-outline-variant text-on-surface font-body-md focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
+                />
+                <button
+                  type="button"
+                  @click="togglePassword"
+                  class="absolute right-md top-1/2 -translate-y-1/2 text-outline-variant hover:text-on-surface-variant transition-colors p-base"
+                >
+                  <span class="material-symbols-outlined text-[20px]">
+                    {{ showPassword ? 'visibility_off' : 'visibility' }}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="flex items-center gap-sm ml-1">
+              <input
+                id="remember"
+                type="checkbox"
+                class="w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary/20"
+              />
+              <label for="remember" class="text-label-sm text-on-surface-variant cursor-pointer">
+                Lembrar neste dispositivo
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              :disabled="loading"
+              class="w-full py-md px-lg shimmer-btn text-white font-label-md rounded-xl shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-sm disabled:opacity-90 disabled:cursor-not-allowed"
+              :class="{ 'shimmer-active': loading }"
+            >
+              <span v-if="loading">Autenticando...</span>
+              <span v-else>Entrar no Sistema</span>
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            </button>
+          </form>
+
+          <!-- Public Access Link -->
+          <div class="mt-xl pt-xl border-t border-outline-variant/30 text-center">
+            <p class="text-on-surface-variant text-label-md">
+              Acesso público?
+              <router-link to="/consulta" class="text-secondary font-bold hover:text-on-secondary-fixed-variant transition-colors ml-xs flex items-center justify-center gap-xs inline-flex group">
+                Consultar Processo
+                <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              </router-link>
+            </p>
+          </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="mt-xl flex justify-center items-center gap-xl opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+          <div class="flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[20px]">verified_user</span>
+            <span class="text-label-sm font-label-sm">Criptografia SSL</span>
+          </div>
+          <div class="flex items-center gap-xs">
+            <span class="material-symbols-outlined text-[20px]">security</span>
+            <span class="text-label-sm font-label-sm">Certificação Digital</span>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-xl px-gutter bg-surface-container-lowest border-t border-outline-variant/20">
+      <div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
+        <span class="text-label-sm text-on-surface-variant opacity-60">
+          © 2024 Cartorial Tech. Advanced Notary Advisory Systems.
+        </span>
+        <div class="flex gap-lg">
+          <a href="#" class="text-label-sm text-on-surface-variant hover:text-secondary transition-colors">Ajuda</a>
+          <a href="#" class="text-label-sm text-on-surface-variant hover:text-secondary transition-colors">Termos</a>
+          <a href="#" class="text-label-sm text-on-surface-variant hover:text-secondary transition-colors">Privacidade</a>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
+
+<style scoped>
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.shimmer-btn {
+  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #3b82f6 100%);
+  background-size: 200% 100%;
+}
+
+.shimmer-active {
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+</style>

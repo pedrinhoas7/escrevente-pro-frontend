@@ -31,12 +31,12 @@ const features = [
   {
     icon: 'summarize',
     title: 'Relatórios Detalhados',
-    desc: 'Gere relatórios de comissões e processos mensais com filtros por período e exportação para impressão.',
+    desc: 'Gere relatórios de processos mensais com filtros por período e exportação para impressão.',
   },
   {
     icon: 'payments',
     title: 'Controle Financeiro',
-    desc: 'Acompanhe comissões de escrevente e apresentante, emolumentos e valores de cada processo.',
+    desc: 'Acompanhe valores e emolumentos de cada processo com relatórios por período.',
   },
   {
     icon: 'search',
@@ -53,7 +53,7 @@ const features = [
 const passos = [
   { num: '01', title: 'Cadastro do Processo', desc: 'Registre o ato notarial com partes, valores e tipo de documento.' },
   { num: '02', title: 'Acompanhamento', desc: 'Atualize o status em cada etapa até a conclusão e registro.' },
-  { num: '03', title: 'Relatórios', desc: 'Gere relatórios de comissão e produtividade mensal com um clique.' },
+  { num: '03', title: 'Relatórios', desc: 'Gere relatórios de produtividade mensal com um clique.' },
 ]
 
 const planos = [
@@ -75,9 +75,9 @@ const planos = [
     desc: 'Para equipes de cartório',
     recursos: [
       'Tudo do plano Essencial',
-      'Relatório de comissões detalhado',
+      'Relatórios financeiros detalhados',
       'Gráficos de evolução no dashboard',
-      'Controle de comissões por escrevente',
+      'Controle de valores por processo',
       'Múltiplos usuários com perfis',
       'Suporte prioritário por WhatsApp',
     ],
@@ -113,6 +113,10 @@ const planos = [
           <a href="#planos" class="nav-link">Planos</a>
           <a href="#como-funciona" class="nav-link">Como Funciona</a>
           <router-link to="/consulta" class="nav-link">Consultar</router-link>
+          <router-link to="/login" class="nav-login">
+            <span class="material-symbols-outlined">login</span>
+            Acessar Plataforma
+          </router-link>
           <button @click="abrirWhatsApp" class="nav-cta">
             <span class="material-symbols-outlined">chat</span>
             Falar com Vendas
@@ -131,8 +135,8 @@ const planos = [
             <span class="hero-title-accent">atos notariais</span>
           </h1>
           <p class="hero-subtitle">
-            Plataforma integrada para escreventes e apresentantes gerenciarem processos,
-            comissões e clientes com eficiência e segurança.
+            Plataforma integrada para escreventes e apresentantes gerenciarem processos
+            e clientes com eficiência e segurança.
           </p>
           <div class="hero-actions">
             <button @click="abrirWhatsApp" class="btn-primary">
@@ -873,6 +877,42 @@ const planos = [
 }
 
 /* ===== NAV CTA ===== */
+.nav-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #112752;
+  border: 1.5px solid rgba(17, 39, 82, 0.25);
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.nav-login .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.nav-login:hover {
+  border-color: #112752;
+  background: rgba(17, 39, 82, 0.04);
+}
+
+@media (max-width: 767px) {
+  .nav-login {
+    padding: 8px 12px;
+    font-size: 0;
+  }
+
+  .nav-login .material-symbols-outlined {
+    font-size: 18px;
+  }
+}
+
 .nav-cta {
   display: inline-flex;
   align-items: center;

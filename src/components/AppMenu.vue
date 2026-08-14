@@ -27,19 +27,10 @@ watch(() => route.path, (path) => {
       <RouterLink
         to="/dashboard"
         class="menu-item"
-        :class="{ 'menu-item-active': isRouteActive('/dashboard') }"
+        :class="{ 'menu-item-active-bg': isRouteActive('/dashboard') }"
       >
         <span class="material-symbols-outlined">dashboard</span>
         <span class="menu-item-text">Dashboard</span>
-      </RouterLink>
-
-      <RouterLink
-        to="/clientes"
-        class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/clientes') }"
-      >
-        <span class="material-symbols-outlined">groups</span>
-        <span class="menu-item-text">Clientes</span>
       </RouterLink>
 
       <RouterLink
@@ -49,6 +40,15 @@ watch(() => route.path, (path) => {
       >
         <span class="material-symbols-outlined">account_tree</span>
         <span class="menu-item-text">Processos</span>
+      </RouterLink>
+
+      <RouterLink
+        to="/clientes"
+        class="menu-item menu-item-inactive"
+        :class="{ 'menu-item-active-bg': isRouteActive('/clientes') }"
+      >
+        <span class="material-symbols-outlined">groups</span>
+        <span class="menu-item-text">Clientes</span>
       </RouterLink>
 
       <div class="menu-item-group">
@@ -181,15 +181,14 @@ watch(() => route.path, (path) => {
   flex-direction: column;
   padding: 16px;
   gap: 8px;
-  height: 100%;
+  height: calc(100vh - 64px);
   width: 280px;
   position: fixed;
   left: 0;
-  top: 0;
+  top: 64px;
   z-index: 40;
   background-color: #faf9f6;
   border-right: 1px solid rgba(197, 198, 208, 0.3);
-  margin-top: 64px;
 }
 
 @media (min-width: 768px) {

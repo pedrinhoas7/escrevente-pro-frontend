@@ -16,7 +16,7 @@ const goBack = () => {
   <header class="app-header">
     <div class="header-content">
       <div class="header-left">
-        <div v-if="isDashboard" class="brand">
+        <div v-if="true" class="brand">
           <div class="brand-icon">
             <span class="material-symbols-outlined brand-icon-text">description</span>
           </div>
@@ -31,7 +31,7 @@ const goBack = () => {
       </div>
       
       <div class="header-right">
-        <div v-if="isDashboard" class="nav-links">
+        <div v-if="false" class="nav-links">
           <span class="nav-link active">Dashboard</span>
           <router-link to="/clientes" class="nav-link">Clientes</router-link>
           <router-link to="/processos" class="nav-link">Processos</router-link>

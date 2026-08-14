@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
-const route = useRoute()
 const router = useRouter()
-
-const isDashboard = computed(() => route.name === 'Dashboard')
 
 const goBack = () => {
   router.back()
@@ -33,8 +29,8 @@ const goBack = () => {
       <div class="header-right">
         <div v-if="false" class="nav-links">
           <span class="nav-link active">Dashboard</span>
-          <router-link to="/clientes" class="nav-link">Clientes</router-link>
-          <router-link to="/processos" class="nav-link">Processos</router-link>
+          <router-link to="/app/clientes" class="nav-link">Clientes</router-link>
+          <router-link to="/app/processos" class="nav-link">Processos</router-link>
         </div>
         <div class="user-avatar">
           <span class="material-symbols-outlined user-icon">person</span>

@@ -12,7 +12,7 @@ const props = defineProps<{
 const router = useRouter()
 
 const irParaDetalhes = () => {
-  router.push(`/processos/${props.processo.id}`)
+  router.push(`/app/processos/${props.processo.id}`)
 }
 
 const lastStatus = computed(() => {

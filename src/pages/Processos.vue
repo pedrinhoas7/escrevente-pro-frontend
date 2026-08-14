@@ -88,7 +88,7 @@ const formatDate = (date: any) => {
 }
 
 const abrirProcesso = (id: string) => {
-  router.push(`/processos/${id}`)
+  router.push(`/app/processos/${id}`)
 }
 
 const getIconColor = (tipoAto: string): string => {
@@ -124,7 +124,7 @@ const getIconColor = (tipoAto: string): string => {
                 class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-label-md font-sans"
                 placeholder="Buscar por tipo ou protocolo..." type="text" />
             </div>
-            <router-link to="/processos/novo"
+            <router-link to="/app/processos/novo"
               class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md flex items-center justify-center gap-xs hover:shadow-lg transition-all active:scale-95">
               <span class="material-symbols-outlined">add</span>
               Novo Processo
@@ -267,7 +267,7 @@ const getIconColor = (tipoAto: string): string => {
           </div>
 
           <div v-if="filteredProcessos.length > 0" class="md:hidden flex flex-col divide-y divide-outline-variant/20">
-            <router-link v-for="processo in filteredProcessos" :key="processo.id" :to="`/processos/${processo.id}`"
+            <router-link v-for="processo in filteredProcessos" :key="processo.id" :to="`/app/processos/${processo.id}`"
               class="p-lg flex flex-col gap-md hover:bg-surface-container-low transition-colors">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-md">

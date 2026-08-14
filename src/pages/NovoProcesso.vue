@@ -51,7 +51,7 @@ const salvar = async () => {
             throw new Error('Tipo de Ato é obrigatório');
         }
         await processosStore.addProcesso({ ...form.value, tipoAto: form.value.tipoAto });
-        router.push('/processos');
+        router.push('/app/processos');
     } catch (error) {
         console.error("Erro ao salvar processo", error);
     }
@@ -120,7 +120,7 @@ const salvar = async () => {
             </div>
 
             <div class="border-t border-gray-200 pt-2 md:pt-6 flex flex-col-reverse sm:flex-row sm:justify-end space-y-3 sm:space-y-2 sm:space-x-3">
-                <router-link to="/processos" class="btn-secondary py-3 w-full sm:w-auto text-center">
+                <router-link to="/app/processos" class="btn-secondary py-3 w-full sm:w-auto text-center">
                     Cancelar
                 </router-link>
                 <button type="submit" class="btn-primary py-3 w-full sm:w-auto mb-2">

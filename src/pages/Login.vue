@@ -22,7 +22,7 @@ const handleLogin = async () => {
 
   try {
     await authStore.login(email.value, password.value);
-    router.push('/dashboard');
+    router.push('/app/dashboard');
   } catch (e: any) {
     error.value = 'Credenciais inválidas. Por favor, tente novamente.';
   } finally {
@@ -32,7 +32,7 @@ const handleLogin = async () => {
 
 onMounted(() => {
   if (authStore.isAuthenticated) {
-    router.push('/dashboard');
+    router.push('/app/dashboard');
   }
 });
 </script>

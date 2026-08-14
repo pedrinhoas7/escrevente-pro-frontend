@@ -149,7 +149,7 @@ const formatDateSimple = (date: any) => {
               Bem-vindo ao seu painel de controle notarial. Você tem <strong>{{ processosAbertos }}</strong> processos ativos.
             </p>
           </div>
-          <router-link to="/processos/novo" class="btn-primary hidden-mobile">
+          <router-link to="/app/processos/novo" class="btn-primary hidden-mobile">
             <span class="material-symbols-outlined btn-icon">add</span>
             Novo Processo
           </router-link>
@@ -277,7 +277,7 @@ const formatDateSimple = (date: any) => {
           <section class="activity-section">
             <div class="activity-header">
               <h3 class="activity-title">Processos Recentes</h3>
-              <router-link to="/processos" class="activity-link">Ver todos</router-link>
+              <router-link to="/app/processos" class="activity-link">Ver todos</router-link>
             </div>
 
             <div v-if="processosStore.loading" class="loading-container">
@@ -301,7 +301,7 @@ const formatDateSimple = (date: any) => {
               <router-link
                 v-for="processo in processosRecentes"
                 :key="processo.id"
-                :to="`/processos/${processo.id}`"
+                :to="`/app/processos/${processo.id}`"
                 class="activity-row"
               >
                 <div class="table-cell">
@@ -355,11 +355,11 @@ const formatDateSimple = (date: any) => {
     </main>
 
     <div class="mobile-actions mr-4">
-      <router-link to="/processos/novo" class="btn-primary-mobile">
+      <router-link to="/app/processos/novo" class="btn-primary-mobile">
         <span class="material-symbols-outlined">add</span>
         Novo Processo
       </router-link>
-      <router-link to="/processos" class="btn-secondary-mobile">
+      <router-link to="/app/processos" class="btn-secondary-mobile">
         <span class="material-symbols-outlined">search</span>
         Buscar
       </router-link>

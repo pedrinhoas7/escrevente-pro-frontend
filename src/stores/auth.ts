@@ -58,7 +58,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('expiresAt');
       localStorage.removeItem('userRole'); // Remover userRole do localStorage
 
-      router.push('/login');
+      router.push('/');
     },
     async login(email: string, password: string) {
         try {

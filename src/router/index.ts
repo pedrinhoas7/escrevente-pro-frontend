@@ -11,10 +11,16 @@ import ConsultaProtocolo from '../pages/ConsultaProtocolo.vue';
 import HistoricoProcesso from '../pages/HistoricoProcesso.vue';
 import RelatorioComissoes from '../pages/RelatorioComissoes.vue';
 import RelatorioProcessos from '../pages/RelatorioProcessos.vue';
+import LandingPage from '../pages/LandingPage.vue';
 import MainLayout from '../layouts/MainLayout.vue';
 import { useAuthStore } from '../stores/auth';
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/',
+    name: 'LandingPage',
+    component: LandingPage,
+  },
   {
     path: '/login',
     name: 'Login',
@@ -31,13 +37,13 @@ const routes: Array<RouteRecordRaw> = [
     component: HistoricoProcesso
   },
   {
-    path: '/',
+    path: '/app',
     component: MainLayout,
     meta: { requiresAuth: true },
     children: [
       {
         path: '',
-        redirect: '/dashboard'
+        redirect: '/app/dashboard'
       },
       {
         path: 'dashboard',
@@ -76,7 +82,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'relatorios',
-        redirect: '/relatorios/processos',
+        redirect: '/app/relatorios/processos',
       },
       {
         path: 'relatorios/comissoes',
@@ -90,10 +96,9 @@ const routes: Array<RouteRecordRaw> = [
       },
     ]
   },
-  // Rota catch-all para 404 (opcional, redirecionando para login)
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/login'
+    redirect: '/'
   }
 ];
 
@@ -115,6 +120,8 @@ router.beforeEach((to, _from, next) => {
   
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next('/login');
+  } else if ((to.path === '/login' || to.path === '/') && authStore.isAuthenticated) {
+    next('/app/dashboard');
   } else {
     next();
   }

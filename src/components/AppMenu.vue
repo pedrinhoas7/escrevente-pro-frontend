@@ -25,27 +25,27 @@ watch(() => route.path, (path) => {
   <aside class="desktop-menu">
     <nav class="menu-nav">
       <RouterLink
-        to="/dashboard"
+        to="/app/dashboard"
         class="menu-item"
-        :class="{ 'menu-item-active-bg': isRouteActive('/dashboard') }"
+        :class="{ 'menu-item-active-bg': isRouteActive('/app/dashboard') }"
       >
         <span class="material-symbols-outlined">dashboard</span>
         <span class="menu-item-text">Dashboard</span>
       </RouterLink>
 
       <RouterLink
-        to="/processos"
+        to="/app/processos"
         class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/processos') }"
+        :class="{ 'menu-item-active-bg': isRouteActive('/app/processos') }"
       >
         <span class="material-symbols-outlined">account_tree</span>
         <span class="menu-item-text">Processos</span>
       </RouterLink>
 
       <RouterLink
-        to="/clientes"
+        to="/app/clientes"
         class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/clientes') }"
+        :class="{ 'menu-item-active-bg': isRouteActive('/app/clientes') }"
       >
         <span class="material-symbols-outlined">groups</span>
         <span class="menu-item-text">Clientes</span>
@@ -54,7 +54,7 @@ watch(() => route.path, (path) => {
       <div class="menu-item-group">
         <button
           class="menu-item menu-item-button"
-          :class="{ 'menu-item-active-bg': isRouteActive('/relatorios') }"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/relatorios') }"
           @click="relatoriosExpandido = !relatoriosExpandido"
         >
           <span class="material-symbols-outlined">summarize</span>
@@ -70,7 +70,7 @@ watch(() => route.path, (path) => {
         <Transition name="submenu">
           <div v-if="relatoriosExpandido" class="submenu">
             <RouterLink
-              to="/relatorios/comissoes"
+              to="/app/relatorios/comissoes"
               class="submenu-item"
               :class="{ 'submenu-item-active': isRouteActive('/relatorios/comissoes') }"
             >
@@ -78,7 +78,7 @@ watch(() => route.path, (path) => {
               <span class="submenu-text">Comissões</span>
             </RouterLink>
             <RouterLink
-              to="/relatorios/processos"
+              to="/app/relatorios/processos"
               class="submenu-item"
               :class="{ 'submenu-item-active': isRouteActive('/relatorios/processos') }"
             >
@@ -103,13 +103,13 @@ watch(() => route.path, (path) => {
 
   <nav class="mobile-menu">
     <RouterLink
-      to="/dashboard"
+      to="/app/dashboard"
       class="mobile-nav-item"
-      :class="{ 'mobile-nav-item-active': isRouteActive('/dashboard') }"
+      :class="{ 'mobile-nav-item-active': isRouteActive('/app/dashboard') }"
     >
       <span
         class="material-symbols-outlined"
-        :style="getIconStyle(isRouteActive('/dashboard'))"
+        :style="getIconStyle(isRouteActive('/app/dashboard'))"
       >
         dashboard
       </span>
@@ -117,13 +117,13 @@ watch(() => route.path, (path) => {
     </RouterLink>
 
     <RouterLink
-      to="/clientes"
+      to="/app/clientes"
       class="mobile-nav-item"
-      :class="{ 'mobile-nav-item-active': isRouteActive('/clientes') }"
+      :class="{ 'mobile-nav-item-active': isRouteActive('/app/clientes') }"
     >
       <span
         class="material-symbols-outlined"
-        :style="getIconStyle(isRouteActive('/clientes'))"
+        :style="getIconStyle(isRouteActive('/app/clientes'))"
       >
         groups
       </span>
@@ -131,13 +131,13 @@ watch(() => route.path, (path) => {
     </RouterLink>
 
     <RouterLink
-      to="/processos"
+      to="/app/processos"
       class="mobile-nav-item"
-      :class="{ 'mobile-nav-item-active': isRouteActive('/processos') }"
+      :class="{ 'mobile-nav-item-active': isRouteActive('/app/processos') }"
     >
       <span
         class="material-symbols-outlined"
-        :style="getIconStyle(isRouteActive('/processos'))"
+        :style="getIconStyle(isRouteActive('/app/processos'))"
       >
         account_tree
       </span>
@@ -145,13 +145,13 @@ watch(() => route.path, (path) => {
     </RouterLink>
 
     <RouterLink
-      to="/relatorios/processos"
+      to="/app/relatorios/processos"
       class="mobile-nav-item"
-      :class="{ 'mobile-nav-item-active': isRouteActive('/relatorios') }"
+      :class="{ 'mobile-nav-item-active': isRouteActive('/app/relatorios') }"
     >
       <span
         class="material-symbols-outlined"
-        :style="getIconStyle(isRouteActive('/relatorios'))"
+        :style="getIconStyle(isRouteActive('/app/relatorios'))"
       >
         summarize
       </span>

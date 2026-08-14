@@ -194,7 +194,7 @@ const formatCPF = (cpf: string) => {
                   </td>
                   <td class="px-lg py-md text-right">
                     <router-link
-                      :to="`/clientes/${cliente.id}/editar`"
+                      :to="`/app/clientes/${cliente.id}/editar`"
                       class="text-secondary hover:underline font-label-md transition-all"
                     >
                       Ver Detalhes
@@ -225,7 +225,7 @@ const formatCPF = (cpf: string) => {
               <div class="flex justify-between items-center text-label-sm">
                 <span class="text-on-surface-variant">{{ cliente.telefone || '---' }}</span>
                 <router-link
-                  :to="`/clientes/${cliente.id}/editar`"
+                  :to="`/app/clientes/${cliente.id}/editar`"
                   class="text-secondary font-bold"
                 >
                   Ver Detalhes

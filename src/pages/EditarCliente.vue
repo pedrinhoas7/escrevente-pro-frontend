@@ -33,7 +33,7 @@ onMounted(async () => {
 const salvarEdicao = async () => {
     try {
         await clientesStore.updateCliente(clienteId, form.value);
-        router.push('/clientes');
+        router.push('/app/clientes');
     } catch (error) {
         console.error("Erro ao salvar cliente", error);
         alert("Erro ao salvar cliente: " + (error as Error).message);
@@ -71,7 +71,7 @@ const salvarEdicao = async () => {
             </div>
 
             <div class="border-t border-gray-200 pt-2 md:pt-6 flex flex-col-reverse sm:flex-row sm:justify-end space-y-3 sm:space-y-2 sm:space-x-3">
-                <router-link to="/clientes" class="btn-secondary py-3 w-full sm:w-auto text-center">
+                <router-link to="/app/clientes" class="btn-secondary py-3 w-full sm:w-auto text-center">
                     Cancelar
                 </router-link>
                 <button type="submit" class="btn-primary py-3 w-full sm:w-auto mb-2">

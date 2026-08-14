@@ -61,7 +61,7 @@ const handleRemoveStatus = async (statusId: string) => {
                      <p v-if="processosStore.processoAtual.valorProcesso" class="text-[#6B7280]">Valor do Processo: <span class="font-bold">{{ processosStore.processoAtual.valorProcesso.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
                      <p v-if="processosStore.processoAtual.valorEmolumentos" class="text-[#6B7280]">Valor dos Emolumentos: <span class="font-bold">{{ processosStore.processoAtual.valorEmolumentos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span></p>
                      </div>
-                    <router-link :to="`/processos/${route.params.id}/editar`" class="btn-secondary py-2 px-4 text-sm">
+                    <router-link :to="`/app/processos/${route.params.id}/editar`" class="btn-secondary py-2 px-4 text-sm">
                         Editar
                     </router-link>
                  </div>

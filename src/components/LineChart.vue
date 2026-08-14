@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -33,6 +33,21 @@ const props = defineProps<{
   datasets: Dataset[]
 }>()
 
+const isMobile = ref(false)
+
+function updateMobile() {
+  isMobile.value = window.innerWidth < 768
+}
+
+onMounted(() => {
+  updateMobile()
+  window.addEventListener('resize', updateMobile)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateMobile)
+})
+
 const chartData = computed(() => ({
   labels: props.labels,
   datasets: props.datasets.map(ds => ({
@@ -51,7 +66,7 @@ const chartData = computed(() => ({
   })),
 }))
 
-const chartOptions = {
+const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
   interaction: {
@@ -65,12 +80,13 @@ const chartOptions = {
       labels: {
         font: {
           family: 'Inter',
-          size: 12,
+          size: isMobile.value ? 11 : 12,
         },
         color: '#44464f',
         usePointStyle: true,
         pointStyle: 'circle' as const,
-        padding: 16,
+        padding: isMobile.value ? 12 : 16,
+        boxWidth: 8,
       },
     },
     tooltip: {
@@ -92,8 +108,12 @@ const chartOptions = {
         display: false,
       },
       ticks: {
-        font: { family: 'Inter', size: 11 },
+        font: { family: 'Inter', size: isMobile.value ? 9 : 11 },
         color: '#6B7280',
+        maxRotation: isMobile.value ? 45 : 0,
+        minRotation: isMobile.value ? 45 : 0,
+        autoSkip: true,
+        maxTicksLimit: isMobile.value ? 6 : 12,
       },
     },
     y: {
@@ -106,13 +126,13 @@ const chartOptions = {
         display: false,
       },
       ticks: {
-        font: { family: 'Inter', size: 11 },
+        font: { family: 'Inter', size: isMobile.value ? 9 : 11 },
         color: '#6B7280',
         precision: 0,
       },
     },
   },
-}
+}))
 </script>
 
 <template>

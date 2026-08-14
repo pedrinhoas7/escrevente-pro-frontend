@@ -733,6 +733,26 @@ const formatDateSimple = (date: any) => {
 .chart-container {
   position: relative;
   height: 280px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.chart-container canvas {
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  .chart-card {
+    padding: 16px;
+  }
+
+  .chart-card-header {
+    margin-bottom: 16px;
+  }
+
+  .chart-container {
+    height: 220px;
+  }
 }
 
 .activity-grid {

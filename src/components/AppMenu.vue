@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from 'vue-router'
+import { ref, watch } from 'vue'
 import { useAuthStore } from '../stores/auth'
 
 const authStore = useAuthStore()
@@ -10,6 +11,14 @@ const isRouteActive = (path: string) => route.path.startsWith(path)
 const getIconStyle = (isActive: boolean) => {
   return isActive ? 'font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;' : ''
 }
+
+const relatoriosExpandido = ref(false)
+
+watch(() => route.path, (path) => {
+  if (path.startsWith('/relatorios')) {
+    relatoriosExpandido.value = true
+  }
+}, { immediate: true })
 </script>
 
 <template>
@@ -42,14 +51,43 @@ const getIconStyle = (isActive: boolean) => {
         <span class="menu-item-text">Processos</span>
       </RouterLink>
 
-      <RouterLink
-        to="/consulta"
-        class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/consulta-protocolo') }"
-      >
-        <span class="material-symbols-outlined">search</span>
-        <span class="menu-item-text">Consultar</span>
-      </RouterLink>
+      <div class="menu-item-group">
+        <button
+          class="menu-item menu-item-button"
+          :class="{ 'menu-item-active-bg': isRouteActive('/relatorios') }"
+          @click="relatoriosExpandido = !relatoriosExpandido"
+        >
+          <span class="material-symbols-outlined">summarize</span>
+          <span class="menu-item-text">Relatórios</span>
+          <span
+            class="material-symbols-outlined submenu-arrow"
+            :class="{ 'submenu-arrow-open': relatoriosExpandido }"
+          >
+            expand_more
+          </span>
+        </button>
+
+        <Transition name="submenu">
+          <div v-if="relatoriosExpandido" class="submenu">
+            <RouterLink
+              to="/relatorios/comissoes"
+              class="submenu-item"
+              :class="{ 'submenu-item-active': isRouteActive('/relatorios/comissoes') }"
+            >
+              <span class="material-symbols-outlined submenu-icon">payments</span>
+              <span class="submenu-text">Comissões</span>
+            </RouterLink>
+            <RouterLink
+              to="/relatorios/processos"
+              class="submenu-item"
+              :class="{ 'submenu-item-active': isRouteActive('/relatorios/processos') }"
+            >
+              <span class="material-symbols-outlined submenu-icon">description</span>
+              <span class="submenu-text">Processos Mensal</span>
+            </RouterLink>
+          </div>
+        </Transition>
+      </div>
     </nav>
 
     <div class="menu-footer">
@@ -104,6 +142,20 @@ const getIconStyle = (isActive: boolean) => {
         account_tree
       </span>
       <span class="mobile-nav-text">Processos</span>
+    </RouterLink>
+
+    <RouterLink
+      to="/relatorios/processos"
+      class="mobile-nav-item"
+      :class="{ 'mobile-nav-item-active': isRouteActive('/relatorios') }"
+    >
+      <span
+        class="material-symbols-outlined"
+        :style="getIconStyle(isRouteActive('/relatorios'))"
+      >
+        summarize
+      </span>
+      <span class="mobile-nav-text">Relatórios</span>
     </RouterLink>
 
     <button
@@ -183,6 +235,112 @@ const getIconStyle = (isActive: boolean) => {
   letter-spacing: 0.05em;
 }
 
+.menu-item-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item-button {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.submenu-arrow {
+  margin-left: auto;
+  font-size: 20px;
+  transition: transform 0.2s ease;
+  color: #6B7280;
+}
+
+.submenu-arrow-open {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  margin-top: 4px;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #44464f;
+  text-decoration: none;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.submenu-item::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(117, 119, 128, 0.3);
+}
+
+.submenu-item:hover {
+  background-color: #efeeeb;
+}
+
+.submenu-item-active {
+  background-color: rgba(17, 39, 82, 0.08);
+  color: #112752;
+  font-weight: 700;
+}
+
+.submenu-item-active::before {
+  background: #112752;
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+}
+
+.submenu-icon {
+  font-size: 20px;
+  color: inherit;
+}
+
+.submenu-text {
+  letter-spacing: 0.03em;
+}
+
+.submenu-enter-active,
+.submenu-leave-active {
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.submenu-enter-from,
+.submenu-leave-to {
+  opacity: 0;
+  max-height: 0;
+  margin-top: 0;
+}
+
+.submenu-enter-to,
+.submenu-leave-from {
+  opacity: 1;
+  max-height: 200px;
+}
+
 .menu-footer {
   margin-top: auto;
   border-top: 1px solid rgba(197, 198, 208, 0.2);
@@ -216,7 +374,7 @@ const getIconStyle = (isActive: boolean) => {
   backdrop-filter: blur(16px);
   border-top: 1px solid rgba(197, 198, 208, 0.3);
   height: 64px;
-  padding: 0 16px;
+  padding: 0 8px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -248,7 +406,7 @@ const getIconStyle = (isActive: boolean) => {
 
 .mobile-nav-text {
   font-family: 'Inter', sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 500;
 }
 

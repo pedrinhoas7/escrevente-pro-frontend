@@ -9,6 +9,8 @@ import EditarProcesso from '../pages/EditarProcesso.vue';
 import EditarCliente from '../pages/EditarCliente.vue'; // Adicionar esta linha
 import ConsultaProtocolo from '../pages/ConsultaProtocolo.vue';
 import HistoricoProcesso from '../pages/HistoricoProcesso.vue';
+import RelatorioComissoes from '../pages/RelatorioComissoes.vue';
+import RelatorioProcessos from '../pages/RelatorioProcessos.vue';
 import MainLayout from '../layouts/MainLayout.vue';
 import { useAuthStore } from '../stores/auth';
 
@@ -71,6 +73,20 @@ const routes: Array<RouteRecordRaw> = [
         path: 'processos/:id/editar',
         name: 'EditarProcesso',
         component: EditarProcesso,
+      },
+      {
+        path: 'relatorios',
+        redirect: '/relatorios/processos',
+      },
+      {
+        path: 'relatorios/comissoes',
+        name: 'RelatorioComissoes',
+        component: RelatorioComissoes,
+      },
+      {
+        path: 'relatorios/processos',
+        name: 'RelatorioProcessos',
+        component: RelatorioProcessos,
       },
     ]
   },

@@ -1,16 +1,27 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useProcessosStore } from '../stores/processos';
+import { useClientesStore } from '../stores/clientes';
 import { useAuthStore } from '../stores/auth';
+import { useEvolucao, type Periodo } from '../composables/useEvolucao';
+import LineChart from '../components/LineChart.vue';
+import PeriodSelector from '../components/PeriodSelector.vue';
 
 const processosStore = useProcessosStore();
+const clientesStore = useClientesStore();
 const authStore = useAuthStore();
+
+const periodoSelecionado = ref<Periodo>('6m');
 
 onMounted(() => {
   processosStore.fetchProcessos();
+  clientesStore.fetchClientes();
 });
 
 const processos = computed(() => processosStore.processos);
+const clientes = computed(() => clientesStore.clientes);
+
+const evolucao = useEvolucao(processos, clientes, periodoSelecionado);
 
 const processosAbertos = computed(() =>
   processos.value.filter(p => {
@@ -127,13 +138,13 @@ const formatDateSimple = (date: any) => {
 </script>
 
 <template>
-  <div class="dashboard-container">
+  <div class="dashboard-container mr-4">
     <main class="dashboard-main">
       <div class="dashboard-content">
         
         <section class="dashboard-header">
           <div>
-            <h1 class="dashboard-title">Olá, Assessor</h1>
+            <h1 class="dashboard-title">Olá, Escrevente</h1>
             <p class="dashboard-subtitle">
               Bem-vindo ao seu painel de controle notarial. Você tem <strong>{{ processosAbertos }}</strong> processos ativos.
             </p>
@@ -212,10 +223,60 @@ const formatDateSimple = (date: any) => {
           </div>
         </section>
 
-        <div class="activity-grid">
+        <section class="charts-section">
+          <div class="charts-header">
+            <h2 class="charts-section-title">Evolução</h2>
+            <PeriodSelector v-model="periodoSelecionado" />
+          </div>
+
+          <div class="charts-grid">
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <div class="chart-icon chart-icon-navy">
+                  <span class="material-symbols-outlined">account_tree</span>
+                </div>
+                <div>
+                  <h3 class="chart-title">Evolução de Processos</h3>
+                  <p class="chart-subtitle">Novos processos e conclusões por mês</p>
+                </div>
+              </div>
+              <div class="chart-container">
+                <LineChart
+                  :labels="evolucao.labels.value"
+                  :datasets="[
+                    { label: 'Novos processos', data: evolucao.novosProcessos.value, color: '#112752' },
+                    { label: 'Concluídos', data: evolucao.processosConcluidos.value, color: '#CFB53B' },
+                  ]"
+                />
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <div class="chart-icon chart-icon-gold">
+                  <span class="material-symbols-outlined">group</span>
+                </div>
+                <div>
+                  <h3 class="chart-title">Evolução de Clientes</h3>
+                  <p class="chart-subtitle">Novos cadastros por mês</p>
+                </div>
+              </div>
+              <div class="chart-container">
+                <LineChart
+                  :labels="evolucao.labels.value"
+                  :datasets="[
+                    { label: 'Novos clientes', data: evolucao.novosClientes.value, color: '#112752' },
+                  ]"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="activity-grid mb-20">
           <section class="activity-section">
             <div class="activity-header">
-              <h3 class="activity-title">Atividade Recente</h3>
+              <h3 class="activity-title">Processos Recentes</h3>
               <router-link to="/processos" class="activity-link">Ver todos</router-link>
             </div>
 
@@ -288,46 +349,12 @@ const formatDateSimple = (date: any) => {
             </div>
           </section>
 
-          <aside class="sidebar">
-            <div class="shortcuts-section">
-              <h3 class="shortcuts-title">Atalhos Rápidos</h3>
-              <div class="shortcuts-grid">
-                <router-link to="/processos" class="shortcut-card">
-                  <div class="shortcut-icon">
-                    <span class="material-symbols-outlined">search</span>
-                  </div>
-                  <div class="shortcut-content">
-                    <p class="shortcut-title">Buscar Processo</p>
-                    <p class="shortcut-subtitle">Localize por ID ou nome</p>
-                  </div>
-                </router-link>
-
-                <router-link to="/clientes" class="shortcut-card">
-                  <div class="shortcut-icon">
-                    <span class="material-symbols-outlined">groups</span>
-                  </div>
-                  <div class="shortcut-content">
-                    <p class="shortcut-title">Novo Cliente</p>
-                    <p class="shortcut-subtitle">Cadastrar pessoa ou empresa</p>
-                  </div>
-                </router-link>
-              </div>
-            </div>
-
-            <div class="upgrade-card">
-              <h4 class="upgrade-title">Upgrade para Premium</h4>
-              <p class="upgrade-text">
-                Acesse automação de minutas via IA e integração direta com o e-Notariado.
-              </p>
-              <button class="upgrade-button">Saiba Mais</button>
-            </div>
-          </aside>
         </div>
 
       </div>
     </main>
 
-    <div class="mobile-actions">
+    <div class="mobile-actions mr-4">
       <router-link to="/processos/novo" class="btn-primary-mobile">
         <span class="material-symbols-outlined">add</span>
         Novo Processo
@@ -344,17 +371,6 @@ const formatDateSimple = (date: any) => {
 .dashboard-container {
   background-color: #faf9f6;
   min-height: 100vh;
-}
-
-.dashboard-main {
-  padding-bottom: 88px;
-}
-
-@media (min-width: 768px) {
-  .dashboard-main {
-    padding-bottom: 32px;
-    margin-left: 280px;
-  }
 }
 
 .dashboard-content {
@@ -616,17 +632,116 @@ const formatDateSimple = (date: any) => {
   font-size: 16px;
 }
 
+.charts-section {
+  margin-bottom: 48px;
+}
+
+.charts-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .charts-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.charts-section-title {
+  font-family: 'Libre Caslon Text', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .charts-section-title {
+    font-size: 22px;
+  }
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.chart-card {
+  background: #ffffff;
+  border: 1px solid rgba(117, 119, 128, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.chart-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.chart-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chart-icon .material-symbols-outlined {
+  font-size: 24px;
+}
+
+.chart-icon-navy {
+  background-color: rgba(17, 39, 82, 0.1);
+  color: #112752;
+}
+
+.chart-icon-gold {
+  background-color: rgba(207, 181, 59, 0.15);
+  color: #CFB53B;
+}
+
+.chart-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #112752;
+  margin: 0 0 2px 0;
+}
+
+.chart-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #6B7280;
+  margin: 0;
+}
+
+.chart-container {
+  position: relative;
+  height: 280px;
+}
+
 .activity-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
 }
 
-@media (min-width: 1024px) {
-  .activity-grid {
-    grid-template-columns: 2fr 1fr;
-  }
-}
+
 
 .activity-section {
   background: #ffffff;
@@ -993,7 +1108,7 @@ const formatDateSimple = (date: any) => {
   background: #112752;
   color: #ffffff;
   border-radius: 12px;
-  padding: 16px;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;

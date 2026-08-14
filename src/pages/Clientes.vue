@@ -72,8 +72,8 @@ const formatCPF = (cpf: string) => {
 </script>
 
 <template>
-  <div class="bg-background min-h-screen pb-24 md:pb-8">
-    <main class="pt-16 md:pt-0 md:ml-[280px]">
+  <div class="bg-background min-h-screen pb-24 px-3 mr-4 md:pb-8">
+    <main class="">
       <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-lg">
         
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-lg mb-xl">
@@ -83,7 +83,7 @@ const formatCPF = (cpf: string) => {
           </div>
           <div class="flex flex-col sm:flex-row gap-md items-center w-full lg:w-auto">
             <div class="relative w-full sm:w-80">
-              <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">search</span>
+              <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline mt-3 -ml-2">search</span>
               <input
                 v-model="searchTerm"
                 class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-label-md font-sans"
@@ -141,14 +141,6 @@ const formatCPF = (cpf: string) => {
         <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 overflow-hidden">
           <div class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
             <h3 class="text-body-lg font-serif font-bold">Listagem de Clientes</h3>
-            <div class="flex gap-xs">
-              <button class="p-xs hover:bg-surface-container rounded-md transition-colors">
-                <span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
-              </button>
-              <button class="p-xs hover:bg-surface-container rounded-md transition-colors">
-                <span class="material-symbols-outlined text-on-surface-variant">sort</span>
-              </button>
-            </div>
           </div>
 
           <div v-if="clientesStore.loading" class="p-xl text-center">
@@ -186,7 +178,7 @@ const formatCPF = (cpf: string) => {
                   <td class="px-lg py-md">
                     <div class="flex items-center gap-md">
                       <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary text-label-sm">
-                        {{ getInitials(cliente.nome) }}
+                        {{ cliente }}
                       </div>
                       <div>
                         <p class="text-label-md font-bold">{{ cliente.nome }}</p>
@@ -213,7 +205,7 @@ const formatCPF = (cpf: string) => {
             </table>
           </div>
 
-          <div v-if="filteredClientes.length > 0" class="md:hidden flex flex-col divide-y divide-outline-variant/20">
+          <div v-if="filteredClientes.length > 0" class="flex flex-col divide-y divide-outline-variant/20">
             <div
               v-for="cliente in filteredClientes"
               :key="cliente.id"
@@ -258,7 +250,7 @@ const formatCPF = (cpf: string) => {
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
         <div class="fixed inset-0 bg-black/50 transition-opacity" @click="showModal = false"></div>
         
-        <div class="inline-block bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+        <div class="inline-block mr-3 z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
           <div class="bg-white px-lg py-xl">
             <h3 class="text-headline-md font-serif font-bold text-primary mb-lg">Novo Cliente</h3>
             <div class="space-y-md">

@@ -43,7 +43,7 @@ const getIconStyle = (isActive: boolean) => {
       </RouterLink>
 
       <RouterLink
-        to="/consulta-protocolo"
+        to="/consulta"
         class="menu-item menu-item-inactive"
         :class="{ 'menu-item-active-bg': isRouteActive('/consulta-protocolo') }"
       >

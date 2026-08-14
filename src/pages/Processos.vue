@@ -2,6 +2,7 @@
 import { onMounted, computed, ref } from 'vue'
 import { useProcessosStore } from '../stores/processos'
 import { useClientesStore } from '../stores/clientes'
+import router from '../router'
 
 const processosStore = useProcessosStore()
 const clientesStore = useClientesStore()
@@ -86,6 +87,10 @@ const formatDate = (date: any) => {
   }
 }
 
+const abrirProcesso = (id: string) => {
+  router.push(`/processos/${id}`)
+}
+
 const getIconColor = (tipoAto: string): string => {
   const map: Record<string, string> = {
     'escritura': '#3B82F6',
@@ -101,29 +106,26 @@ const getIconColor = (tipoAto: string): string => {
 </script>
 
 <template>
-  <div class="bg-background min-h-screen pb-24 md:pb-8">
-    <main class="pt-16 md:pt-0 md:ml-[280px]">
+  <div class="bg-background min-h-screen pb-24  px-3 mr-4 ">
+    <main>
       <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-lg">
 
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-lg mb-xl">
           <div>
             <h1 class="text-headline-lg font-serif font-bold text-primary mb-2">Gestão de Processos</h1>
-            <p class="text-body-md text-on-surface-variant">Acompanhe e gerencie todos os processos cartoriais ativos.</p>
+            <p class="text-body-md text-on-surface-variant">Acompanhe e gerencie todos os processos cartoriais ativos.
+            </p>
           </div>
           <div class="flex flex-col sm:flex-row gap-md items-center w-full lg:w-auto">
-            <div class="relative w-full sm:w-80">
-              <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">search</span>
-              <input
-                v-model="searchTerm"
+            <div class="relative w-full sm:w-80 ">
+              <span
+                class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline mt-3">search</span>
+              <input v-model="searchTerm"
                 class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-label-md font-sans"
-                placeholder="Buscar por tipo ou protocolo..."
-                type="text"
-              />
+                placeholder="Buscar por tipo ou protocolo..." type="text" />
             </div>
-            <router-link
-              to="/processos/novo"
-              class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md flex items-center justify-center gap-xs hover:shadow-lg transition-all active:scale-95"
-            >
+            <router-link to="/processos/novo"
+              class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md flex items-center justify-center gap-xs hover:shadow-lg transition-all active:scale-95">
               <span class="material-symbols-outlined">add</span>
               Novo Processo
             </router-link>
@@ -131,8 +133,10 @@ const getIconColor = (tipoAto: string): string => {
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg mb-xl">
-          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
-            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Processos Ativos</span>
+          <div
+            class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Processos
+              Ativos</span>
             <span class="text-headline-md font-serif font-bold">{{ processosAtivos }}</span>
             <div class="flex items-center gap-xs text-secondary text-label-sm">
               <span class="material-symbols-outlined text-base">account_tree</span>
@@ -140,8 +144,10 @@ const getIconColor = (tipoAto: string): string => {
             </div>
           </div>
 
-          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
-            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Assinaturas Pendentes</span>
+          <div
+            class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Assinaturas
+              Pendentes</span>
             <span class="text-headline-md font-serif font-bold">{{ processosPendentes }}</span>
             <div class="flex items-center gap-xs text-orange-700 text-label-sm">
               <span class="material-symbols-outlined text-base">draw</span>
@@ -149,8 +155,10 @@ const getIconColor = (tipoAto: string): string => {
             </div>
           </div>
 
-          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
-            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Total Cadastrado</span>
+          <div
+            class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Total
+              Cadastrado</span>
             <span class="text-headline-md font-serif font-bold">{{ totalProcessos }}</span>
             <div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
               <span class="material-symbols-outlined text-base">description</span>
@@ -158,7 +166,8 @@ const getIconColor = (tipoAto: string): string => {
             </div>
           </div>
 
-          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
+          <div
+            class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
             <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Concluídos</span>
             <span class="text-headline-md font-serif font-bold">{{ processosConcluidos }}</span>
             <div class="flex items-center gap-xs text-emerald-700 text-label-sm">
@@ -169,7 +178,8 @@ const getIconColor = (tipoAto: string): string => {
         </div>
 
         <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 overflow-hidden">
-          <div class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
+          <div
+            class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
             <h3 class="text-body-lg font-serif font-bold">Listagem de Processos</h3>
             <div class="flex gap-xs">
               <button class="p-xs hover:bg-surface-container rounded-md transition-colors">
@@ -194,35 +204,31 @@ const getIconColor = (tipoAto: string): string => {
               <span class="material-symbols-outlined text-on-surface-variant">description</span>
             </div>
             <p class="text-primary font-semibold">Nenhum processo encontrado</p>
-            <p class="text-on-surface-variant text-body-sm mt-1">Crie o primeiro processo clicando em "Novo Processo"</p>
+            <p class="text-on-surface-variant text-body-sm mt-1">Crie o primeiro processo clicando em "Novo Processo"
+            </p>
           </div>
 
-          <div v-else class="hidden md:block overflow-x-auto">
+          <div v-else class="overflow-x-auto">
             <table class="w-full border-collapse">
               <thead>
                 <tr class="text-left bg-surface-container-low">
                   <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">PROCESSO</th>
-                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">CLIENTE</th>
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">APRESENTANTE</th>
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">COMPRADOR</th>
                   <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">PROTOCOLO</th>
                   <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">STATUS</th>
                   <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant text-right">DATA</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-outline-variant/20">
-                <router-link
-                  v-for="processo in filteredProcessos"
-                  :key="processo.id"
-                  :to="`/processos/${processo.id}`"
-                  class="hover:bg-surface-container-low transition-colors group cursor-pointer block"
-                  tag="tr"
-                >
+                <tr v-for="processo in filteredProcessos" :key="processo.id" @click="abrirProcesso(processo.id!)"
+                  class="hover:bg-surface-container-low transition-colors group cursor-pointer">
                   <td class="px-lg py-md">
                     <div class="flex items-center gap-md">
-                      <div
-                        class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                        :style="{ backgroundColor: getIconColor(processo.tipoAto) + '20' }"
-                      >
-                        <span class="material-symbols-outlined text-base" :style="{ color: getIconColor(processo.tipoAto) }">
+                      <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                        :style="{ backgroundColor: getIconColor(processo.tipoAto) + '20' }">
+                        <span class="material-symbols-outlined text-base"
+                          :style="{ color: getIconColor(processo.tipoAto) }">
                           description
                         </span>
                       </div>
@@ -237,41 +243,38 @@ const getIconColor = (tipoAto: string): string => {
                   <td class="px-lg py-md text-label-md text-on-surface-variant">
                     {{ getClientName(processo.partes.apresentante || '') }}
                   </td>
+                  <td class="px-lg py-md text-label-md text-on-surface-variant">
+                    {{ processo.partes.outorganteComprador}}
+                  </td>
                   <td class="px-lg py-md text-label-md font-mono text-on-surface-variant">
                     {{ processo.protocolo || '---' }}
                   </td>
                   <td class="px-lg py-md">
-                    <span
-                      v-if="processo.statusHistory?.[0]?.status"
+                    <span v-if="processo.statusHistory?.[0]?.status"
                       class="px-md py-xs rounded-full text-label-sm font-label-sm flex items-center w-fit gap-xs"
-                      :class="[getStatusInfo(processo.statusHistory[0].status).bg, getStatusInfo(processo.statusHistory[0].status).text]"
-                    >
-                      <span class="material-symbols-outlined text-sm">{{ getStatusInfo(processo.statusHistory[0].status).icon }}</span>
+                      :class="[getStatusInfo(processo.statusHistory[0].status).bg, getStatusInfo(processo.statusHistory[0].status).text]">
+                      <span class="material-symbols-outlined text-sm">{{
+                        getStatusInfo(processo.statusHistory[0].status).icon }}</span>
                       {{ getStatusInfo(processo.statusHistory[0].status).label }}
                     </span>
                   </td>
                   <td class="px-lg py-md text-right text-label-sm text-on-surface-variant">
                     {{ formatDate(processo.criadoEm) }}
                   </td>
-                </router-link>
+                </tr>
               </tbody>
             </table>
           </div>
 
           <div v-if="filteredProcessos.length > 0" class="md:hidden flex flex-col divide-y divide-outline-variant/20">
-            <router-link
-              v-for="processo in filteredProcessos"
-              :key="processo.id"
-              :to="`/processos/${processo.id}`"
-              class="p-lg flex flex-col gap-md hover:bg-surface-container-low transition-colors"
-            >
+            <router-link v-for="processo in filteredProcessos" :key="processo.id" :to="`/processos/${processo.id}`"
+              class="p-lg flex flex-col gap-md hover:bg-surface-container-low transition-colors">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-md">
-                  <div
-                    class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                    :style="{ backgroundColor: getIconColor(processo.tipoAto) + '20' }"
-                  >
-                    <span class="material-symbols-outlined text-base" :style="{ color: getIconColor(processo.tipoAto) }">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                    :style="{ backgroundColor: getIconColor(processo.tipoAto) + '20' }">
+                    <span class="material-symbols-outlined text-base"
+                      :style="{ color: getIconColor(processo.tipoAto) }">
                       description
                     </span>
                   </div>
@@ -280,18 +283,17 @@ const getIconColor = (tipoAto: string): string => {
                     <p class="text-label-sm text-on-surface-variant">{{ formatDate(processo.criadoEm) }}</p>
                   </div>
                 </div>
-                <span
-                  v-if="processo.statusHistory?.[0]?.status"
+                <span v-if="processo.statusHistory?.[0]?.status"
                   class="px-sm py-xs rounded-full text-label-sm font-label-sm"
-                  :class="[getStatusInfo(processo.statusHistory[0].status).bg, getStatusInfo(processo.statusHistory[0].status).text]"
-                >
+                  :class="[getStatusInfo(processo.statusHistory[0].status).bg, getStatusInfo(processo.statusHistory[0].status).text]">
                   {{ getStatusInfo(processo.statusHistory[0].status).label }}
                 </span>
               </div>
             </router-link>
           </div>
 
-          <div v-if="filteredProcessos.length > 0" class="px-lg py-md bg-surface-bright flex flex-col sm:flex-row justify-between items-center gap-md">
+          <div v-if="filteredProcessos.length > 0"
+            class="px-lg py-md bg-surface-bright flex flex-col sm:flex-row justify-between items-center gap-md">
             <p class="text-label-sm text-on-surface-variant">Mostrando {{ filteredProcessos.length }} processos</p>
           </div>
         </div>

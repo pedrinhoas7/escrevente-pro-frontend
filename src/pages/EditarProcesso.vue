@@ -34,6 +34,12 @@ const valorEmolumentosInput = ref<string>('');
 const tiposAto = computed<TipoDeAto[]>(() => processosStore.tiposAto);
 const clientes = computed(() => clientesStore.clientes);
 
+const toDateInput = (date: any): string => {
+    if (!date) return '';
+    const d = date._seconds ? new Date(date._seconds * 1000) : new Date(date);
+    return d.toISOString().slice(0, 10);
+};
+
 onMounted(async () => {
     await clientesStore.fetchClientes();
     await processosStore.fetchTiposAto();
@@ -43,7 +49,7 @@ onMounted(async () => {
         form.value = {
             protocolo: processosStore.processoAtual.protocolo || '',
             tipoAto: processosStore.processoAtual.tipoAto,
-            dataEntrada: processosStore.processoAtual.dataEntrada.slice(0, 10), // AAAA-MM-DD
+            dataEntrada: toDateInput(processosStore.processoAtual.dataEntrada),
             partes: {
                 outorganteVendedor: processosStore.processoAtual.partes?.outorganteVendedor || '',
                 outorganteComprador: processosStore.processoAtual.partes?.outorganteComprador || '',

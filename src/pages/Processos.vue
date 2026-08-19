@@ -165,6 +165,23 @@ const abrirProcesso = (id: string) => {
   router.push(`/app/processos/${id}`)
 }
 
+const editarProcesso = (id: string, event: Event) => {
+  event.stopPropagation()
+  router.push(`/app/processos/${id}/editar`)
+}
+
+const excluirProcesso = async (id: string, event: Event) => {
+  event.stopPropagation()
+  if (confirm('Tem certeza que deseja excluir este processo e todo seu histórico?')) {
+    try {
+      await processosStore.deleteProcesso(id)
+    } catch (error) {
+      alert('Erro ao excluir processo.')
+      console.error(error)
+    }
+  }
+}
+
 const getIconColor = (tipoAto: string): string => {
   const map: Record<string, string> = {
     'escritura': '#3B82F6',
@@ -278,7 +295,7 @@ const getIconColor = (tipoAto: string): string => {
             </p>
           </div>
 
-          <div v-else class="overflow-x-auto">
+          <div v-else class="hidden md:block overflow-x-auto">
             <table class="w-full border-collapse">
               <thead>
                 <tr class="text-left bg-surface-container-low border-b border-outline-variant/20">
@@ -296,6 +313,7 @@ const getIconColor = (tipoAto: string): string => {
                   <th @click="toggleSort('data')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th text-right" :class="sortKey === 'data' ? 'text-primary' : 'text-on-surface-variant'">
                     <span class="flex items-center gap-xs justify-end">DATA <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'data' && 'opacity-100'">{{ sortKey === 'data' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'data' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
                   </th>
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant text-right">AÇÕES</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-outline-variant/20">
@@ -338,6 +356,16 @@ const getIconColor = (tipoAto: string): string => {
                   </td>
                   <td class="px-lg py-md text-right text-label-sm text-on-surface-variant">
                     {{ formatDate(processo.criadoEm) }}
+                  </td>
+                  <td class="px-lg py-md text-right">
+                    <div class="flex items-center justify-end gap-sm">
+                      <button @click="editarProcesso(processo.id!, $event)" class="p-sm hover:bg-surface-container rounded-md transition-colors" title="Editar">
+                        <span class="material-symbols-outlined text-base text-secondary">edit</span>
+                      </button>
+                      <button @click="excluirProcesso(processo.id!, $event)" class="p-sm hover:bg-error-container/30 rounded-md transition-colors" title="Excluir">
+                        <span class="material-symbols-outlined text-base text-error">delete</span>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>

@@ -148,12 +148,12 @@ const formatDateSimple = (date: any) => {
         
         <section class="dashboard-header">
           <div>
-            <h1 class="dashboard-title">Olá, Escrevente</h1>
+            <h1 class="dashboard-title">Olá, {{ authStore.isCartorio ? 'Cartório' : 'Escrevente' }}</h1>
             <p class="dashboard-subtitle">
               Bem-vindo ao seu painel de controle notarial. Você tem <strong>{{ processosAbertos }}</strong> processos ativos.
             </p>
           </div>
-          <router-link to="/app/processos/novo" class="btn-primary hidden-mobile">
+          <router-link to="/app/processos" class="btn-primary hidden-mobile">
             <span class="material-symbols-outlined btn-icon">add</span>
             Novo Processo
           </router-link>
@@ -359,7 +359,7 @@ const formatDateSimple = (date: any) => {
     </main>
 
     <div class="mobile-actions mr-4">
-      <router-link to="/app/processos/novo" class="btn-primary-mobile">
+      <router-link to="/app/processos" class="btn-primary-mobile">
         <span class="material-symbols-outlined">add</span>
         Novo Processo
       </router-link>

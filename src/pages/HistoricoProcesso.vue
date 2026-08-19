@@ -28,8 +28,11 @@ onMounted(async () => {
              
              <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-[#1B2A4A] text-sm bg-gray-50 p-4 rounded-lg">
                 <div><span class="font-bold">Tipo de Ato:</span> {{ processosStore.processoAtual.tipoAto }}</div>
-                 <div><span class="font-bold">Data de Entrada:</span> {{ new Date((processosStore.processoAtual.dataEntrada as any)._seconds * 1000).toLocaleDateString() }}</div>
-             </div>
+                <div><span class="font-bold">Data de Entrada:</span> {{ new Date((processosStore.processoAtual.dataEntrada as any)._seconds * 1000).toLocaleDateString() }}</div>
+                <div v-if="processosStore.processoAtual.partes?.apresentante"><span class="font-bold">Apresentante:</span> {{ processosStore.processoAtual.partes.apresentante }}</div>
+                <div v-if="processosStore.processoAtual.partes?.outorganteComprador"><span class="font-bold">Comprador:</span> {{ processosStore.processoAtual.partes.outorganteComprador }}</div>
+                <div v-if="processosStore.processoAtual.partes?.outorganteVendedor"><span class="font-bold">Vendedor:</span> {{ processosStore.processoAtual.partes.outorganteVendedor }}</div>
+            </div>
         </div>
 
         <div class="bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-8">

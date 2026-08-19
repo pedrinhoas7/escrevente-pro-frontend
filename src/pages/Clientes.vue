@@ -23,21 +23,20 @@ const filteredClientes = computed(() => {
   }
   const term = searchTerm.value.toLowerCase();
   return clientesStore.clientes.filter(cliente =>
-    cliente.nome.toLowerCase().includes(term) ||
-    cliente.cpf?.toLowerCase().includes(term) ||
-    cliente.email?.toLowerCase().includes(term)
+    cliente.nome.toLowerCase().includes(term)
   );
 });
 
 const totalClientes = computed(() => clientesStore.clientes.length);
 
-const clientesPremium = computed(() =>
-  clientesStore.clientes.filter((cliente: any) => cliente.status === 'premium').length
-);
-
-const clientesAtivos = computed(() =>
-  clientesStore.clientes.filter((cliente: any) => cliente.status === 'ativo').length
-);
+const clientesNovosMes = computed(() => {
+  const now = new Date();
+  const inicioMes = new Date(now.getFullYear(), now.getMonth(), 1);
+  return clientesStore.clientes.filter(c => {
+    const criado = c.criadoEm?._seconds ? new Date(c.criadoEm._seconds * 1000) : new Date(c.criadoEm);
+    return criado >= inicioMes;
+  }).length;
+});
 
 const getInitials = (nome: string) => {
   return nome
@@ -56,6 +55,17 @@ const salvarCliente = async () => {
   } catch (error) {
     alert('Erro ao salvar cliente. Verifique o console ou a conexão.');
     console.error(error);
+  }
+};
+
+const excluirCliente = async (id: string) => {
+  if (confirm('Tem certeza que deseja excluir este cliente?')) {
+    try {
+      await clientesStore.deleteCliente(id);
+    } catch (error) {
+      alert('Erro ao excluir cliente.');
+      console.error(error);
+    }
   }
 };
 
@@ -79,7 +89,7 @@ const formatCPF = (cpf: string) => {
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-lg mb-xl">
           <div>
             <h1 class="text-headline-lg font-serif font-bold text-primary mb-2">Gestão de Clientes</h1>
-            <p class="text-body-md text-on-surface-variant">Visualize e gerencie processos e protocolos ativos.</p>
+            <p class="text-body-md text-on-surface-variant">Visualize e gerencie seus clientes cadastrados.</p>
           </div>
           <div class="flex flex-col sm:flex-row gap-md items-center w-full lg:w-auto">
             <div class="relative w-full sm:w-80">
@@ -112,28 +122,11 @@ const formatCPF = (cpf: string) => {
           </div>
 
           <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
-            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Clientes Premium</span>
-            <span class="text-headline-md font-serif font-bold">{{ clientesPremium }}</span>
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Novos Este Mês</span>
+            <span class="text-headline-md font-serif font-bold">{{ clientesNovosMes }}</span>
             <div class="flex items-center gap-xs text-secondary text-label-sm">
-              <span class="material-symbols-outlined text-base">star</span>
-              <span>Relacionamento especial</span>
-            </div>
-          </div>
-
-          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
-            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Clientes Ativos</span>
-            <span class="text-headline-md font-serif font-bold">{{ clientesAtivos }}</span>
-            <div class="flex items-center gap-xs text-emerald-600 text-label-sm">
-              <span class="material-symbols-outlined text-base">check_circle</span>
-              <span>Com processos em andamento</span>
-            </div>
-          </div>
-
-          <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant/30 flex flex-col gap-xs">
-            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Taxa de Conversão</span>
-            <span class="text-headline-md font-serif font-bold">94.2%</span>
-            <div class="w-full bg-surface-container h-1.5 rounded-full mt-base">
-              <div class="bg-secondary h-full rounded-full" style="width: 94%"></div>
+              <span class="material-symbols-outlined text-base">trending_up</span>
+              <span>Recém-cadastrados</span>
             </div>
           </div>
         </div>
@@ -178,7 +171,7 @@ const formatCPF = (cpf: string) => {
                   <td class="px-lg py-md">
                     <div class="flex items-center gap-md">
                       <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary text-label-sm">
-                        {{ cliente }}
+                        {{ getInitials(cliente.nome) }}
                       </div>
                       <div>
                         <p class="text-label-md font-bold">{{ cliente.nome }}</p>
@@ -193,19 +186,29 @@ const formatCPF = (cpf: string) => {
                     {{ cliente.telefone || '---' }}
                   </td>
                   <td class="px-lg py-md text-right">
-                    <router-link
-                      :to="`/app/clientes/${cliente.id}/editar`"
-                      class="text-secondary hover:underline font-label-md transition-all"
-                    >
-                      Ver Detalhes
-                    </router-link>
+                    <div class="flex items-center justify-end gap-sm">
+                      <router-link
+                        :to="`/app/clientes/${cliente.id}/editar`"
+                        class="p-sm hover:bg-surface-container rounded-md transition-colors"
+                        title="Editar"
+                      >
+                        <span class="material-symbols-outlined text-base text-secondary">edit</span>
+                      </router-link>
+                      <button
+                        @click="excluirCliente(cliente.id!)"
+                        class="p-sm hover:bg-error-container/30 rounded-md transition-colors"
+                        title="Excluir"
+                      >
+                        <span class="material-symbols-outlined text-base text-error">delete</span>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <div v-if="filteredClientes.length > 0" class="flex flex-col divide-y divide-outline-variant/20">
+          <div v-if="filteredClientes.length > 0" class="md:hidden flex flex-col divide-y divide-outline-variant/20">
             <div
               v-for="cliente in filteredClientes"
               :key="cliente.id"
@@ -224,12 +227,20 @@ const formatCPF = (cpf: string) => {
               </div>
               <div class="flex justify-between items-center text-label-sm">
                 <span class="text-on-surface-variant">{{ cliente.telefone || '---' }}</span>
-                <router-link
-                  :to="`/app/clientes/${cliente.id}/editar`"
-                  class="text-secondary font-bold"
-                >
-                  Ver Detalhes
-                </router-link>
+                <div class="flex gap-sm">
+                  <router-link
+                    :to="`/app/clientes/${cliente.id}/editar`"
+                    class="p-sm hover:bg-surface-container rounded-md transition-colors"
+                  >
+                    <span class="material-symbols-outlined text-base text-secondary">edit</span>
+                  </router-link>
+                  <button
+                    @click="excluirCliente(cliente.id!)"
+                    class="p-sm hover:bg-error-container/30 rounded-md transition-colors"
+                  >
+                    <span class="material-symbols-outlined text-base text-error">delete</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

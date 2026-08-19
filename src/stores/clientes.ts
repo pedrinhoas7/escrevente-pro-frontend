@@ -71,6 +71,15 @@ export const useClientesStore = defineStore('clientes', {
       } finally {
         this.loading = false;
       }
+    },
+    async deleteCliente(id: string) {
+      try {
+        await api.delete(`/clientes/${id}`);
+        this.clientes = this.clientes.filter(c => c.id !== id);
+      } catch (error: any) {
+        this.error = error.message;
+        throw error;
+      }
     }
   },
 });

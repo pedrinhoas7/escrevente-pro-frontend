@@ -15,7 +15,7 @@ const getIconStyle = (isActive: boolean) => {
 const relatoriosExpandido = ref(false)
 
 watch(() => route.path, (path) => {
-  if (path.startsWith('/relatorios')) {
+  if (path.startsWith('/app/relatorios')) {
     relatoriosExpandido.value = true
   }
 }, { immediate: true })
@@ -51,6 +51,16 @@ watch(() => route.path, (path) => {
         <span class="menu-item-text">Clientes</span>
       </RouterLink>
 
+      <RouterLink
+        v-if="authStore.isCartorio"
+        to="/app/escreventes"
+        class="menu-item menu-item-inactive"
+        :class="{ 'menu-item-active-bg': isRouteActive('/app/escreventes') }"
+      >
+        <span class="material-symbols-outlined">badge</span>
+        <span class="menu-item-text">Escreventes</span>
+      </RouterLink>
+
       <div class="menu-item-group">
         <button
           class="menu-item menu-item-button"
@@ -72,7 +82,7 @@ watch(() => route.path, (path) => {
             <RouterLink
               to="/app/relatorios/comissoes"
               class="submenu-item"
-              :class="{ 'submenu-item-active': isRouteActive('/relatorios/comissoes') }"
+              :class="{ 'submenu-item-active': isRouteActive('/app/relatorios/comissoes') }"
             >
               <span class="material-symbols-outlined submenu-icon">payments</span>
               <span class="submenu-text">Comissões</span>
@@ -80,7 +90,7 @@ watch(() => route.path, (path) => {
             <RouterLink
               to="/app/relatorios/processos"
               class="submenu-item"
-              :class="{ 'submenu-item-active': isRouteActive('/relatorios/processos') }"
+              :class="{ 'submenu-item-active': isRouteActive('/app/relatorios/processos') }"
             >
               <span class="material-symbols-outlined submenu-icon">description</span>
               <span class="submenu-text">Processos Mensal</span>

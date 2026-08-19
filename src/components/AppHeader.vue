@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const goBack = () => {
-  router.back()
-}
 </script>
 
 <template>
   <header class="app-header">
     <div class="header-content">
       <div class="header-left">
-        <div v-if="true" class="brand">
+        <div class="brand">
           <div class="brand-icon">
             <span class="material-symbols-outlined brand-icon-text">description</span>
           </div>
@@ -21,17 +14,9 @@ const goBack = () => {
             <p class="brand-subtitle">Sistema Notarial</p>
           </div>
         </div>
-        <button v-else @click="goBack" class="back-button">
-          <span class="material-symbols-outlined">arrow_back</span>
-        </button>
       </div>
       
       <div class="header-right">
-        <div v-if="false" class="nav-links">
-          <span class="nav-link active">Dashboard</span>
-          <router-link to="/app/clientes" class="nav-link">Clientes</router-link>
-          <router-link to="/app/processos" class="nav-link">Processos</router-link>
-        </div>
         <div class="user-avatar">
           <span class="material-symbols-outlined user-icon">person</span>
         </div>
@@ -113,56 +98,10 @@ const goBack = () => {
   margin: 0;
 }
 
-.back-button {
-  padding: 8px;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  transition: background-color 0.2s;
-  border-radius: 8px;
-  color: #44464f;
-}
-
-.back-button:hover {
-  background-color: #f4f3f0;
-}
-
 .header-right {
   display: flex;
   align-items: center;
   gap: 16px;
-}
-
-.nav-links {
-  display: none;
-  gap: 32px;
-  margin-right: 32px;
-}
-
-@media (min-width: 768px) {
-  .nav-links {
-    display: flex;
-  }
-}
-
-.nav-link {
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: #44464f;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.nav-link:hover {
-  color: #1a1c1a;
-}
-
-.nav-link.active {
-  color: #CFB53B;
-  font-weight: 700;
-  border-bottom: 2px solid #CFB53B;
 }
 
 .user-avatar {

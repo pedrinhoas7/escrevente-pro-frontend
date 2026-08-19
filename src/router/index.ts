@@ -3,10 +3,10 @@ import Login from '../pages/Login.vue';
 import Dashboard from '../pages/Dashboard.vue';
 import Clientes from '../pages/Clientes.vue';
 import Processos from '../pages/Processos.vue';
-import NovoProcesso from '../pages/NovoProcesso.vue';
 import DetalhesProcesso from '../pages/DetalhesProcesso.vue';
 import EditarProcesso from '../pages/EditarProcesso.vue';
-import EditarCliente from '../pages/EditarCliente.vue'; // Adicionar esta linha
+import EditarCliente from '../pages/EditarCliente.vue';
+import GestaoEscreventes from '../pages/GestaoEscreventes.vue';
 import ConsultaProtocolo from '../pages/ConsultaProtocolo.vue';
 import HistoricoProcesso from '../pages/HistoricoProcesso.vue';
 import RelatorioComissoes from '../pages/RelatorioComissoes.vue';
@@ -61,14 +61,14 @@ const routes: Array<RouteRecordRaw> = [
         component: EditarCliente,
       },
       {
+        path: 'escreventes',
+        name: 'GestaoEscreventes',
+        component: GestaoEscreventes,
+      },
+      {
         path: 'processos',
         name: 'Processos',
         component: Processos,
-      },
-      {
-        path: 'processos/novo',
-        name: 'NovoProcesso',
-        component: NovoProcesso,
       },
       {
         path: 'processos/:id',

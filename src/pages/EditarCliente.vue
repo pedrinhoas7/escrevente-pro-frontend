@@ -66,7 +66,7 @@ const salvarEdicao = async () => {
                 </div>
                 <div>
                     <label for="endereco" class="block text-sm font-medium text-gray-700">Endereço</label>
-                    <input v-model="form.endereco" id="endereco" type="text" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A4C]" />
+                    <input v-model="form.endereco" id="endereco" type="text" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
                 </div>
             </div>
 

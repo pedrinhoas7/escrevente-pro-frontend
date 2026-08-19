@@ -130,6 +130,15 @@ export const useProcessosStore = defineStore('processos', {
         } finally {
             this.loading = false;
         }
+    },
+    async deleteProcesso(id: string) {
+        try {
+            await api.delete(`/processos/${id}`);
+            this.processos = this.processos.filter(p => p.id !== id);
+        } catch (error: any) {
+            this.error = error.message;
+            throw error;
+        }
     }
   },
 });

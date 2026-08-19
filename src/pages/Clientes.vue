@@ -87,7 +87,7 @@ const formatCPF = (cpf: string) => {
               <input
                 v-model="searchTerm"
                 class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-label-md font-sans"
-                placeholder="Buscar cliente ou protocolo..."
+                placeholder="Buscar pelo nome do cliente..."
                 type="text"
               />
             </div>

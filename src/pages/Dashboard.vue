@@ -50,7 +50,9 @@ const hoje = computed(() => {
     now.getDate(),
   );
   return processos.value.filter(p => {
-    const criado = new Date(formatDate(p.criadoEm));
+    const criado = p.criadoEm?._seconds
+      ? new Date(p.criadoEm._seconds * 1000)
+      : new Date(p.criadoEm);
     return criado >= inicioDoDia
   }).length;
 });
@@ -63,7 +65,9 @@ const lastSevenDays = computed(() => {
     now.getDate() - 7,
   );
   return processos.value.filter(p => {
-    const criado = new Date(formatDate(p.criadoEm));
+    const criado = p.criadoEm?._seconds
+      ? new Date(p.criadoEm._seconds * 1000)
+      : new Date(p.criadoEm);
     return criado >= filter
   }).length;
 });

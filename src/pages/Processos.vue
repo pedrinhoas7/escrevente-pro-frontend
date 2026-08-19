@@ -30,10 +30,11 @@ const filteredProcessos = computed(() => {
     return sortedProcessos
   }
 
+  const term = searchTerm.value.toLowerCase()
   return sortedProcessos.filter(
     processo =>
-      processo.tipoAto.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-      (processo.protocolo && processo.protocolo.toLowerCase().includes(searchTerm.value.toLowerCase()))
+      (processo.protocolo && processo.protocolo.toLowerCase().includes(term)) ||
+      (processo.partes.outorganteComprador && processo.partes.outorganteComprador.toLowerCase().includes(term))
   )
 })
 
@@ -122,7 +123,7 @@ const getIconColor = (tipoAto: string): string => {
                 class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline mt-3">search</span>
               <input v-model="searchTerm"
                 class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-label-md font-sans"
-                placeholder="Buscar por tipo ou protocolo..." type="text" />
+                placeholder="Buscar por protocolo ou comprador..." type="text" />
             </div>
             <router-link to="/app/processos/novo"
               class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md flex items-center justify-center gap-xs hover:shadow-lg transition-all active:scale-95">

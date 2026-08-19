@@ -9,6 +9,38 @@ const clientesStore = useClientesStore()
 
 const searchTerm = ref('')
 
+type SortKey = 'tipoAto' | 'apresentante' | 'comprador' | 'protocolo' | 'status' | 'data'
+type SortOrder = 'asc' | 'desc'
+const sortKey = ref<SortKey>('data')
+const sortOrder = ref<SortOrder>('desc')
+
+const toggleSort = (key: SortKey) => {
+  if (sortKey.value === key) {
+    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortKey.value = key
+    sortOrder.value = 'asc'
+  }
+}
+
+const cycleSort = () => {
+  const keys: SortKey[] = ['data', 'tipoAto', 'protocolo', 'status', 'comprador', 'apresentante']
+  const idx = keys.indexOf(sortKey.value)
+  sortKey.value = keys[(idx + 1) % keys.length] as SortKey
+  sortOrder.value = 'asc'
+}
+
+const getSortValue = (p: typeof processosStore.processos[number], key: SortKey): string | number => {
+  switch (key) {
+    case 'tipoAto': return p.tipoAto?.toLowerCase() || ''
+    case 'apresentante': return getClientName(p.partes.apresentante || '').toLowerCase()
+    case 'comprador': return p.partes.outorganteComprador?.toLowerCase() || ''
+    case 'protocolo': return p.protocolo?.toLowerCase() || ''
+    case 'status': return p.statusHistory?.[0]?.status?.toLowerCase() || ''
+    case 'data': return p.criadoEm?._seconds || 0
+  }
+}
+
 onMounted(() => {
   processosStore.fetchProcessos()
   clientesStore.fetchClientes()
@@ -21,9 +53,10 @@ const getClientName = (apresentanteId: string) => {
 
 const filteredProcessos = computed(() => {
   const sortedProcessos = [...processosStore.processos].sort((a, b) => {
-    const aDate = a.statusHistory?.[0]?.data?._seconds || 0
-    const bDate = b.statusHistory?.[0]?.data?._seconds || 0
-    return bDate - aDate
+    const aVal = getSortValue(a, sortKey.value)
+    const bVal = getSortValue(b, sortKey.value)
+    const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0
+    return sortOrder.value === 'asc' ? cmp : -cmp
   })
 
   if (!searchTerm.value) {
@@ -189,12 +222,10 @@ const getIconColor = (tipoAto: string): string => {
             class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
             <h3 class="text-body-lg font-serif font-bold">Listagem de Processos</h3>
             <div class="flex gap-xs">
-              <button class="p-xs hover:bg-surface-container rounded-md transition-colors">
-                <span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
+              <button @click="cycleSort" class="p-xs hover:bg-surface-container rounded-md transition-colors" :title="`Ordenar por: ${sortKey}`">
+                <span class="material-symbols-outlined text-on-surface-variant">{{ sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</span>
               </button>
-              <button class="p-xs hover:bg-surface-container rounded-md transition-colors">
-                <span class="material-symbols-outlined text-on-surface-variant">sort</span>
-              </button>
+              <span class="text-label-sm text-on-surface-variant self-center capitalize px-xs">{{ sortKey }}</span>
             </div>
           </div>
 
@@ -219,12 +250,12 @@ const getIconColor = (tipoAto: string): string => {
             <table class="w-full border-collapse">
               <thead>
                 <tr class="text-left bg-surface-container-low">
-                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">PROCESSO</th>
-                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">APRESENTANTE</th>
-                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">COMPRADOR</th>
-                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">PROTOCOLO</th>
-                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">STATUS</th>
-                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant text-right">DATA</th>
+                  <th @click="toggleSort('tipoAto')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">PROCESSO <span v-if="sortKey === 'tipoAto'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
+                  <th @click="toggleSort('apresentante')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">APRESENTANTE <span v-if="sortKey === 'apresentante'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
+                  <th @click="toggleSort('comprador')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">COMPRADOR <span v-if="sortKey === 'comprador'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
+                  <th @click="toggleSort('protocolo')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">PROTOCOLO <span v-if="sortKey === 'protocolo'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
+                  <th @click="toggleSort('status')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">STATUS <span v-if="sortKey === 'status'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
+                  <th @click="toggleSort('data')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none text-right">DATA <span v-if="sortKey === 'data'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-outline-variant/20">

@@ -7,10 +7,19 @@ const api = axios.create({
 
 // Interceptor para adicionar o token em cada requisição
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
     const authStore = useAuthStore();
-    if (authStore.isAuthenticated) {
-      config.headers.Authorization = `Bearer ${authStore.token}`;
+    if (authStore.token) {
+      if (authStore.isTokenExpired && authStore.refreshToken) {
+        try {
+          const newToken = await authStore.attemptRefreshToken();
+          config.headers.Authorization = `Bearer ${newToken}`;
+        } catch {
+          authStore.logout();
+        }
+      } else {
+        config.headers.Authorization = `Bearer ${authStore.token}`;
+      }
     }
     return config;
   },

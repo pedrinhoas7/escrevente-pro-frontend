@@ -22,8 +22,11 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isAuthenticated: (state) => {
+      return !!state.token;
+    },
+    isTokenExpired: (state) => {
       const now = new Date().getTime();
-      return !!state.token && !!state.expiresAt && state.expiresAt > now;
+      return !state.expiresAt || state.expiresAt <= now;
     },
     userRole: (state) => state.userRole,
     cartorioId: (state) => state.cartorioId,

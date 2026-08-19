@@ -250,10 +250,10 @@ const formatCPF = (cpf: string) => {
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
         <div class="fixed inset-0 bg-black/50 transition-opacity" @click="showModal = false"></div>
         
-        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 w-full max-w-2xl mx-auto">
-          <div class="bg-white px-xl py-xl">
-            <h3 class="text-headline-md font-serif font-bold text-primary mb-lg">Novo Cliente</h3>
-            <div class="space-y-md">
+        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 w-full max-w-3xl mx-auto">
+          <div class="bg-white px-2xl py-2xl">
+            <h3 class="text-headline-md font-serif font-bold text-primary mb-xl">Novo Cliente</h3>
+            <div class="space-y-lg">
               <input
                 v-model="novoCliente.nome"
                 type="text"

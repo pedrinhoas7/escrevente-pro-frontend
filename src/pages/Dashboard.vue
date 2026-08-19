@@ -125,12 +125,6 @@ function getIconColor(tipoAto: string): string {
   return foundKey ? map[foundKey] as string : '#CFB53B';
 }
 
-const formatDate = (date: any) => {
-  if (!date) return '';
-  const d = new Date(date._seconds ? date._seconds * 1000 : date);
-  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-};
-
 const formatDateSimple = (date: any) => {
   if (!date) return '';
   const d = new Date(date._seconds ? date._seconds * 1000 : date);

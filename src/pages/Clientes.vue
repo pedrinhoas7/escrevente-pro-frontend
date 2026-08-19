@@ -247,10 +247,10 @@ const formatCPF = (cpf: string) => {
       role="dialog"
       aria-modal="true"
     >
-      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+      <div class="flex items-center justify-center min-h-screen p-2.5">
         <div class="fixed inset-0 bg-black/50 transition-opacity" @click="showModal = false"></div>
-        
-        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 w-full max-w-3xl mx-auto">
+
+        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all w-full mx-2.5">
           <div class="bg-white px-2xl py-2xl">
             <h3 class="text-headline-md font-serif font-bold text-primary mb-xl">Novo Cliente</h3>
             <div class="space-y-lg">

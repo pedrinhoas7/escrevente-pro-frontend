@@ -3,11 +3,30 @@ import { onMounted, computed, ref } from 'vue'
 import { useProcessosStore } from '../stores/processos'
 import { useClientesStore } from '../stores/clientes'
 import router from '../router'
+import type { TipoDeAto } from '../types/tipo-ato'
 
 const processosStore = useProcessosStore()
 const clientesStore = useClientesStore()
 
 const searchTerm = ref('')
+const showModal = ref(false)
+
+const novoProcesso = ref({
+  protocolo: '',
+  tipoAto: '' as TipoDeAto,
+  dataEntrada: new Date().toISOString().slice(0, 10),
+  partes: {
+    outorganteVendedor: '',
+    outorganteComprador: '',
+    escrevente: '',
+    apresentante: ''
+  },
+  valorProcesso: undefined as number | undefined,
+  valorEmolumentos: undefined as number | undefined,
+  notasInternas: ''
+})
+
+const tiposAto = computed<TipoDeAto[]>(() => processosStore.tiposAto)
 
 type SortKey = 'tipoAto' | 'apresentante' | 'comprador' | 'protocolo' | 'status' | 'data'
 type SortOrder = 'asc' | 'desc'
@@ -21,13 +40,6 @@ const toggleSort = (key: SortKey) => {
     sortKey.value = key
     sortOrder.value = 'asc'
   }
-}
-
-const cycleSort = () => {
-  const keys: SortKey[] = ['data', 'tipoAto', 'protocolo', 'status', 'comprador', 'apresentante']
-  const idx = keys.indexOf(sortKey.value)
-  sortKey.value = keys[(idx + 1) % keys.length] as SortKey
-  sortOrder.value = 'asc'
 }
 
 const getSortValue = (p: typeof processosStore.processos[number], key: SortKey): string | number => {
@@ -44,7 +56,31 @@ const getSortValue = (p: typeof processosStore.processos[number], key: SortKey):
 onMounted(() => {
   processosStore.fetchProcessos()
   clientesStore.fetchClientes()
+  processosStore.fetchTiposAto()
 })
+
+const salvarProcesso = async () => {
+  try {
+    if (!novoProcesso.value.tipoAto) {
+      alert('Tipo de Ato é obrigatório')
+      return
+    }
+    await processosStore.addProcesso({ ...novoProcesso.value })
+    showModal.value = false
+    novoProcesso.value = {
+      protocolo: '',
+      tipoAto: '' as TipoDeAto,
+      dataEntrada: new Date().toISOString().slice(0, 10),
+      partes: { outorganteVendedor: '', outorganteComprador: '', escrevente: '', apresentante: '' },
+      valorProcesso: undefined,
+      valorEmolumentos: undefined,
+      notasInternas: ''
+    }
+  } catch (error) {
+    alert('Erro ao salvar processo. Verifique o console.')
+    console.error(error)
+  }
+}
 
 const getClientName = (apresentanteId: string) => {
   const client = clientesStore.clientes.find(c => c.id === apresentanteId)
@@ -164,11 +200,11 @@ const getIconColor = (tipoAto: string): string => {
                 class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-label-md font-sans"
                 placeholder="Buscar por protocolo ou comprador..." type="text" />
             </div>
-            <router-link to="/app/processos/novo"
+            <button @click="showModal = true"
               class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md flex items-center justify-center gap-xs hover:shadow-lg transition-all active:scale-95">
               <span class="material-symbols-outlined">add</span>
               Novo Processo
-            </router-link>
+            </button>
           </div>
         </div>
 
@@ -221,12 +257,10 @@ const getIconColor = (tipoAto: string): string => {
           <div
             class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
             <h3 class="text-body-lg font-serif font-bold">Listagem de Processos</h3>
-            <div class="flex gap-xs">
-              <button @click="cycleSort" class="p-xs hover:bg-surface-container rounded-md transition-colors" :title="`Ordenar por: ${sortKey}`">
-                <span class="material-symbols-outlined text-on-surface-variant">{{ sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</span>
-              </button>
-              <span class="text-label-sm text-on-surface-variant self-center capitalize px-xs">{{ sortKey }}</span>
-            </div>
+            <span class="text-label-sm text-on-surface-variant flex items-center gap-xs">
+              <span class="material-symbols-outlined text-base">swap_vert</span>
+              Clique no cabeçalho para ordenar
+            </span>
           </div>
 
           <div v-if="processosStore.loading" class="p-xl text-center">
@@ -249,13 +283,25 @@ const getIconColor = (tipoAto: string): string => {
           <div v-else class="overflow-x-auto">
             <table class="w-full border-collapse">
               <thead>
-                <tr class="text-left bg-surface-container-low">
-                  <th @click="toggleSort('tipoAto')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">PROCESSO <span v-if="sortKey === 'tipoAto'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
-                  <th @click="toggleSort('apresentante')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">APRESENTANTE <span v-if="sortKey === 'apresentante'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
-                  <th @click="toggleSort('comprador')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">COMPRADOR <span v-if="sortKey === 'comprador'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
-                  <th @click="toggleSort('protocolo')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">PROTOCOLO <span v-if="sortKey === 'protocolo'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
-                  <th @click="toggleSort('status')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none">STATUS <span v-if="sortKey === 'status'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
-                  <th @click="toggleSort('data')" class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant cursor-pointer hover:text-primary select-none text-right">DATA <span v-if="sortKey === 'data'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span></th>
+                <tr class="text-left bg-surface-container-low border-b border-outline-variant/20">
+                  <th @click="toggleSort('tipoAto')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'tipoAto' ? 'text-primary' : 'text-on-surface-variant'">
+                    <span class="flex items-center gap-xs">PROCESSO <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'tipoAto' && 'opacity-100'">{{ sortKey === 'tipoAto' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'tipoAto' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
+                  </th>
+                  <th @click="toggleSort('apresentante')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'apresentante' ? 'text-primary' : 'text-on-surface-variant'">
+                    <span class="flex items-center gap-xs">APRESENTANTE <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'apresentante' && 'opacity-100'">{{ sortKey === 'apresentante' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'apresentante' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
+                  </th>
+                  <th @click="toggleSort('comprador')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'comprador' ? 'text-primary' : 'text-on-surface-variant'">
+                    <span class="flex items-center gap-xs">COMPRADOR <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'comprador' && 'opacity-100'">{{ sortKey === 'comprador' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'comprador' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
+                  </th>
+                  <th @click="toggleSort('protocolo')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'protocolo' ? 'text-primary' : 'text-on-surface-variant'">
+                    <span class="flex items-center gap-xs">PROTOCOLO <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'protocolo' && 'opacity-100'">{{ sortKey === 'protocolo' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'protocolo' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
+                  </th>
+                  <th @click="toggleSort('status')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'status' ? 'text-primary' : 'text-on-surface-variant'">
+                    <span class="flex items-center gap-xs">STATUS <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'status' && 'opacity-100'">{{ sortKey === 'status' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'status' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
+                  </th>
+                  <th @click="toggleSort('data')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th text-right" :class="sortKey === 'data' ? 'text-primary' : 'text-on-surface-variant'">
+                    <span class="flex items-center gap-xs justify-end">DATA <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'data' && 'opacity-100'">{{ sortKey === 'data' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'data' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
+                  </th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-outline-variant/20">
@@ -338,6 +384,76 @@ const getIconColor = (tipoAto: string): string => {
 
       </div>
     </main>
+
+    <div
+      v-if="showModal"
+      class="fixed z-50 inset-0 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="flex items-center justify-center min-h-screen p-2.5">
+        <div class="fixed inset-0 bg-black/50 transition-opacity" @click="showModal = false"></div>
+
+        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all w-full mx-2.5">
+          <div class="bg-white px-2xl py-2xl">
+            <h3 class="text-headline-md font-serif font-bold text-primary mb-xl">Novo Processo</h3>
+            <div class="space-y-lg">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+                <div>
+                  <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Protocolo (opcional)</label>
+                  <input v-model="novoProcesso.protocolo" type="text" placeholder="Protocolo" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md" />
+                </div>
+                <div>
+                  <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Tipo de Ato</label>
+                  <select v-model="novoProcesso.tipoAto" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md bg-white">
+                    <option value="" disabled>Selecione um tipo</option>
+                    <option v-for="tipo in tiposAto" :key="tipo" :value="tipo">{{ tipo }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Data de Entrada</label>
+                  <input v-model="novoProcesso.dataEntrada" type="date" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md" />
+                </div>
+                <div>
+                  <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Apresentante</label>
+                  <select v-model="novoProcesso.partes.apresentante" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md bg-white">
+                    <option value="" disabled>Selecione</option>
+                    <option v-for="cliente in clientesStore.clientes" :key="cliente.id" :value="cliente.id">{{ cliente.nome }}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="border-t border-outline-variant/30 pt-lg">
+                <h4 class="text-body-md font-serif font-bold text-primary mb-md">Partes Envolvidas</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+                  <div>
+                    <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Outorgante Vendedor</label>
+                    <input v-model="novoProcesso.partes.outorganteVendedor" type="text" placeholder="Vendedor" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md" />
+                  </div>
+                  <div>
+                    <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Outorgante Comprador</label>
+                    <input v-model="novoProcesso.partes.outorganteComprador" type="text" placeholder="Comprador" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md" />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Notas Internas</label>
+                <textarea v-model="novoProcesso.notasInternas" rows="3" placeholder="Notas internas" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="bg-surface-container-low px-2xl py-md flex flex-row-reverse gap-md">
+            <button @click="salvarProcesso" type="button" class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md hover:shadow-lg transition-all">
+              Salvar
+            </button>
+            <button @click="showModal = false" type="button" class="w-full sm:w-auto border border-outline-variant text-primary px-lg py-sm rounded-lg font-label-md hover:bg-surface-container transition-all">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

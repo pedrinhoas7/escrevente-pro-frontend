@@ -250,8 +250,8 @@ const formatCPF = (cpf: string) => {
       <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
         <div class="fixed inset-0 bg-black/50 transition-opacity" @click="showModal = false"></div>
         
-        <div class="inline-block mr-3 z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
-          <div class="bg-white px-lg py-xl">
+        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 w-full max-w-2xl mx-auto">
+          <div class="bg-white px-xl py-xl">
             <h3 class="text-headline-md font-serif font-bold text-primary mb-lg">Novo Cliente</h3>
             <div class="space-y-md">
               <input

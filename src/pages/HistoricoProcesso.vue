@@ -41,7 +41,7 @@ onMounted(async () => {
         </div>
 
         <div class="mt-8 text-center">
-            <router-link to="/consulta" class="text-[#C9A84C] hover:text-[#1B2A4A] font-medium transition-colors">
+            <router-link to="/" class="text-[#C9A84C] hover:text-[#1B2A4A] font-medium transition-colors">
                 Nova Consulta
             </router-link>
         </div>

@@ -152,7 +152,7 @@ const formatCPF = (cpf: string) => {
             <p class="text-on-surface-variant text-body-sm mt-1">Cadastre o primeiro cliente clicando em "Novo Cliente"</p>
           </div>
 
-          <div v-else class="hidden md:block overflow-x-auto">
+          <div v-else class="overflow-x-auto">
             <table class="w-full border-collapse">
               <thead>
                 <tr class="text-left bg-surface-container-low">

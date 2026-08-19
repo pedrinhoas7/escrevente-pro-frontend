@@ -299,7 +299,7 @@ const getIconColor = (tipoAto: string): string => {
             </p>
           </div>
 
-          <div v-else class="hidden md:block overflow-x-auto">
+          <div v-else class="overflow-x-auto">
             <table class="w-full border-collapse">
               <thead>
                 <tr class="text-left bg-surface-container-low border-b border-outline-variant/20">

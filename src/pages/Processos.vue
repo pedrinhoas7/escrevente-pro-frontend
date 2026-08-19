@@ -28,7 +28,7 @@ const novoProcesso = ref({
 
 const tiposAto = computed<TipoDeAto[]>(() => processosStore.tiposAto)
 
-type SortKey = 'tipoAto' | 'apresentante' | 'comprador' | 'protocolo' | 'status' | 'data'
+type SortKey = 'apresentante' | 'comprador' | 'status' | 'data'
 type SortOrder = 'asc' | 'desc'
 const sortKey = ref<SortKey>('data')
 const sortOrder = ref<SortOrder>('desc')
@@ -44,10 +44,8 @@ const toggleSort = (key: SortKey) => {
 
 const getSortValue = (p: typeof processosStore.processos[number], key: SortKey): string | number => {
   switch (key) {
-    case 'tipoAto': return p.tipoAto?.toLowerCase() || ''
     case 'apresentante': return getClientName(p.partes.apresentante || '').toLowerCase()
     case 'comprador': return p.partes.outorganteComprador?.toLowerCase() || ''
-    case 'protocolo': return p.protocolo?.toLowerCase() || ''
     case 'status': return p.statusHistory?.[0]?.status?.toLowerCase() || ''
     case 'data': return p.criadoEm?._seconds || 0
   }
@@ -284,18 +282,14 @@ const getIconColor = (tipoAto: string): string => {
             <table class="w-full border-collapse">
               <thead>
                 <tr class="text-left bg-surface-container-low border-b border-outline-variant/20">
-                  <th @click="toggleSort('tipoAto')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'tipoAto' ? 'text-primary' : 'text-on-surface-variant'">
-                    <span class="flex items-center gap-xs">PROCESSO <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'tipoAto' && 'opacity-100'">{{ sortKey === 'tipoAto' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'tipoAto' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
-                  </th>
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">PROCESSO</th>
                   <th @click="toggleSort('apresentante')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'apresentante' ? 'text-primary' : 'text-on-surface-variant'">
                     <span class="flex items-center gap-xs">APRESENTANTE <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'apresentante' && 'opacity-100'">{{ sortKey === 'apresentante' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'apresentante' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
                   </th>
                   <th @click="toggleSort('comprador')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'comprador' ? 'text-primary' : 'text-on-surface-variant'">
                     <span class="flex items-center gap-xs">COMPRADOR <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'comprador' && 'opacity-100'">{{ sortKey === 'comprador' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'comprador' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
                   </th>
-                  <th @click="toggleSort('protocolo')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'protocolo' ? 'text-primary' : 'text-on-surface-variant'">
-                    <span class="flex items-center gap-xs">PROTOCOLO <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'protocolo' && 'opacity-100'">{{ sortKey === 'protocolo' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'protocolo' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
-                  </th>
+                  <th class="px-lg py-md text-label-sm font-label-sm text-on-surface-variant">PROTOCOLO</th>
                   <th @click="toggleSort('status')" class="px-lg py-md text-label-sm font-label-sm cursor-pointer select-none transition-colors hover:bg-surface-container group/th" :class="sortKey === 'status' ? 'text-primary' : 'text-on-surface-variant'">
                     <span class="flex items-center gap-xs">STATUS <span class="material-symbols-outlined text-sm opacity-0 group-hover/th:opacity-40 transition-opacity" :class="sortKey === 'status' && 'opacity-100'">{{ sortKey === 'status' && sortOrder === 'asc' ? 'arrow_upward' : sortKey === 'status' && sortOrder === 'desc' ? 'arrow_downward' : 'swap_vert' }}</span></span>
                   </th>

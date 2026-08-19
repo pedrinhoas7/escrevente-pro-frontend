@@ -87,10 +87,14 @@ const getClientName = (apresentanteId: string) => {
 
 const filteredProcessos = computed(() => {
   const sortedProcessos = [...processosStore.processos].sort((a, b) => {
-    const aVal = getSortValue(a, sortKey.value)
-    const bVal = getSortValue(b, sortKey.value)
-    const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0
-    return sortOrder.value === 'asc' ? cmp : -cmp
+    try {
+      const aVal = getSortValue(a, sortKey.value)
+      const bVal = getSortValue(b, sortKey.value)
+      const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0
+      return sortOrder.value === 'asc' ? cmp : -cmp
+    } catch {
+      return 0
+    }
   })
 
   if (!searchTerm.value) {

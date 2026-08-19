@@ -82,7 +82,7 @@ const excluirProcesso = async () => {
                         <router-link :to="`/app/processos/${route.params.id}/editar`" class="btn-secondary py-2 px-4 text-sm">
                             Editar
                         </router-link>
-                        <button @click="excluirProcesso" class="bg-red-600 text-white py-2 px-4 text-sm rounded-lg hover:bg-red-700 transition-colors">
+                        <button @click="excluirProcesso" class="border border-outline-variant text-primary py-2 px-4 text-sm rounded-lg hover:bg-surface-container transition-colors cursor-pointer">
                             Excluir
                         </button>
                     </div>
@@ -133,8 +133,9 @@ const excluirProcesso = async () => {
             />
         </div>
     </div>
-    <div v-else class="text-center py-20 text-[#1B2A4A]">
-        Carregando detalhes do processo...
+    <div v-else class="flex flex-col items-center justify-center py-20 gap-md text-[#1B2A4A]">
+        <div class="w-10 h-10 border-2 border-[#1B2A4A]/20 border-t-[#1B2A4A] rounded-full animate-spin"></div>
+        <p>Carregando detalhes do processo...</p>
     </div>
   </div>
 </template>

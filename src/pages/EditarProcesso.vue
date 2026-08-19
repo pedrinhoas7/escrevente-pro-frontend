@@ -91,7 +91,11 @@ const salvarEdicao = async () => {
 
 <template>
   <div class="min-h-dvh bg-[#F8F7F4]">
-    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-6 md:p-8">
+    <div v-if="processosStore.loading" class="flex flex-col items-center justify-center min-h-dvh gap-md">
+      <div class="w-10 h-10 border-2 border-[#1B2A4A]/20 border-t-[#1B2A4A] rounded-full animate-spin"></div>
+      <p class="text-[#44464f]">Carregando processo...</p>
+    </div>
+    <div v-else class="max-w-7xl mx-auto bg-white rounded-lg shadow-xl border border-[#1B2A4A]/10 p-6 md:p-8">
         <h1 class="text-2xl font-serif font-bold text-[#1B2A4A] mb-6 border-b pb-4">Editar Processo</h1>
 
         <form @submit.prevent="salvarEdicao" class="space-y-6">
@@ -150,10 +154,10 @@ const salvarEdicao = async () => {
             </div>
 
             <div class="border-t border-gray-200 pt-2 md:pt-6 flex flex-col-reverse sm:flex-row sm:justify-end space-y-3 sm:space-y-2 sm:space-x-3">
-                <router-link :to="`/app/processos/${processoId}`" class="btn-secondary py-3 w-full sm:w-auto text-center">
+                <router-link :to="`/app/processos/${processoId}`" class="btn-secondary py-3 w-full sm:w-auto text-center cursor-pointer">
                     Cancelar
                 </router-link>
-                <button type="submit" class="btn-primary py-3 w-full sm:w-auto mb-2">
+                <button type="submit" class="btn-primary py-3 w-full sm:w-auto mb-2 cursor-pointer">
                     Salvar Edição
                 </button>
             </div>

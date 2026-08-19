@@ -47,8 +47,9 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div v-else-if="loading" class="min-h-dvh flex items-center justify-center text-[#1B2A4A]">
-          Carregando informações...
+      <div v-else-if="loading" class="min-h-dvh flex flex-col items-center justify-center gap-md text-[#1B2A4A]">
+          <div class="w-10 h-10 border-2 border-[#1B2A4A]/20 border-t-[#1B2A4A] rounded-full animate-spin"></div>
+          <p>Carregando informações...</p>
       </div>
 
       <div v-else class="min-h-dvh flex flex-col items-center justify-center text-[#1B2A4A]">

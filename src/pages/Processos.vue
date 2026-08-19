@@ -363,11 +363,11 @@ const getIconColor = (tipoAto: string): string => {
                   </td>
                   <td class="px-lg py-md text-right">
                     <div class="flex items-center justify-end gap-sm">
-                      <button @click="editarProcesso(processo.id!, $event)" class="p-sm hover:bg-surface-container rounded-md transition-colors" title="Editar">
-                        <span class="material-symbols-outlined text-base text-secondary">edit</span>
+                      <button @click="editarProcesso(processo.id!, $event)" class="p-sm hover:bg-surface-container rounded-md transition-colors cursor-pointer" title="Editar">
+                        <span class="material-symbols-outlined text-base text-on-surface-variant">edit</span>
                       </button>
-                      <button @click="excluirProcesso(processo.id!, $event)" class="p-sm hover:bg-error-container/30 rounded-md transition-colors" title="Excluir">
-                        <span class="material-symbols-outlined text-base text-error">delete</span>
+                      <button @click="excluirProcesso(processo.id!, $event)" class="p-sm hover:bg-surface-container rounded-md transition-colors cursor-pointer" title="Excluir">
+                        <span class="material-symbols-outlined text-base text-on-surface-variant">delete</span>
                       </button>
                     </div>
                   </td>
@@ -470,10 +470,10 @@ const getIconColor = (tipoAto: string): string => {
             </div>
           </div>
           <div class="bg-surface-container-low px-2xl py-md flex flex-row-reverse gap-md">
-            <button @click="salvarProcesso" type="button" class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md hover:shadow-lg transition-all">
+            <button @click="salvarProcesso" type="button" class="w-full sm:w-auto bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md hover:shadow-lg transition-all cursor-pointer">
               Salvar
             </button>
-            <button @click="showModal = false" type="button" class="w-full sm:w-auto border border-outline-variant text-primary px-lg py-sm rounded-lg font-label-md hover:bg-surface-container transition-all">
+            <button @click="showModal = false" type="button" class="w-full sm:w-auto border border-outline-variant text-primary px-lg py-sm rounded-lg font-label-md hover:bg-surface-container transition-all cursor-pointer">
               Cancelar
             </button>
           </div>

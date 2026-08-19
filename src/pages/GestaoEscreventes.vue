@@ -176,11 +176,11 @@ const excluirEscrevente = async (id: string) => {
                   </td>
                   <td class="px-lg py-md text-right">
                     <div class="flex items-center justify-end gap-sm">
-                      <button @click="editarEscrevente(e)" class="p-sm hover:bg-surface-container rounded-md transition-colors" title="Editar">
-                        <span class="material-symbols-outlined text-base text-secondary">edit</span>
+                      <button @click="editarEscrevente(e)" class="p-sm hover:bg-surface-container rounded-md transition-colors cursor-pointer" title="Editar">
+                        <span class="material-symbols-outlined text-base text-on-surface-variant">edit</span>
                       </button>
-                      <button @click="excluirEscrevente(e.uid)" class="p-sm hover:bg-error-container/30 rounded-md transition-colors" title="Excluir">
-                        <span class="material-symbols-outlined text-base text-error">delete</span>
+                      <button @click="excluirEscrevente(e.uid)" class="p-sm hover:bg-surface-container rounded-md transition-colors cursor-pointer" title="Excluir">
+                        <span class="material-symbols-outlined text-base text-on-surface-variant">delete</span>
                       </button>
                     </div>
                   </td>
@@ -207,11 +207,11 @@ const excluirEscrevente = async (id: string) => {
                   {{ e.ativo ? 'Ativo' : 'Inativo' }}
                 </button>
                 <div class="flex gap-sm">
-                  <button @click="editarEscrevente(e)" class="p-sm hover:bg-surface-container rounded-md transition-colors">
-                    <span class="material-symbols-outlined text-base text-secondary">edit</span>
+                  <button @click="editarEscrevente(e)" class="p-sm hover:bg-surface-container rounded-md transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-base text-on-surface-variant">edit</span>
                   </button>
-                  <button @click="excluirEscrevente(e.uid)" class="p-sm hover:bg-error-container/30 rounded-md transition-colors">
-                    <span class="material-symbols-outlined text-base text-error">delete</span>
+                  <button @click="excluirEscrevente(e.uid)" class="p-sm hover:bg-surface-container rounded-md transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-base text-on-surface-variant">delete</span>
                   </button>
                 </div>
               </div>
@@ -249,11 +249,11 @@ const excluirEscrevente = async (id: string) => {
           </div>
           <div class="bg-surface-container-low px-2xl py-md flex flex-row-reverse gap-md">
             <button @click="salvarEscrevente" type="button"
-              class="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-sm rounded-lg font-label-md hover:shadow-lg transition-all">
+              class="w-full sm:w-auto bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md hover:shadow-lg transition-all cursor-pointer">
               Salvar
             </button>
             <button @click="showModal = false; editingUid = null" type="button"
-              class="w-full sm:w-auto border border-outline-variant text-primary px-lg py-sm rounded-lg font-label-md hover:bg-surface-container transition-all">
+              class="w-full sm:w-auto border border-outline-variant text-primary px-lg py-sm rounded-lg font-label-md hover:bg-surface-container transition-all cursor-pointer">
               Cancelar
             </button>
           </div>

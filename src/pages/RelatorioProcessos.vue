@@ -39,6 +39,11 @@ const statusConfig: Record<string, { label: string; bg: string; text: string }> 
   'Falta de documento': { label: 'Pendente', bg: '#FED7AA', text: '#EA580C' },
   'Indeferido': { label: 'Indeferido', bg: '#FCA5A5', text: '#DC2626' },
   'Aguardando assinatura': { label: 'Assinatura', bg: '#D1FAE5', text: '#059669' },
+  'Aguardando Pagamento': { label: 'Aguardando Pagamento', bg: '#FEF3C7', text: '#D97706' },
+  'Boleto Pago': { label: 'Boleto Pago', bg: '#ECFCCB', text: '#65A30D' },
+  'Assinado': { label: 'Assinado', bg: '#E9D5FF', text: '#9333EA' },
+  'Enviado para registro': { label: 'Enviado para registro', bg: '#E0E7FF', text: '#4F46E5' },
+  'Registrado': { label: 'Registrado', bg: '#DCFCE7', text: '#15803D' },
   'Documentação entregue ao cliente': { label: 'Entregue', bg: '#A7F3D0', text: '#047857' },
   'Concluído / Registrado': { label: 'Concluído', bg: '#E5E7EB', text: '#6B7280' },
 }

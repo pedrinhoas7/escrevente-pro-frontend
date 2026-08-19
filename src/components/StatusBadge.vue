@@ -11,6 +11,11 @@ const statusColors: Record<string, string> = {
   "Falta de documento": "bg-[#F97316]",
   "Indeferido": "bg-[#EF4444]",
   "Aguardando assinatura": "bg-[#8B5CF6]",
+  "Aguardando Pagamento": "bg-[#FBBF24]",
+  "Boleto Pago": "bg-[#84CC16]",
+  "Assinado": "bg-[#A855F7]",
+  "Enviado para registro": "bg-[#6366F1]",
+  "Registrado": "bg-[#16A34A]",
   "Documentação entregue ao cliente": "bg-[#14B8A6]",
   "Concluído / Registrado": "bg-[#22C55E]",
 };

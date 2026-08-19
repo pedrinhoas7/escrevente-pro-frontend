@@ -43,7 +43,7 @@ const totalProcessos = computed(() => processosStore.processos.length)
 const processosAtivos = computed(() =>
   processosStore.processos.filter(p => {
     const ultimo = p.statusHistory?.[0]?.status
-    return ultimo && !['Concluído / Registrado', 'Indeferido'].includes(ultimo)
+    return ultimo && !['Concluído / Registrado', 'Registrado', 'Indeferido'].includes(ultimo)
   }).length
 )
 
@@ -55,7 +55,8 @@ const processosPendentes = computed(() =>
 
 const processosConcluidos = computed(() =>
   processosStore.processos.filter(p =>
-    p.statusHistory?.[0]?.status === 'Concluído / Registrado'
+    p.statusHistory?.[0]?.status === 'Concluído / Registrado' ||
+    p.statusHistory?.[0]?.status === 'Registrado'
   ).length
 )
 
@@ -65,6 +66,11 @@ const statusConfig: Record<string, { label: string; bg: string; text: string; ic
   'Falta de documento': { label: 'Pendente', bg: 'bg-orange-100', text: 'text-orange-700', icon: 'error_outline' },
   'Indeferido': { label: 'Indeferido', bg: 'bg-error-container/50', text: 'text-error', icon: 'cancel' },
   'Aguardando assinatura': { label: 'Assinatura', bg: 'bg-tertiary-container/30', text: 'text-green-700', icon: 'draw' },
+  'Aguardando Pagamento': { label: 'Aguardando Pagamento', bg: 'bg-amber-100', text: 'text-amber-700', icon: 'payments' },
+  'Boleto Pago': { label: 'Boleto Pago', bg: 'bg-lime-100', text: 'text-lime-700', icon: 'payments' },
+  'Assinado': { label: 'Assinado', bg: 'bg-purple-100', text: 'text-purple-700', icon: 'draw' },
+  'Enviado para registro': { label: 'Enviado para registro', bg: 'bg-indigo-100', text: 'text-indigo-700', icon: 'outbox' },
+  'Registrado': { label: 'Registrado', bg: 'bg-green-100', text: 'text-green-700', icon: 'check_circle' },
   'Documentação entregue ao cliente': { label: 'Entregue', bg: 'bg-emerald-100', text: 'text-emerald-700', icon: 'task_alt' },
   'Concluído / Registrado': { label: 'Concluído', bg: 'bg-surface-container-high', text: 'text-on-surface-variant', icon: 'check_circle' },
 }

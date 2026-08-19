@@ -17,6 +17,11 @@ const statusOpcoes = [
     "Falta de documento",
     "Indeferido",
     "Aguardando assinatura",
+    "Aguardando Pagamento",
+    "Boleto Pago",
+    "Assinado",
+    "Enviado para registro",
+    "Registrado",
     "Documentação entregue ao cliente",
     "Concluído / Registrado"
 ];

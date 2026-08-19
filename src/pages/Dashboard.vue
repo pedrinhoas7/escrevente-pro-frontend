@@ -26,7 +26,7 @@ const evolucao = useEvolucao(processos, clientes, periodoSelecionado);
 const processosAbertos = computed(() =>
   processos.value.filter(p => {
     const ultimo = p.statusHistory?.[0]?.status;
-    return ultimo && !['Concluído / Registrado', 'Indeferido'].includes(ultimo);
+    return ultimo && !['Concluído / Registrado', 'Registrado', 'Indeferido'].includes(ultimo);
   }).length
 );
 
@@ -74,7 +74,8 @@ const lastSevenDays = computed(() => {
 
 const concluidos = computed(() =>
   processos.value.filter(p =>
-    p.statusHistory?.[0]?.status === 'Concluído / Registrado'
+    p.statusHistory?.[0]?.status === 'Concluído / Registrado' ||
+    p.statusHistory?.[0]?.status === 'Registrado'
   ).length
 );
 
@@ -98,6 +99,11 @@ const statusConfig: Record<string, { label: string; bgColor: string; textColor: 
   'Falta de documento': { label: 'Pendente', bgColor: '#FED7AA', textColor: '#EA580C' },
   'Indeferido': { label: 'Indeferido', bgColor: '#FCA5A5', textColor: '#DC2626' },
   'Aguardando assinatura': { label: 'Assinatura', bgColor: '#D1FAE5', textColor: '#059669' },
+  'Aguardando Pagamento': { label: 'Aguardando Pagamento', bgColor: '#FEF3C7', textColor: '#D97706' },
+  'Boleto Pago': { label: 'Boleto Pago', bgColor: '#ECFCCB', textColor: '#65A30D' },
+  'Assinado': { label: 'Assinado', bgColor: '#E9D5FF', textColor: '#9333EA' },
+  'Enviado para registro': { label: 'Enviado para registro', bgColor: '#E0E7FF', textColor: '#4F46E5' },
+  'Registrado': { label: 'Registrado', bgColor: '#DCFCE7', textColor: '#15803D' },
   'Documentação entregue ao cliente': { label: 'Entregue', bgColor: '#A7F3D0', textColor: '#047857' },
   'Concluído / Registrado': { label: 'Concluído', bgColor: '#E5E7EB', textColor: '#6B7280' },
 };

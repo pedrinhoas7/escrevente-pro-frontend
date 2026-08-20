@@ -27,7 +27,11 @@ const handleLogin = async () => {
 
   try {
     await authStore.login(email.value, password.value);
-    router.push('/app/dashboard');
+    if (authStore.userRole === 'admin') {
+      router.push('/app/admin');
+    } else {
+      router.push('/app/dashboard');
+    }
   } catch (e: any) {
     error.value = 'Credenciais inválidas. Por favor, tente novamente.';
   } finally {
@@ -52,7 +56,11 @@ const handleRecuperarSenha = async () => {
 
 onMounted(() => {
   if (authStore.isAuthenticated) {
-    router.push('/app/dashboard');
+    if (authStore.userRole === 'admin') {
+      router.push('/app/admin');
+    } else {
+      router.push('/app/dashboard');
+    }
   }
 });
 </script>

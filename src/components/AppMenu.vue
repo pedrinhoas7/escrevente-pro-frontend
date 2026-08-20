@@ -24,100 +24,189 @@ watch(() => route.path, (path) => {
 <template>
   <aside class="desktop-menu">
     <nav class="menu-nav">
-      <RouterLink
-        to="/app/dashboard"
-        class="menu-item"
-        :class="{ 'menu-item-active-bg': isRouteActive('/app/dashboard') }"
-      >
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="menu-item-text">Dashboard</span>
-      </RouterLink>
-
-      <RouterLink
-        to="/app/processos"
-        class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/app/processos') }"
-      >
-        <span class="material-symbols-outlined">account_tree</span>
-        <span class="menu-item-text">Processos</span>
-      </RouterLink>
-
-      <RouterLink
-        to="/app/clientes"
-        class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/app/clientes') }"
-      >
-        <span class="material-symbols-outlined">groups</span>
-        <span class="menu-item-text">Clientes</span>
-      </RouterLink>
-
-      <RouterLink
-        v-if="authStore.isCartorio"
-        to="/app/escreventes"
-        class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/app/escreventes') }"
-      >
-        <span class="material-symbols-outlined">badge</span>
-        <span class="menu-item-text">Escreventes</span>
-      </RouterLink>
-
-      <RouterLink
-        v-if="authStore.userRole === 'admin'"
-        to="/app/admin"
-        class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/app/admin') }"
-      >
-        <span class="material-symbols-outlined">admin_panel_settings</span>
-        <span class="menu-item-text">Painel Admin</span>
-      </RouterLink>
-
-      <RouterLink
-        v-if="authStore.userRole === 'admin'"
-        to="/app/admin/usuarios"
-        class="menu-item menu-item-inactive"
-        :class="{ 'menu-item-active-bg': isRouteActive('/app/admin/usuarios') }"
-      >
-        <span class="material-symbols-outlined">manage_accounts</span>
-        <span class="menu-item-text">Usuários</span>
-      </RouterLink>
-
-      <div class="menu-item-group">
-        <button
-          class="menu-item menu-item-button"
-          :class="{ 'menu-item-active-bg': isRouteActive('/app/relatorios') }"
-          @click="relatoriosExpandido = !relatoriosExpandido"
+      <!-- Menu Admin -->
+      <template v-if="authStore.userRole === 'admin'">
+        <RouterLink
+          to="/app/admin"
+          class="menu-item"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/admin') && !isRouteActive('/app/admin/usuarios') }"
         >
-          <span class="material-symbols-outlined">summarize</span>
-          <span class="menu-item-text">Relatórios</span>
-          <span
-            class="material-symbols-outlined submenu-arrow"
-            :class="{ 'submenu-arrow-open': relatoriosExpandido }"
-          >
-            expand_more
-          </span>
-        </button>
+          <span class="material-symbols-outlined">admin_panel_settings</span>
+          <span class="menu-item-text">Painel Admin</span>
+        </RouterLink>
 
-        <Transition name="submenu">
-          <div v-if="relatoriosExpandido" class="submenu">
-            <RouterLink
-              to="/app/relatorios/comissoes"
-              class="submenu-item"
-              :class="{ 'submenu-item-active': isRouteActive('/app/relatorios/comissoes') }"
+        <RouterLink
+          to="/app/admin/usuarios"
+          class="menu-item menu-item-inactive"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/admin/usuarios') }"
+        >
+          <span class="material-symbols-outlined">manage_accounts</span>
+          <span class="menu-item-text">Usuários</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/app/processos"
+          class="menu-item menu-item-inactive"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/processos') }"
+        >
+          <span class="material-symbols-outlined">account_tree</span>
+          <span class="menu-item-text">Processos</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/app/clientes"
+          class="menu-item menu-item-inactive"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/clientes') }"
+        >
+          <span class="material-symbols-outlined">groups</span>
+          <span class="menu-item-text">Clientes</span>
+        </RouterLink>
+      </template>
+
+      <!-- Menu Cartorio -->
+      <template v-else-if="authStore.isCartorio">
+        <RouterLink
+          to="/app/dashboard"
+          class="menu-item"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/dashboard') }"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="menu-item-text">Dashboard</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/app/escreventes"
+          class="menu-item menu-item-inactive"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/escreventes') }"
+        >
+          <span class="material-symbols-outlined">badge</span>
+          <span class="menu-item-text">Escreventes</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/app/processos"
+          class="menu-item menu-item-inactive"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/processos') }"
+        >
+          <span class="material-symbols-outlined">account_tree</span>
+          <span class="menu-item-text">Processos</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/app/clientes"
+          class="menu-item menu-item-inactive"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/clientes') }"
+        >
+          <span class="material-symbols-outlined">groups</span>
+          <span class="menu-item-text">Clientes</span>
+        </RouterLink>
+
+        <div class="menu-item-group">
+          <button
+            class="menu-item menu-item-button"
+            :class="{ 'menu-item-active-bg': isRouteActive('/app/relatorios') }"
+            @click="relatoriosExpandido = !relatoriosExpandido"
+          >
+            <span class="material-symbols-outlined">summarize</span>
+            <span class="menu-item-text">Relatórios</span>
+            <span
+              class="material-symbols-outlined submenu-arrow"
+              :class="{ 'submenu-arrow-open': relatoriosExpandido }"
             >
-              <span class="material-symbols-outlined submenu-icon">payments</span>
-              <span class="submenu-text">Comissões</span>
-            </RouterLink>
-            <RouterLink
-              to="/app/relatorios/processos"
-              class="submenu-item"
-              :class="{ 'submenu-item-active': isRouteActive('/app/relatorios/processos') }"
+              expand_more
+            </span>
+          </button>
+
+          <Transition name="submenu">
+            <div v-if="relatoriosExpandido" class="submenu">
+              <RouterLink
+                to="/app/relatorios/comissoes"
+                class="submenu-item"
+                :class="{ 'submenu-item-active': isRouteActive('/app/relatorios/comissoes') }"
+              >
+                <span class="material-symbols-outlined submenu-icon">payments</span>
+                <span class="submenu-text">Comissões</span>
+              </RouterLink>
+              <RouterLink
+                to="/app/relatorios/processos"
+                class="submenu-item"
+                :class="{ 'submenu-item-active': isRouteActive('/app/relatorios/processos') }"
+              >
+                <span class="material-symbols-outlined submenu-icon">description</span>
+                <span class="submenu-text">Processos Mensal</span>
+              </RouterLink>
+            </div>
+          </Transition>
+        </div>
+      </template>
+
+      <!-- Menu Escrevente -->
+      <template v-else>
+        <RouterLink
+          to="/app/dashboard"
+          class="menu-item"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/dashboard') }"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="menu-item-text">Dashboard</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/app/processos"
+          class="menu-item menu-item-inactive"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/processos') }"
+        >
+          <span class="material-symbols-outlined">account_tree</span>
+          <span class="menu-item-text">Processos</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/app/clientes"
+          class="menu-item menu-item-inactive"
+          :class="{ 'menu-item-active-bg': isRouteActive('/app/clientes') }"
+        >
+          <span class="material-symbols-outlined">groups</span>
+          <span class="menu-item-text">Clientes</span>
+        </RouterLink>
+
+        <div class="menu-item-group">
+          <button
+            class="menu-item menu-item-button"
+            :class="{ 'menu-item-active-bg': isRouteActive('/app/relatorios') }"
+            @click="relatoriosExpandido = !relatoriosExpandido"
+          >
+            <span class="material-symbols-outlined">summarize</span>
+            <span class="menu-item-text">Relatórios</span>
+            <span
+              class="material-symbols-outlined submenu-arrow"
+              :class="{ 'submenu-arrow-open': relatoriosExpandido }"
             >
-              <span class="material-symbols-outlined submenu-icon">description</span>
-              <span class="submenu-text">Processos Mensal</span>
-            </RouterLink>
-          </div>
-        </Transition>
-      </div>
+              expand_more
+            </span>
+          </button>
+
+          <Transition name="submenu">
+            <div v-if="relatoriosExpandido" class="submenu">
+              <RouterLink
+                to="/app/relatorios/comissoes"
+                class="submenu-item"
+                :class="{ 'submenu-item-active': isRouteActive('/app/relatorios/comissoes') }"
+              >
+                <span class="material-symbols-outlined submenu-icon">payments</span>
+                <span class="submenu-text">Comissões</span>
+              </RouterLink>
+              <RouterLink
+                to="/app/relatorios/processos"
+                class="submenu-item"
+                :class="{ 'submenu-item-active': isRouteActive('/app/relatorios/processos') }"
+              >
+                <span class="material-symbols-outlined submenu-icon">description</span>
+                <span class="submenu-text">Processos Mensal</span>
+              </RouterLink>
+            </div>
+          </Transition>
+        </div>
+      </template>
     </nav>
 
     <div class="menu-footer">
@@ -131,70 +220,127 @@ watch(() => route.path, (path) => {
     </div>
   </aside>
 
+  <!-- Mobile Menu -->
   <nav class="mobile-menu">
-    <RouterLink
-      to="/app/dashboard"
-      class="mobile-nav-item"
-      :class="{ 'mobile-nav-item-active': isRouteActive('/app/dashboard') }"
-    >
-      <span
-        class="material-symbols-outlined"
-        :style="getIconStyle(isRouteActive('/app/dashboard'))"
+    <template v-if="authStore.userRole === 'admin'">
+      <RouterLink
+        to="/app/admin"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/admin') && !isRouteActive('/app/admin/usuarios') }"
       >
-        dashboard
-      </span>
-      <span class="mobile-nav-text">Dashboard</span>
-    </RouterLink>
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/admin') && !isRouteActive('/app/admin/usuarios'))">admin_panel_settings</span>
+        <span class="mobile-nav-text">Painel</span>
+      </RouterLink>
 
-    <RouterLink
-      to="/app/clientes"
-      class="mobile-nav-item"
-      :class="{ 'mobile-nav-item-active': isRouteActive('/app/clientes') }"
-    >
-      <span
-        class="material-symbols-outlined"
-        :style="getIconStyle(isRouteActive('/app/clientes'))"
+      <RouterLink
+        to="/app/admin/usuarios"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/admin/usuarios') }"
       >
-        groups
-      </span>
-      <span class="mobile-nav-text">Clientes</span>
-    </RouterLink>
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/admin/usuarios'))">manage_accounts</span>
+        <span class="mobile-nav-text">Usuários</span>
+      </RouterLink>
 
-    <RouterLink
-      to="/app/processos"
-      class="mobile-nav-item"
-      :class="{ 'mobile-nav-item-active': isRouteActive('/app/processos') }"
-    >
-      <span
-        class="material-symbols-outlined"
-        :style="getIconStyle(isRouteActive('/app/processos'))"
+      <RouterLink
+        to="/app/processos"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/processos') }"
       >
-        account_tree
-      </span>
-      <span class="mobile-nav-text">Processos</span>
-    </RouterLink>
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/processos'))">account_tree</span>
+        <span class="mobile-nav-text">Processos</span>
+      </RouterLink>
 
-    <RouterLink
-      to="/app/relatorios/processos"
-      class="mobile-nav-item"
-      :class="{ 'mobile-nav-item-active': isRouteActive('/app/relatorios') }"
-    >
-      <span
-        class="material-symbols-outlined"
-        :style="getIconStyle(isRouteActive('/app/relatorios'))"
+      <button
+        @click="authStore.logout()"
+        class="mobile-nav-button"
       >
-        summarize
-      </span>
-      <span class="mobile-nav-text">Relatórios</span>
-    </RouterLink>
+        <span class="material-symbols-outlined">logout</span>
+        <span class="mobile-nav-text">Sair</span>
+      </button>
+    </template>
 
-    <button
-      @click="authStore.logout()"
-      class="mobile-nav-button"
-    >
-      <span class="material-symbols-outlined">logout</span>
-      <span class="mobile-nav-text">Sair</span>
-    </button>
+    <template v-else-if="authStore.isCartorio">
+      <RouterLink
+        to="/app/dashboard"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/dashboard') }"
+      >
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/dashboard'))">dashboard</span>
+        <span class="mobile-nav-text">Dashboard</span>
+      </RouterLink>
+
+      <RouterLink
+        to="/app/escreventes"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/escreventes') }"
+      >
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/escreventes'))">badge</span>
+        <span class="mobile-nav-text">Escreventes</span>
+      </RouterLink>
+
+      <RouterLink
+        to="/app/processos"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/processos') }"
+      >
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/processos'))">account_tree</span>
+        <span class="mobile-nav-text">Processos</span>
+      </RouterLink>
+
+      <button
+        @click="authStore.logout()"
+        class="mobile-nav-button"
+      >
+        <span class="material-symbols-outlined">logout</span>
+        <span class="mobile-nav-text">Sair</span>
+      </button>
+    </template>
+
+    <template v-else>
+      <RouterLink
+        to="/app/dashboard"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/dashboard') }"
+      >
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/dashboard'))">dashboard</span>
+        <span class="mobile-nav-text">Dashboard</span>
+      </RouterLink>
+
+      <RouterLink
+        to="/app/clientes"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/clientes') }"
+      >
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/clientes'))">groups</span>
+        <span class="mobile-nav-text">Clientes</span>
+      </RouterLink>
+
+      <RouterLink
+        to="/app/processos"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/processos') }"
+      >
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/processos'))">account_tree</span>
+        <span class="mobile-nav-text">Processos</span>
+      </RouterLink>
+
+      <RouterLink
+        to="/app/relatorios/processos"
+        class="mobile-nav-item"
+        :class="{ 'mobile-nav-item-active': isRouteActive('/app/relatorios') }"
+      >
+        <span class="material-symbols-outlined" :style="getIconStyle(isRouteActive('/app/relatorios'))">summarize</span>
+        <span class="mobile-nav-text">Relatórios</span>
+      </RouterLink>
+
+      <button
+        @click="authStore.logout()"
+        class="mobile-nav-button"
+      >
+        <span class="material-symbols-outlined">logout</span>
+        <span class="mobile-nav-text">Sair</span>
+      </button>
+    </template>
   </nav>
 </template>
 

@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isAuthenticated: (state) => {
-      return !!state.token;
+      return !!state.token || !!state.refreshToken;
     },
     isTokenExpired: (state) => {
       const now = new Date().getTime();

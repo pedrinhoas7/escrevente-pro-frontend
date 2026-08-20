@@ -144,6 +144,8 @@ router.beforeEach((to, _from, next) => {
     } else {
       next('/app/dashboard');
     }
+  } else if (to.path === '/app/dashboard' && authStore.userRole === 'admin') {
+    next('/app/admin');
   } else {
     next();
   }

@@ -7,6 +7,9 @@ import DetalhesProcesso from '../pages/DetalhesProcesso.vue';
 import EditarProcesso from '../pages/EditarProcesso.vue';
 import EditarCliente from '../pages/EditarCliente.vue';
 import GestaoEscreventes from '../pages/GestaoEscreventes.vue';
+import GestaoUsuarios from '../pages/GestaoUsuarios.vue';
+import AdminDashboard from '../pages/AdminDashboard.vue';
+import DefinirSenha from '../pages/DefinirSenha.vue';
 import ConsultaProtocolo from '../pages/ConsultaProtocolo.vue';
 import HistoricoProcesso from '../pages/HistoricoProcesso.vue';
 import RelatorioComissoes from '../pages/RelatorioComissoes.vue';
@@ -37,6 +40,11 @@ const routes: Array<RouteRecordRaw> = [
     component: HistoricoProcesso
   },
   {
+    path: '/definir-senha',
+    name: 'DefinirSenha',
+    component: DefinirSenha
+  },
+  {
     path: '/app',
     component: MainLayout,
     meta: { requiresAuth: true },
@@ -64,6 +72,16 @@ const routes: Array<RouteRecordRaw> = [
         path: 'escreventes',
         name: 'GestaoEscreventes',
         component: GestaoEscreventes,
+      },
+      {
+        path: 'admin',
+        name: 'AdminDashboard',
+        component: AdminDashboard,
+      },
+      {
+        path: 'admin/usuarios',
+        name: 'GestaoUsuarios',
+        component: GestaoUsuarios,
       },
       {
         path: 'processos',

@@ -61,6 +61,26 @@ watch(() => route.path, (path) => {
         <span class="menu-item-text">Escreventes</span>
       </RouterLink>
 
+      <RouterLink
+        v-if="authStore.userRole === 'admin'"
+        to="/app/admin"
+        class="menu-item menu-item-inactive"
+        :class="{ 'menu-item-active-bg': isRouteActive('/app/admin') }"
+      >
+        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <span class="menu-item-text">Painel Admin</span>
+      </RouterLink>
+
+      <RouterLink
+        v-if="authStore.userRole === 'admin'"
+        to="/app/admin/usuarios"
+        class="menu-item menu-item-inactive"
+        :class="{ 'menu-item-active-bg': isRouteActive('/app/admin/usuarios') }"
+      >
+        <span class="material-symbols-outlined">manage_accounts</span>
+        <span class="menu-item-text">Usuários</span>
+      </RouterLink>
+
       <div class="menu-item-group">
         <button
           class="menu-item menu-item-button"

@@ -2,12 +2,17 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
+import api from '../services/api';
 
 const email = ref('');
 const password = ref('');
 const error = ref('');
 const loading = ref(false);
 const showPassword = ref(false);
+const showRecuperarSenha = ref(false);
+const recuperarEmail = ref('');
+const recuperarEnviado = ref(false);
+const recuperarLoading = ref(false);
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
@@ -27,6 +32,21 @@ const handleLogin = async () => {
     error.value = 'Credenciais inválidas. Por favor, tente novamente.';
   } finally {
     loading.value = false;
+  }
+};
+
+const handleRecuperarSenha = async () => {
+  if (!recuperarEmail.value) {
+    return;
+  }
+  recuperarLoading.value = true;
+  try {
+    await api.post('/admin/recuperar-senha', { email: recuperarEmail.value });
+    recuperarEnviado.value = true;
+  } catch (e: any) {
+    error.value = 'Erro ao enviar email de recuperação.';
+  } finally {
+    recuperarLoading.value = false;
   }
 };
 
@@ -89,7 +109,7 @@ onMounted(() => {
             <div class="login-field-group">
               <div class="login-label-row">
                 <label class="login-label" for="password">Senha</label>
-                <a href="#" class="login-forgot-link">Esqueceu a senha?</a>
+                <button type="button" @click="showRecuperarSenha = true" class="login-forgot-link">Esqueceu a senha?</button>
               </div>
               <div class="login-input-wrapper">
                 <span class="material-symbols-outlined login-input-icon">lock</span>
@@ -177,6 +197,47 @@ onMounted(() => {
         </div>
       </div>
     </footer>
+    <!-- Modal Recuperar Senha -->
+    <div v-if="showRecuperarSenha" class="fixed z-50 inset-0 flex items-center justify-center p-4">
+      <div class="fixed inset-0 bg-black/50" @click="showRecuperarSenha = false"></div>
+      <div class="relative z-50 bg-white rounded-xl shadow-xl w-full max-w-md p-8">
+        <div v-if="recuperarEnviado" class="text-center">
+          <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-lg">
+            <span class="material-symbols-outlined text-emerald-600 text-3xl">mark_email_read</span>
+          </div>
+          <h2 class="text-xl font-serif font-bold text-[#1B2A4A] mb-2">Email enviado!</h2>
+          <p class="text-[#44464f] mb-lg">Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.</p>
+          <button @click="showRecuperarSenha = false; recuperarEnviado = false" class="w-full bg-[#112752] text-white py-md rounded-lg font-semibold cursor-pointer hover:shadow-lg transition-all">
+            Fechar
+          </button>
+        </div>
+
+        <div v-else>
+          <h2 class="text-xl font-serif font-bold text-[#1B2A4A] mb-2">Recuperar Senha</h2>
+          <p class="text-[#44464f] text-sm mb-lg">Digite seu email e enviaremos um link para redefinir sua senha.</p>
+
+          <form @submit.prevent="handleRecuperarSenha" class="space-y-lg">
+            <div>
+              <input v-model="recuperarEmail" type="email" required placeholder="seu@email.com"
+                class="w-full p-md border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+            </div>
+
+            <div v-if="error" class="text-red-600 text-sm">{{ error }}</div>
+
+            <button type="submit" :disabled="recuperarLoading"
+              class="w-full bg-[#112752] text-white py-md rounded-lg font-semibold cursor-pointer hover:shadow-lg transition-all disabled:opacity-50">
+              <span v-if="recuperarLoading">Enviando...</span>
+              <span v-else>Enviar Email</span>
+            </button>
+
+            <button type="button" @click="showRecuperarSenha = false"
+              class="w-full text-[#44464f] py-sm text-sm cursor-pointer hover:text-[#1B2A4A]">
+              Voltar para login
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

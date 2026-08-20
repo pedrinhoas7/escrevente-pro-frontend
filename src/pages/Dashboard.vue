@@ -159,7 +159,7 @@ const formatDateSimple = (date: any) => {
           </router-link>
         </section>
 
-        <section v-if="authStore.userRole === 'escrevente'" class="commissions-section">
+        <section v-if="authStore.role === 'escrevente'" class="commissions-section">
           <div class="commissions-card">
             <div class="commissions-header">
               <span class="material-symbols-outlined commissions-icon">payments</span>

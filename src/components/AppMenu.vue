@@ -25,7 +25,7 @@ watch(() => route.path, (path) => {
   <aside class="desktop-menu">
     <nav class="menu-nav">
       <!-- Menu Admin -->
-      <template v-if="authStore.userRole === 'admin'">
+      <template v-if="authStore.isAdmin">
         <RouterLink
           to="/app/admin"
           class="menu-item"
@@ -222,7 +222,7 @@ watch(() => route.path, (path) => {
 
   <!-- Mobile Menu -->
   <nav class="mobile-menu">
-    <template v-if="authStore.userRole === 'admin'">
+    <template v-if="authStore.isAdmin">
       <RouterLink
         to="/app/admin"
         class="mobile-nav-item"

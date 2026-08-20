@@ -28,9 +28,10 @@ export const useAuthStore = defineStore('auth', {
       const now = new Date().getTime();
       return !state.expiresAt || state.expiresAt <= now;
     },
-    userRole: (state) => state.userRole,
+    role: (state) => state.userRole,
     cartorioId: (state) => state.cartorioId,
     isCartorio: (state) => state.userRole === 'cartorio',
+    isAdmin: (state) => state.userRole === 'admin',
   },
   actions: {
     setAuthData(token: string, userId: string, refreshToken: string, expiresIn: number, userRole: string | null = null, cartorioId: string | null = null) {

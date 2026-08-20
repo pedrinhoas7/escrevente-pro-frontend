@@ -27,7 +27,7 @@ const handleLogin = async () => {
 
   try {
     await authStore.login(email.value, password.value);
-    if (authStore.userRole === 'admin') {
+    if (authStore.isAdmin) {
       router.push('/app/admin');
     } else {
       router.push('/app/dashboard');
@@ -56,7 +56,7 @@ const handleRecuperarSenha = async () => {
 
 onMounted(() => {
   if (authStore.isAuthenticated) {
-    if (authStore.userRole === 'admin') {
+    if (authStore.isAdmin) {
       router.push('/app/admin');
     } else {
       router.push('/app/dashboard');

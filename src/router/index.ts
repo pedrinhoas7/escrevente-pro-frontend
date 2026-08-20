@@ -139,12 +139,12 @@ router.beforeEach((to, _from, next) => {
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next('/login');
   } else if ((to.path === '/login' || to.path === '/') && authStore.isAuthenticated) {
-    if (authStore.userRole === 'admin') {
+    if (authStore.isAdmin) {
       next('/app/admin');
     } else {
       next('/app/dashboard');
     }
-  } else if (to.path === '/app/dashboard' && authStore.userRole === 'admin') {
+  } else if (to.path === '/app/dashboard' && authStore.isAdmin) {
     next('/app/admin');
   } else {
     next();

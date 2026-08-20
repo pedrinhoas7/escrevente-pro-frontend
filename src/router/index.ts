@@ -10,6 +10,7 @@ import GestaoEscreventes from '../pages/GestaoEscreventes.vue';
 import GestaoUsuarios from '../pages/GestaoUsuarios.vue';
 import AdminDashboard from '../pages/AdminDashboard.vue';
 import DefinirSenha from '../pages/DefinirSenha.vue';
+import RedefinirSenha from '../pages/RedefinirSenha.vue';
 import ConsultaProtocolo from '../pages/ConsultaProtocolo.vue';
 import HistoricoProcesso from '../pages/HistoricoProcesso.vue';
 import RelatorioComissoes from '../pages/RelatorioComissoes.vue';
@@ -43,6 +44,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/definir-senha',
     name: 'DefinirSenha',
     component: DefinirSenha
+  },
+  {
+    path: '/redefinir-senha',
+    name: 'RedefinirSenha',
+    component: RedefinirSenha
   },
   {
     path: '/app',

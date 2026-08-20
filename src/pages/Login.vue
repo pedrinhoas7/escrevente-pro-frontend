@@ -202,7 +202,7 @@ onMounted(() => {
       <div class="flex items-center justify-center min-h-screen p-2.5">
         <div class="fixed inset-0 bg-black/50 transition-opacity" @click="showRecuperarSenha = false"></div>
 
-        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all w-full mx-2.5 max-w-lg">
+        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all w-full mx-2.5">
           <div class="bg-white p-8">
             <div v-if="recuperarEnviado" class="text-center">
               <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">

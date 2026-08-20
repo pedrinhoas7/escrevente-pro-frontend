@@ -198,43 +198,59 @@ onMounted(() => {
       </div>
     </footer>
     <!-- Modal Recuperar Senha -->
-    <div v-if="showRecuperarSenha" class="fixed z-50 inset-0 flex items-center justify-center p-4">
-      <div class="fixed inset-0 bg-black/50" @click="showRecuperarSenha = false"></div>
-      <div class="relative z-50 bg-white rounded-xl shadow-xl w-full max-w-md p-8">
-        <div v-if="recuperarEnviado" class="text-center">
-          <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-lg">
-            <span class="material-symbols-outlined text-emerald-600 text-3xl">mark_email_read</span>
-          </div>
-          <h2 class="text-xl font-serif font-bold text-[#1B2A4A] mb-2">Email enviado!</h2>
-          <p class="text-[#44464f] mb-lg">Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.</p>
-          <button @click="showRecuperarSenha = false; recuperarEnviado = false" class="w-full bg-[#112752] text-white py-md rounded-lg font-semibold cursor-pointer hover:shadow-lg transition-all">
-            Fechar
-          </button>
-        </div>
+    <div v-if="showRecuperarSenha" class="fixed z-50 inset-0 overflow-y-auto" role="dialog" aria-modal="true">
+      <div class="flex items-center justify-center min-h-screen p-2.5">
+        <div class="fixed inset-0 bg-black/50 transition-opacity" @click="showRecuperarSenha = false"></div>
 
-        <div v-else>
-          <h2 class="text-xl font-serif font-bold text-[#1B2A4A] mb-2">Recuperar Senha</h2>
-          <p class="text-[#44464f] text-sm mb-lg">Digite seu email e enviaremos um link para redefinir sua senha.</p>
-
-          <form @submit.prevent="handleRecuperarSenha" class="space-y-lg">
-            <div>
-              <input v-model="recuperarEmail" type="email" required placeholder="seu@email.com"
-                class="w-full p-md border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A84C] focus:border-[#C9A84C]" />
+        <div class="relative z-50 bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all w-full mx-2.5 max-w-lg">
+          <div class="bg-white p-8">
+            <div v-if="recuperarEnviado" class="text-center">
+              <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-symbols-outlined text-emerald-600 text-3xl">mark_email_read</span>
+              </div>
+              <h2 class="text-xl font-serif font-bold text-[#1B2A4A] mb-2">Email enviado!</h2>
+              <p class="text-[#44464f] mb-6">Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.</p>
+              <button @click="showRecuperarSenha = false; recuperarEnviado = false"
+                class="w-full bg-[#112752] text-white py-3 rounded-lg font-semibold cursor-pointer hover:shadow-lg transition-all">
+                Fechar
+              </button>
             </div>
 
-            <div v-if="error" class="text-red-600 text-sm">{{ error }}</div>
+            <div v-else>
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-[#112752] rounded-lg flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white">lock_reset</span>
+                </div>
+                <div>
+                  <h2 class="text-xl font-serif font-bold text-[#1B2A4A]">Recuperar Senha</h2>
+                  <p class="text-sm text-[#44464f]">Digite seu email para receber o link de redefinição.</p>
+                </div>
+              </div>
 
-            <button type="submit" :disabled="recuperarLoading"
-              class="w-full bg-[#112752] text-white py-md rounded-lg font-semibold cursor-pointer hover:shadow-lg transition-all disabled:opacity-50">
-              <span v-if="recuperarLoading">Enviando...</span>
-              <span v-else>Enviar Email</span>
-            </button>
+              <div v-if="error" class="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg mb-4 text-sm">
+                {{ error }}
+              </div>
 
-            <button type="button" @click="showRecuperarSenha = false"
-              class="w-full text-[#44464f] py-sm text-sm cursor-pointer hover:text-[#1B2A4A]">
-              Voltar para login
-            </button>
-          </form>
+              <form @submit.prevent="handleRecuperarSenha" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input v-model="recuperarEmail" type="email" required placeholder="seu@email.com"
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A84C] focus:border-[#C9A84C] text-base" />
+                </div>
+
+                <button type="submit" :disabled="recuperarLoading"
+                  class="w-full bg-[#112752] text-white py-3 rounded-lg font-semibold cursor-pointer hover:shadow-lg transition-all disabled:opacity-50">
+                  <span v-if="recuperarLoading">Enviando...</span>
+                  <span v-else>Enviar Email</span>
+                </button>
+
+                <button type="button" @click="showRecuperarSenha = false"
+                  class="w-full text-[#44464f] py-2 text-sm cursor-pointer hover:text-[#1B2A4A] transition-colors">
+                  Voltar para login
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>

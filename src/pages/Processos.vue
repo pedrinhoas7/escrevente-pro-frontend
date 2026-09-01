@@ -4,6 +4,7 @@ import { useProcessosStore } from '../stores/processos'
 import { useClientesStore } from '../stores/clientes'
 import router from '../router'
 import type { TipoDeAto } from '../types/tipo-ato'
+import { formatCurrency, parseCurrency } from '../utils/currency'
 
 const processosStore = useProcessosStore()
 const clientesStore = useClientesStore()
@@ -25,6 +26,19 @@ const novoProcesso = ref({
   valorEmolumentos: undefined as number | undefined,
   notasInternas: ''
 })
+
+const valorProcessoInput = ref<string>('')
+const valorEmolumentosInput = ref<string>('')
+
+const onBlurValorProcesso = () => {
+  novoProcesso.value.valorProcesso = parseCurrency(valorProcessoInput.value)
+  valorProcessoInput.value = formatCurrency(novoProcesso.value.valorProcesso)
+}
+
+const onBlurValorEmolumentos = () => {
+  novoProcesso.value.valorEmolumentos = parseCurrency(valorEmolumentosInput.value)
+  valorEmolumentosInput.value = formatCurrency(novoProcesso.value.valorEmolumentos)
+}
 
 const tiposAto = computed<TipoDeAto[]>(() => processosStore.tiposAto)
 
@@ -63,7 +77,10 @@ const salvarProcesso = async () => {
       alert('Tipo de Ato é obrigatório')
       return
     }
-    await processosStore.addProcesso({ ...novoProcesso.value })
+    const payload = { ...novoProcesso.value }
+    if (payload.valorProcesso === undefined) delete payload.valorProcesso
+    if (payload.valorEmolumentos === undefined) delete payload.valorEmolumentos
+    await processosStore.addProcesso(payload)
     showModal.value = false
     novoProcesso.value = {
       protocolo: '',
@@ -74,6 +91,8 @@ const salvarProcesso = async () => {
       valorEmolumentos: undefined,
       notasInternas: ''
     }
+    valorProcessoInput.value = ''
+    valorEmolumentosInput.value = ''
   } catch (error) {
     alert('Erro ao salvar processo. Verifique o console.')
     console.error(error)
@@ -459,6 +478,20 @@ const getIconColor = (tipoAto: string): string => {
                   <div>
                     <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Outorgante Comprador</label>
                     <input v-model="novoProcesso.partes.outorganteComprador" type="text" placeholder="Comprador" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-outline-variant/30 pt-lg">
+                <h4 class="text-body-md font-serif font-bold text-primary mb-md">Valores</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+                  <div>
+                    <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Valor do Processo</label>
+                    <input v-model="valorProcessoInput" @blur="onBlurValorProcesso" type="text" placeholder="R$ 0,00" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md" />
+                  </div>
+                  <div>
+                    <label class="block text-label-sm font-medium text-on-surface-variant mb-xs">Valor dos Emolumentos</label>
+                    <input v-model="valorEmolumentosInput" @blur="onBlurValorEmolumentos" type="text" placeholder="R$ 0,00" class="w-full p-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md" />
                   </div>
                 </div>
               </div>
